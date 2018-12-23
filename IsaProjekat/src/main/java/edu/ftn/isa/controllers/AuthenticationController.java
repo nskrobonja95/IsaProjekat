@@ -1,5 +1,6 @@
 package edu.ftn.isa.controllers;
 
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.core.MediaType;
 
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +24,7 @@ import edu.ftn.isa.payload.SignupPayload;
 import edu.ftn.isa.repositories.UserRepository;
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("/auth")
 public class AuthenticationController {
 
 	@Autowired
@@ -36,13 +38,15 @@ public class AuthenticationController {
 	
 	@PostMapping("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseEntity<?> login(@RequestBody LoginPayload loginPayload) {
-		Authentication auth = authManager.authenticate
-				(new UsernamePasswordAuthenticationToken(
-						loginPayload.getUsername(), loginPayload.getPassword()));
-		if(!auth.isAuthenticated()) {
+	public ResponseEntity<?> login(@Valid @RequestBody LoginPayload loginPayload) {
+		try {
+			Authentication auth = authManager.authenticate
+					(new UsernamePasswordAuthenticationToken(
+							loginPayload.getUsername(), loginPayload.getPassword()));
+		} catch (AuthenticationException e) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		
 		User u = userRepo.findByUsername(loginPayload.getUsername());
 		return new ResponseEntity<User>(u, HttpStatus.OK);
 	}

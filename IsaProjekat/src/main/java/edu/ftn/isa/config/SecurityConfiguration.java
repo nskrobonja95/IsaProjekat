@@ -35,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService);
         auth.jdbcAuthentication()
-        	.usersByUsernameQuery("select username from users where username=?")
+        	.usersByUsernameQuery("select username, password, enabled from users where username=?")
         	.passwordEncoder(passwordEncoder());
     }
 	
@@ -43,10 +43,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
         	.authorizeRequests()
-        		.antMatchers("api/auth/*").permitAll()
-        		.antMatchers("api/admin/*").hasAuthority("ROLE_SysAdmin")
-        		.anyRequest().authenticated()
-        		.and()
+        		.antMatchers("/auth/**").permitAll()
+        		.antMatchers("/admin/**").hasAuthority("ROLE_SysAdmin")
+        		.antMatchers("/avioadmin/**").hasAuthority("ROLE_AvioAdmin")
+        	.anyRequest().authenticated().and()
         		.httpBasic()
         		.authenticationEntryPoint(authenticationEntryPoint);
     }

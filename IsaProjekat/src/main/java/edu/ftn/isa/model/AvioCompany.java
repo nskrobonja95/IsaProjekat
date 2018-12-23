@@ -11,7 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
@@ -24,9 +26,11 @@ public @Data class AvioCompany implements Serializable {
 	@Column(name="avioID")
 	private Long id;
 	
+	@NotNull
 	@Column(name="name")
 	private String name;
 	
+	@NotNull
 	@Column(name="address")
 	private String address;
 	
@@ -39,5 +43,9 @@ public @Data class AvioCompany implements Serializable {
 			joinColumns = @JoinColumn(name = "avio_id", referencedColumnName = "avioID"),
 			inverseJoinColumns = @JoinColumn(name = "dest_id", referencedColumnName = "destID"))
 	private Collection<Destination> destinations;
+	
+	@ManyToOne
+	@JoinColumn(name = "admin", insertable = false, updatable = false)
+	private User admin;
 	
 }

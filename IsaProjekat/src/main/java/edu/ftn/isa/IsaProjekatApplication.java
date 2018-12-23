@@ -16,8 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class IsaProjekatApplication {
 
 	public static void main(String[] args) {
-		PasswordEncoder encoder = new BCryptPasswordEncoder();
-		System.out.println(encoder.encode("nikola95"));
 		SpringApplication.run(IsaProjekatApplication.class, args);
 	}
 	
