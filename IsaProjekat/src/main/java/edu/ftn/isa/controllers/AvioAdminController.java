@@ -3,6 +3,8 @@ package edu.ftn.isa.controllers;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,6 +53,7 @@ public class AvioAdminController {
 	 * postoji mogucnost da se salje id od destinacije
 	 */
 	@PostMapping("/addDestination/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseEntity<?> createDestination(@Valid
 			@RequestBody Destination dest, 
 			@PathVariable("id") Long id) {
@@ -60,6 +63,19 @@ public class AvioAdminController {
 		AvioCompany avio = optionalAvio.get();
 		avio.getDestinations().add(dest);
 		avioRepo.save(avio);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/addFlight/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ResponseEntity<?> createFlight(@Valid
+			@RequestBody Flight flight,
+			@PathVariable("id") Long avioId) {
+		Optional<AvioCompany> avio = avioRepo.findById(avioId);
+		if(avio.isPresent())
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		flight.setAvioCompany(avio.get());
+		flightRepo.save(flight);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

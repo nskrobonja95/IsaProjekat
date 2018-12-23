@@ -1,7 +1,6 @@
 package edu.ftn.isa.model;
 
 import java.util.Date;
-import java.util.regex.Pattern;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,6 +25,10 @@ public @Data class Flight {
 	private Long id;
 	
 	@ManyToOne
+	@JoinColumn(name="aviocompany_id", nullable = false)
+	private AvioCompany avioCompany;
+	
+	@ManyToOne
 	@JoinColumn(name = "fromdest_id", nullable = false)
 	private Destination from;
 	
@@ -36,5 +39,15 @@ public @Data class Flight {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd@HH:mm")
 	@Column(name="takeoff")
 	private Date takeoff;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd@HH:mm")
+	@Column(name="landing")
+	private Date landing;
+	
+	@Column(name="economicprice")
+	private Double economicClassPrice;
+	
+	@Column(name="bussinessprice")
+	private Double bussinessClassPrice;
 	
 }

@@ -45,7 +45,7 @@ public @Data class AvioCompany implements Serializable {
 	private Collection<Destination> destinations;
 	
 	@ManyToOne
-	@JoinColumn(name = "admin", insertable = false, updatable = false)
+	@JoinColumn(name = "admin", nullable=true)
 	private User admin;
 	
 }
