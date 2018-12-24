@@ -33,4 +33,10 @@ public @Data class Room {
 	@JoinColumn(name="hotelID")
 	private Hotel hotel;
 	
+	@Column(name="balcony")
+	private boolean balcony;
+	
+	@Column(name="price_per_night")
+	private Double pricePerNight;
+	
 }
