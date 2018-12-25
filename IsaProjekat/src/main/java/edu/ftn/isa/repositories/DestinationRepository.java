@@ -6,4 +6,6 @@ import edu.ftn.isa.model.Destination;
 
 public interface DestinationRepository extends JpaRepository<Destination, Long>{
 
+	Destination findByName(String name);
+	
 }

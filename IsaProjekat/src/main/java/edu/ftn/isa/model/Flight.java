@@ -1,5 +1,6 @@
 package edu.ftn.isa.model;
 
+import java.util.Collection;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -8,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -32,6 +35,13 @@ public @Data class Flight {
 	@JoinColumn(name = "fromdest_id", nullable = false)
 	private Destination from;
 	
+	@ManyToMany
+	@JoinTable(
+			name = "PERSISTING_FLIGHT_STOPS", 
+			joinColumns = @JoinColumn(name = "flight_id", referencedColumnName = "flightID"),
+			inverseJoinColumns = @JoinColumn(name = "dest_id", referencedColumnName = "destID"))
+	private Collection<Destination> stops;
+	
 	@ManyToOne
 	@JoinColumn(name = "todest_id", nullable = false)
 	private Destination toDest;
@@ -49,5 +59,8 @@ public @Data class Flight {
 	
 	@Column(name="bussinessprice")
 	private Double bussinessClassPrice;
+	
+	@Column(name="number_of_rows")
+	private int numberOfRows;
 	
 }

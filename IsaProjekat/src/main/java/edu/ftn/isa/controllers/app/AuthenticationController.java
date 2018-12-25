@@ -1,4 +1,4 @@
-package edu.ftn.isa.controllers;
+package edu.ftn.isa.controllers.app;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
