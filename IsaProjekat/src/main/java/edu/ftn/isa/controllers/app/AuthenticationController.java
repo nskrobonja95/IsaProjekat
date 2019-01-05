@@ -72,7 +72,7 @@ public class AuthenticationController {
 		u.setEmail(payload.getEmail());
 		u.setPassword(passwordEncoder.encode(payload.getPassword()));
 		u.setUsername(payload.getUsername());
-		u.setState(payload.getState());
+		u.setCity(payload.getCity());
 		u.setEnabled(true);
 		u.setRole(Role.User);
 		return u;

@@ -14,6 +14,6 @@ public @Data class UserDTO {
 
 	private String username;
 	
-	private String state;
+	private String city;
 	
 }

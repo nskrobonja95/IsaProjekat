@@ -30,6 +30,6 @@ public @Data class SignupPayload {
 	
 	@NotNull
 	@Size(min = 2)
-	private String state;
+	private String city;
 	
 }

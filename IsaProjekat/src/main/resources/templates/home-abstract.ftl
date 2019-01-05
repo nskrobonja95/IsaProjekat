@@ -24,7 +24,7 @@
         <a  class="nav-link" href ui-sref="login"><i class="fas fa-sign-in-alt"></i> Login</a>
       </li>
       <li class="nav-item" >
-        <a  class="nav-link" href ui-sref="registration"><i class="fas fa-user-plus"></i> Sign up</a>
+        <a  class="nav-link" href data-toggle="modal" data-target="#signupModal"><i class="fas fa-user-plus"></i> Sign up</a>
       </li>
       <li class="nav-item" ng-if="globals.currentUser.username!=null">
         <a  class="nav-link" href="#" ng-click="baseCtrl.logout()"><i class="fas fa-sign-out-alt"></i> Log Out</a>
@@ -50,11 +50,159 @@
   </div>
 </nav>
 
-   <#--  <div ui-view='choosing'></div>
-   <div ui-view='cinemas'></div>
-   <div ui-view='theatres'></div>
-   <div ui-view='profilePage'></div>
-   <div ui-view='settingsPage'></div>
-   <div ui-view='reserve'></div>
-   <div ui-view='registerObject'></div>  -->
-   <div ui-view="center"></div>
+   <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">SignUp</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-success" role="alert" ng-if="homeCtrl.successMessage">{{homeCtrl.successMessage}}</div>
+        <div class="alert alert-danger" role="alert" ng-if="homeCtrl.errorMessage">{{homeCtrl.errorMessage}}</div>
+        <div class="col-md-6 col-md-offset-3">
+          <form name="registerForm" ng-submit="homeCtrl.submitReg()" role="form">
+
+
+            <div class="form-group">
+                <input type="text" class="form-control" name="email" placeholder="Email" ng-pattern="homeCtrl.emailPattern" ng-model="homeCtrl.user.email" ng-minlength="3" ng-maxlength="128" ng-required="true"></input>
+                <div ng-show="registerForm.email.$touched && (registerForm.email.$error.minlength || registerForm.email.$error.maxlength)">
+                  <small style="color:red;display:block;text-align:center;">Username must have anywhere between 3 and 128 characters!</small>
+                </div>
+                <div ng-show="registerForm.email.$touched && registerForm.email.$error.required">
+                  <small style="color:red;display:block;text-align:center;">Required!</small>
+                </div>
+                <div ng-show="registerForm.email.$touched && registerForm.email.$error.pattern">
+                  <small style="color:red;display:block;text-align:center;">Invalid characters detected!</small>
+                </div>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" name="username" placeholder="Username" ng-pattern="homeCtrl.usernamePattern"
+                ng-model="homeCtrl.user.username" ng-minlength="3" ng-maxlength="10" ng-required="true">
+              <div ng-show="registerForm.username.$touched && (registerForm.username.$error.minlength || registerForm.username.$error.maxlength)">
+                <small style="color:red;display:block;text-align:center;">Username must have anywhere between 3 and 10
+                  characters!</small>
+              </div>
+              <div ng-show="registerForm.username.$touched && registerForm.username.$error.required">
+                <small style="color:red;display:block;text-align:center;">Required!</small>
+              </div>
+              <div ng-show="registerForm.username.$touched && registerForm.username.$error.pattern">
+                <small style="color:red;display:block;text-align:center;">Invalid characters detected!</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="password" class="form-control" name="password" placeholder="Password" ng-pattern="homeCtrl.passwordPattern"
+                ng-model="homeCtrl.user.password" ng-minlength="8" ng-maxlength="16" ng-required="true"></input>
+              <div ng-show="registerForm.password.$touched && (registerForm.password.$error.minlength || registerForm.password.$error.maxlength)">
+                <small style="color:red;display:block;text-align:center;">Password must have anywhere between 8 and 16
+                  characters!</small>
+              </div>
+              <div ng-show="registerForm.password.$touched && registerForm.password.$error.required">
+                <small style="color:red;display:block;text-align:center;">Required!</small>
+              </div>
+              <div ng-show="registerForm.password.$touched && registerForm.password.$error.pattern">
+                <small style="color:red;display:block;text-align:center;">Invalid characters detected!</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <input type="password" class="form-control" name="passwordRepeat" placeholder="Confirm Password"
+                ng-pattern="homeCtrl.user.password" ng-model="homeCtrl.passwordRepeat" ng-minlength="8" ng-maxlength="16"
+                ng-required="true">
+              <div ng-show="registerForm.passwordRepeat.$touched && (registerForm.passwordRepeat.$error.minlength || registerForm.passwordRepeat.$error.maxlength)">
+                <small style="color:red;display:block;text-align:center;">Password must have anywhere between 8 and 16
+                  characters!</small>
+              </div>
+              <div ng-show="registerForm.passwordRepeat.$touched && registerForm.passwordRepeat.$error.required">
+                <small style="color:red;display:block;text-align:center;">Required!</small>
+              </div>
+
+              <div ng-show="registerForm.passwordRepeat.$error.pattern && registerForm.passwordRepeat.$touched">
+                <small style="color:red;display:block;text-align:center;">Passwords have to match!</small>
+              </div>
+              <div ng-show="!registerForm.passwordRepeat.$error.pattern && registerForm.passwordRepeat.$touched && homeCtrl.passwordRepeat != '' ">
+                <small style="color:green;display:block;text-align:center;">Passwords matching!</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" name="name" placeholder="First name" ng-pattern="homeCtrl.namePattern" ng-model="homeCtrl.user.name" ng-minlength="2" ng-maxlength="20" ng-required="true"></input>
+              <div ng-show="registerForm.name.$touched && registerForm.name.$error.minlength">
+                  <small style="color:red;display:block;text-align:center;">Name you have entered is too small!</small>
+              </div>
+              <div ng-show="registerForm.name.$touched && registerForm.name.$error.maxlength">
+                  <small style="color:red;display:block;text-align:center;">Name you have entered is too large!</small>
+              </div>
+              <div ng-show="registerForm.name.$touched && registerForm.name.$error.required">
+                  <small style="color:red;display:block;text-align:center;">Required!</small>
+              </div>
+              <div ng-show="registerForm.name.$touched && registerForm.name.$error.pattern">
+                  <small style="color:red;display:block;text-align:center;">Invalid characters detected!</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" name="lastname" placeholder="Last name" ng-pattern="homeCtrl.lastnamePattern" ng-model="homeCtrl.user.lastname" ng-minlength="2" ng-maxlength="20" ng-required="true"></input>
+              <div ng-show="registerForm.lastname.$touched && registerForm.lastname.$error.minlength">
+                  <small style="color:red;display:block;text-align:center;">Last name you have entered is too small!</small>
+              </div>
+              <div ng-show="registerForm.lastname.$touched && registerForm.lastname.$error.maxlength">
+                  <small style="color:red;display:block;text-align:center;">Last name you have entered is too large!</small>
+              </div>
+              <div ng-show="registerForm.lastname.$touched && registerForm.lastname.$error.required">
+                  <small style="color:red;display:block;text-align:center;">Required!</small>
+              </div>
+              <div ng-show="registerForm.lastname.$touched && registerForm.lastname.$error.pattern">
+                  <small style="color:red;display:block;text-align:center;">Invalid characters detected!</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" name="city" placeholder="City" ng-model="homeCtrl.user.city" ng-minlength="2" ng-maxlength="20" ng-required="true">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" name="phoneNumber" placeholder="Phone number" ng-pattern="homeCtrl.phonePattern" ng-model="homeCtrl.user.phoneNumber" ng-minlength="10" ng-maxlength="10" ng-required="true"></input>
+              <div ng-show="registerForm.phoneNumber.$touched && (registerForm.phoneNumber.$error.minlength || registerForm.phoneNumber.$error.maxlength) && !registerForm.phoneNumber.$error.pattern ">
+                  <small style="color:red;display:block;text-align:center;">Enter a valid phone number!</small>
+              </div>
+              <div ng-show="registerForm.phoneNumber.$touched && (registerForm.phoneNumber.$error.pattern)">
+                  <small style="color:red;display:block;text-align:center;">Invalid characters detected!</small>
+              </div>
+              <div ng-show="registerForm.phoneNumber.$touched && registerForm.phoneNumber.$error.required">
+                  <small style="color:red;display:block;text-align:center;">Required!</small>
+              </div>
+            </div>
+            <div class="form-actions">
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" ng-click="homeCtrl.submitReg()" ng-disabled="homeCtrl.dataLoading || registerForm.passwordRepeat.$error.pattern"
+          class="btn btn-primary">Register</button>
+        <img ng-if="homeCtrl.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div ui-view="center"></div>
+
+<script>
+  $('#loginModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var modal = $(this)
+
+  })
+  $('#signupModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var modal = $(this)
+
+  })
+</script>

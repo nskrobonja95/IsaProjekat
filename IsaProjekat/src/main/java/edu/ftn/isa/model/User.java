@@ -42,8 +42,8 @@ public @Data class User implements Serializable {
 	@Column(name="password")
 	private String password;
 	
-	@Column(name="state")
-	private String state;
+	@Column(name="city")
+	private String city;
 	
 	@Column(name="enabled")
 	private boolean enabled;

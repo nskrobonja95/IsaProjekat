@@ -34,6 +34,7 @@
         <script src="http://maps.googleapis.com/maps/api/js?sensor=false&language=en"></script>  -->
       
         <!-- Services -->
+        <script src="js/app/services/signup.service.js"> </script>
         <#--  <script src="js/app/services/UserService.js"></script>
         <script src="js/app/services/authentication/AuthenticationService.js"> </script>
         <script src="js/app/services/UserService.js"></script>
@@ -46,6 +47,7 @@
         <script src="js/app/modules/authentication/registration.js"></script>  -->
         
         <!-- Controllers -->
+        <script src="js/app/controllers/HomeController.js"></script>
         <#--  <script src="js/app/controllers/UserController.js"></script>
          <script src="js/app/controllers/ProfileController.js"></script>
         <script src="js/app/controllers/successController.js"></script>
