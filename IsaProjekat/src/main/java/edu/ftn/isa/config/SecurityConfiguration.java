@@ -45,7 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
         	.authorizeRequests()
-        		.antMatchers("/auth/**", "/app/**", "/partials/**", "/images/**", "resources/**", "/#!/home", "/**").permitAll()
+        		.antMatchers("/auth/**", "/app/**","/partials/**", "/").permitAll()
         		.antMatchers("/admin/**").hasAuthority("ROLE_SysAdmin")
         		.antMatchers("/avioadmin/**").hasAuthority("ROLE_AvioAdmin")
         	.anyRequest().authenticated().and()
@@ -56,7 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
-        web.ignoring().antMatchers("/resources/**");
+        web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/#!/**");
     }
 	
 	@Bean

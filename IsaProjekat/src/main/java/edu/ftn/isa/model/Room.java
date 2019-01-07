@@ -1,5 +1,7 @@
 package edu.ftn.isa.model;
 
+import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -36,7 +39,7 @@ public @Data class Room {
 	@Column(name="balcony")
 	private boolean balcony;
 	
-	@Column(name="price_per_night")
-	private Double pricePerNight;
+	/*@OneToMany(mappedBy="price")
+	private Collection<PriceOfRoom> prices;*/
 	
 }
