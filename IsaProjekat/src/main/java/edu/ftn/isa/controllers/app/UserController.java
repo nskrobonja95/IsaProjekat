@@ -46,7 +46,7 @@ public class UserController {
 		user.setName(userdto.getName());
 		user.setLastname(userdto.getLastname());
 		user.setUsername(userdto.getUsername());
-		user.setState(userdto.getState());
+		user.setCity(userdto.getCity());
 		try {
 			userRepo.save(user);
 		} catch(Exception e) {
