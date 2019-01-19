@@ -14,7 +14,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -47,6 +49,7 @@ public @Data class HotelReservation {
 	@Column(name="departingdate")
 	private Date departingDate;
 	
+	@JsonBackReference
 	@ManyToMany
 	@JoinTable(
 			name = "PERSISTING_RESERVATION_SERVICE", 

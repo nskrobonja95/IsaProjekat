@@ -12,6 +12,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 
 @Entity
@@ -36,6 +39,7 @@ public @Data class HotelService {
 	@Column(name="charge")
 	private String charge;
 	
+	@JsonManagedReference
 	@ManyToMany(mappedBy = "services")
 	private Collection<HotelReservation> reservations;
 	

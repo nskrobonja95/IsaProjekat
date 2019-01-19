@@ -11,6 +11,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Entity
@@ -33,6 +35,7 @@ public @Data class RentACarService {
 	@Column(name="rentacarpromo")
 	private String promo;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="rentACarService")
 	private Collection<Vehicle> vehicels;
 	

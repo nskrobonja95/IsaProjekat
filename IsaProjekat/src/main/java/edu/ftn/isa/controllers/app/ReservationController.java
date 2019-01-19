@@ -68,7 +68,6 @@ public class ReservationController {
 		reservation.setServices(services);
 		
 		HotelReservation savedRes = hotelResRepo.save(reservation);
-		savedRes.getHotel().setRooms(null);
 		savedRes.getRoom().setHotel(null);
 		for(HotelService service: savedRes.getServices()) {
 			service.setReservations(null);

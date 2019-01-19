@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ftn.isa.converters.HotelServicesConverter;
 import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.HotelService;
 import edu.ftn.isa.model.Room;
@@ -31,6 +32,9 @@ public class HotelController {
 	@Autowired
 	private RoomRepository roomRepo;
 	
+	@Autowired
+	private HotelServicesConverter hotelServicesConverter;
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getHotel(
 			@PathVariable("id") Long id) {
@@ -38,7 +42,6 @@ public class HotelController {
 		Optional<Hotel> optionalHotel = hotelRepo.findById(id);
 		if(!optionalHotel.isPresent())
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		optionalHotel.get().setRooms(null);
 		
 		return new ResponseEntity<Hotel>(optionalHotel.get(), HttpStatus.OK);
 		
@@ -52,8 +55,6 @@ public class HotelController {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			Hotel hotel = opHotel.get();
 			List<Room> rooms = roomRepo.findByHotel(hotel);
-			for(int i=0; i<rooms.size(); ++i)
-				rooms.get(i).setHotel(null);
 			return new ResponseEntity<List<Room>>(rooms, HttpStatus.OK);
 	}
 	
@@ -62,11 +63,6 @@ public class HotelController {
 			@PathVariable("id") Long hotelid) {
 		Optional<Hotel> hotel = hotelRepo.findById(hotelid);
 		List<HotelService> services = hotelServRepo.findByHotel(hotel.get());
-		for(int i=0; i<services.size(); ++i) {
-			services.get(i).setHotel(null);
-			services.get(i).setReservations(null);
-		}
-		
 		return new ResponseEntity<List<HotelService>>(services, HttpStatus.OK);
 		
 	}

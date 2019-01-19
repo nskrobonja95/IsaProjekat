@@ -1,5 +1,7 @@
 package edu.ftn.isa.controllers.administration;
 
+import java.util.Optional;
+
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.QueryParam;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Hotel;
@@ -111,6 +114,22 @@ public class AdminController {
 		if(user == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<User>(user, HttpStatus.OK);
+	}
+	
+	@PutMapping("/setAvioAdmin")
+	public ResponseEntity<?> setAvioAdmin(
+			@QueryParam("username") String username, 
+			@QueryParam("avioid") Long avioId) {
+		User user = userRepo.findByUsername(username);
+		if(user == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		Optional<AvioCompany> avioOp = avioRepo.findById(avioId);
+		if(!avioOp.isPresent())
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		AvioCompany avio = avioOp.get();
+		avio.setAdmin(user);
+		avioRepo.save(avio);
+		return new ResponseEntity<User>(HttpStatus.OK);
 	}
 	
 }

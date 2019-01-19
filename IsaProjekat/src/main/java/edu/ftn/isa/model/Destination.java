@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
 
 @Entity
@@ -25,6 +27,11 @@ public @Data class Destination implements Serializable {
 	@Column(name="name")
 	private String name;
 	
+	@JsonBackReference
 	@ManyToMany(mappedBy = "destinations")
 	private Collection<AvioCompany> avioCompanies;
+	
+	@JsonBackReference
+	@ManyToMany(mappedBy = "stops")
+	private Collection<Flight> flights;
 }

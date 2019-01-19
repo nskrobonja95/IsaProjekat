@@ -1,13 +1,10 @@
 package edu.ftn.isa.model;
 
-import java.util.Collection;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -32,8 +29,5 @@ public @Data class Hotel {
 	@NotNull
 	@Column(name="hotelpromo")
 	private String promo;
-	
-	@OneToMany(mappedBy="hotel")
-	private Collection<Room> rooms;
 	
 }

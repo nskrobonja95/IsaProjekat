@@ -15,6 +15,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 
@@ -35,6 +37,7 @@ public @Data class Flight {
 	@JoinColumn(name = "fromdest_id", nullable = false)
 	private Destination from;
 	
+	@JsonManagedReference
 	@ManyToMany
 	@JoinTable(
 			name = "PERSISTING_FLIGHT_STOPS", 

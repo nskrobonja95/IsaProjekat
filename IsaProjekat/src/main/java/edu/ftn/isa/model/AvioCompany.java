@@ -15,6 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 
 @Entity
@@ -37,6 +40,7 @@ public @Data class AvioCompany implements Serializable {
 	@Column(name="promo")
 	private String promo;
 	
+	@JsonManagedReference
 	@ManyToMany
 	@JoinTable(
 			name = "PERSISTING_AVIO_DESTINATION", 
