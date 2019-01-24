@@ -51,4 +51,8 @@ public @Data class User implements Serializable {
 	@Column(name="role")
 	@Enumerated(EnumType.STRING)
 	private Role role;
+	
+	@Column(name="passwordChanged")
+	private boolean passwordChanged;
+	
 }

@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -29,5 +31,9 @@ public @Data class Hotel {
 	@NotNull
 	@Column(name="hotelpromo")
 	private String promo;
+	
+	@ManyToOne
+	@JoinColumn(name = "admin", nullable=true)
+	private User admin;
 	
 }

@@ -1,5 +1,6 @@
 package edu.ftn.isa.controllers.administration;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -10,6 +11,7 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,8 +20,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
+import edu.ftn.isa.dto.AdminDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.RentACarService;
@@ -45,6 +47,9 @@ public class AdminController {
 	
 	@Autowired
 	private RentACarRepository rentACarRepo;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@PostMapping("/addAvio")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -130,6 +135,133 @@ public class AdminController {
 		avio.setAdmin(user);
 		avioRepo.save(avio);
 		return new ResponseEntity<User>(HttpStatus.OK);
+	}
+	
+	@PutMapping("/setHotelAdmin")
+	public ResponseEntity<?> setHotelAdmin(
+			@QueryParam("username") String username, 
+			@QueryParam("hotelid") Long hotelId) {
+		User user = userRepo.findByUsername(username);
+		if(user == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		Optional<Hotel> hotelOp = hotelRepo.findById(hotelId);
+		if(!hotelOp.isPresent())
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		Hotel hotel = hotelOp.get();
+		hotel.setAdmin(user);
+		hotelRepo.save(hotel);
+		return new ResponseEntity<User>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/setAvioAdmin/{avioId}")
+	public ResponseEntity<?> setAvioAdminForm(
+			@RequestBody AdminDTO adminDto, 
+			@PathVariable("avioId") Long avioId) {
+		
+		if(userRepo.findByUsernameOrEmail(adminDto.getUsername(), adminDto.getEmail()) != null) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
+		
+		User user = new User();
+		user.setEmail(adminDto.getEmail());
+		user.setUsername(adminDto.getUsername());
+		user.setPassword(passwordEncoder.encode(adminDto.getPassword()));
+		user.setPasswordChanged(false);
+		user.setRole(Role.AvioAdmin);
+		userRepo.save(user);
+		
+		AvioCompany avio = avioRepo.findById(avioId).get();
+		avio.setAdmin(user);
+		avioRepo.save(avio);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+		
+	}
+	
+	@PostMapping("/setHotelAdmin/{hotelId}")
+	public ResponseEntity<?> setHotelAdminForm(
+			@RequestBody AdminDTO adminDto, 
+			@PathVariable("hotelId") Long hotelId) {
+		
+		if(userRepo.findByUsernameOrEmail(adminDto.getUsername(), adminDto.getEmail()) != null) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
+		
+		User user = new User();
+		user.setEmail(adminDto.getEmail());
+		user.setUsername(adminDto.getUsername());
+		user.setPassword(passwordEncoder.encode(adminDto.getPassword()));
+		user.setPasswordChanged(false);
+		user.setRole(Role.AvioAdmin);
+		userRepo.save(user);
+		
+		Hotel hotel = hotelRepo.findById(hotelId).get();
+		hotel.setAdmin(user);
+		hotelRepo.save(hotel);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+		
+	}
+	
+	@PostMapping("/setRASAdmin/{RASId}")
+	public ResponseEntity<?> setRASAdminForm(
+			@RequestBody AdminDTO adminDto, 
+			@PathVariable("RASId") Long RASId) {
+		
+		if(userRepo.findByUsernameOrEmail(adminDto.getUsername(), adminDto.getEmail()) != null) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
+		
+		User user = new User();
+		user.setEmail(adminDto.getEmail());
+		user.setUsername(adminDto.getUsername());
+		user.setPassword(passwordEncoder.encode(adminDto.getPassword()));
+		user.setPasswordChanged(false);
+		user.setRole(Role.AvioAdmin);
+		userRepo.save(user);
+		
+		RentACarService ras = rentACarRepo.findById(RASId).get();
+		ras.setAdmin(user);
+		rentACarRepo.save(ras);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+		
+	}
+	
+	@PutMapping("/setRASAdmin")
+	public ResponseEntity<?> setRASAdmin(
+			@QueryParam("username") String username, 
+			@QueryParam("rasid") Long rasId) {
+		User user = userRepo.findByUsername(username);
+		if(user == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		Optional<RentACarService> rasOp = rentACarRepo.findById(rasId);
+		if(!rasOp.isPresent())
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		RentACarService ras = rasOp.get();
+		ras.setAdmin(user);
+		rentACarRepo.save(ras);
+		return new ResponseEntity<User>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/getUsers")
+	public ResponseEntity<?> getAllUsers() {
+		return new ResponseEntity<List<User>>(userRepo.findAll(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/getAvioAdminUsers")
+	public ResponseEntity<?> getAllAvioAdminUsers() {
+		return new ResponseEntity<List<User>>(userRepo.findByRole(Role.AvioAdmin), HttpStatus.OK);
+	}
+	
+	@GetMapping("/getHotelAdminUsers")
+	public ResponseEntity<?> getAllHotelAdminUsers() {
+		return new ResponseEntity<List<User>>(userRepo.findByRole(Role.HotelAdmin), HttpStatus.OK);
+	}
+	
+	@GetMapping("/getRASAdminUsers")
+	public ResponseEntity<?> getAllRASAdminUsers() {
+		return new ResponseEntity<List<User>>(userRepo.findByRole(Role.RentACarAdmin), HttpStatus.OK);
 	}
 	
 }

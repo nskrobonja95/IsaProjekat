@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -38,5 +40,9 @@ public @Data class RentACarService {
 	@JsonIgnore
 	@OneToMany(mappedBy="rentACarService")
 	private Collection<Vehicle> vehicels;
+	
+	@ManyToOne
+	@JoinColumn(name = "admin", nullable=true)
+	private User admin;
 	
 }
