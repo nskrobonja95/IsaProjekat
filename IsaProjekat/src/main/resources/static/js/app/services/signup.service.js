@@ -10,7 +10,8 @@ angular.module('flightApp').factory('SignupService',
                 createUser: createUser,
                 updateUser: updateUser,
                 removeUser: removeUser,
-                getUserByUsername: getUserByUsername
+                getUserByUsername: getUserByUsername,
+                userSignIn: userSignIn
             };
 
             return factory;
@@ -57,7 +58,7 @@ angular.module('flightApp').factory('SignupService',
                 $http.post(urls.REGISTER_SERVICE_API, user)
                     .then(
                         function (response) {
-                            loadAllUsers();
+                            //loadAllUsers();
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
@@ -80,6 +81,22 @@ angular.module('flightApp').factory('SignupService',
                         function (errResponse) {
                             console.error(errResponse.data.errorMessage);
                             deferred.reject(errResponse);
+                        }
+                    );
+                return deferred.promise;
+            }
+
+            function userSignIn(userLogin) {
+                console.log("Logging in with username: " + userLogin.username);
+                var deferred = $q.defer();
+                $http.post(urls.LOGIN_SERVICE_API, userLogin)
+                    .then(
+                        function (response) {
+                            deferred.resolve(response.data);
+                        },
+                        function (errResponse) {
+                           console.error('Error while creating User : '+errResponse.data.errorMessage);
+                           deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;

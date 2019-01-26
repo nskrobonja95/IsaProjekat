@@ -4,6 +4,7 @@ var app = angular.module('flightApp', ['ui.router', 'ngMaterial', 'ngMessages', 
 app.constant('urls', {
     BASE: 'http://localhost:8080/SpringBootCRUDApp',
     REGISTER_SERVICE_API : 'http://localhost:8080/auth/register',
+    LOGIN_SERVICE_API : 'http://localhost:8080/auth/login',
     FRIENDS_SERVICE_API: 'http://localhost:8080/SpringBootCRUDApp/api/friendsList/',
     CINEMAS_SERVICE_API : 'http://localhost:8080/SpringBootCRUDApp/cinemasApi/cinemas',
     AUTHENTICATION_SERVICE_API : 'http://localhost:8080/auth/',
@@ -41,6 +42,14 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 }
 
 
+            })
+            .state('home-abstract.confirmReg', {
+                url:'/confirmReg',
+                views: {
+                    'confirm': {
+                        template: "Verification Email sent. Confirm your account."
+                    }
+                }
             });
             $urlRouterProvider.otherwise('/home');
 

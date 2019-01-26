@@ -21,7 +21,7 @@
     
     <ul class="navbar-nav ml-auto" ng-if="globals.currentUser.username==null">
       <li class="nav-item">
-        <a  class="nav-link" href ui-sref="login"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a  class="nav-link" href data-toggle="modal" data-target="#loginModal"><i class="fas fa-sign-in-alt"></i> Login</a>
       </li>
       <li class="nav-item" >
         <a  class="nav-link" href data-toggle="modal" data-target="#signupModal"><i class="fas fa-user-plus"></i> Sign up</a>
@@ -67,9 +67,9 @@
 
 
             <div class="form-group">
-                <input type="text" class="form-control" name="email" placeholder="Email" ng-pattern="homeCtrl.emailPattern" ng-model="homeCtrl.user.email" ng-minlength="3" ng-maxlength="128" ng-required="true"></input>
+                <input type="email" class="form-control" name="email" placeholder="Email" ng-pattern="homeCtrl.emailPattern" ng-model="homeCtrl.user.email" ng-minlength="3" ng-maxlength="128" ng-required="true"></input>
                 <div ng-show="registerForm.email.$touched && (registerForm.email.$error.minlength || registerForm.email.$error.maxlength)">
-                  <small style="color:red;display:block;text-align:center;">Username must have anywhere between 3 and 128 characters!</small>
+                  <small style="color:red;display:block;text-align:center;">Email must have anywhere between 3 and 128 characters!</small>
                 </div>
                 <div ng-show="registerForm.email.$touched && registerForm.email.$error.required">
                   <small style="color:red;display:block;text-align:center;">Required!</small>
@@ -186,6 +186,62 @@
   </div>
 </div>
 
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form name="loginForm" ng-submit="homeCtrl.submitLogin()" role="form">
+          <div class="form-group">
+            <input type="text" class="form-control" name="username" placeholder="Username" ng-pattern="homeCtrl.usernamePattern"
+              ng-model="homeCtrl.userLogin.username" ng-minlength="3" ng-maxlength="25" ng-required="true">
+            <div ng-show="registerForm.username.$touched && (registerForm.username.$error.minlength || registerForm.username.$error.maxlength)">
+              <small style="color:red;display:block;text-align:center;">Username must have anywhere between 3 and 10
+                    characters!</small>
+            </div>
+            <div ng-show="registerForm.username.$touched && registerForm.username.$error.required">
+              <small style="color:red;display:block;text-align:center;">Required!</small>
+            </div>
+            <div ng-show="registerForm.username.$touched && registerForm.username.$error.pattern">
+              <small style="color:red;display:block;text-align:center;">Invalid characters detected!</small>
+            </div>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" name="password" placeholder="Password" ng-pattern="homeCtrl.passwordPattern"
+                ng-model="homeCtrl.userLogin.password" ng-minlength="8" ng-maxlength="16" ng-required="true"></input>
+              <div ng-show="registerForm.password.$touched && (registerForm.password.$error.minlength || registerForm.password.$error.maxlength)">
+                <small style="color:red;display:block;text-align:center;">Password must have anywhere between 8 and 16
+                  characters!</small>
+              </div>
+              <div ng-show="registerForm.password.$touched && registerForm.password.$error.required">
+                <small style="color:red;display:block;text-align:center;">Required!</small>
+              </div>
+              <div ng-show="registerForm.password.$touched && registerForm.password.$error.pattern">
+                <small style="color:red;display:block;text-align:center;">Invalid characters detected!</small>
+              </div>
+            </div>
+            <div class="form-actions">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" ng-click="homeCtrl.submitLogin()" data-dismiss="modal" ng-disabled="homeCtrl.dataLoading || registerForm.passwordRepeat.$error.pattern"
+            class="btn btn-primary">Sign in</button>
+          <img ng-if="homeCtrl.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div ui-view="confirm"></div>
 <div ui-view="center"></div>
 
 <script>

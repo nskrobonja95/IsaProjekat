@@ -6,12 +6,16 @@ angular.module('flightApp').controller('HomeController',
         
         var self = this;
         self.user = {};
+        //for login
+        self.userLogin ={};
+
         self.users=[];
         self.user.enabled = false;
         self.user.confirmationToken = '';
         self.user.type = '0';
         self.loggedUser = null;
         self.submitReg = submitReg;
+        self.submitLogin = submitLogin;
         self.getAllUsers = getAllUsers;
         self.createUser = createUser;
         self.updateUser = updateUser;
@@ -29,6 +33,8 @@ angular.module('flightApp').controller('HomeController',
         self.dataLoading = false;
         self.onlyIntegers = /^\d+$/;
         self.onlyNumbers = /^\d+([,.]\d+)?$/;
+
+        
         
         
         function submitReg() {
@@ -42,8 +48,26 @@ angular.module('flightApp').controller('HomeController',
                 console.log('User updated with id ', self.user.id);
             }
         }
+
+        function submitLogin() {
+            console.log(self.userLogin);
+            self.dataLoading = true;
+            SignupService.userSignIn(self.userLogin)
+                .then(
+                    function(response) {
+                        self.dataLoading = false;
+                        $("#loginModal").modal("hide");
+                        self.userLogin.username = '';
+                        self.userLogin.password = '';
+                    }, 
+                    function(errResponse) {
+                        self.dataLoading = false;
+                        alert("RESPONSE ERROR");
+                    }
+                );
+        }
+
         self.moje = function () {
-        	  
               $state.go('login');
         }
 
@@ -60,7 +84,7 @@ angular.module('flightApp').controller('HomeController',
                         $scope.registerForm.$setPristine();
                         $scope.registerForm.$setUntouched();
                         self.dataLoading = false;
-                        
+                        $("signupModal").modal("hide");
                     },
                     function (errResponse) {
                         console.error('Error while creating User');

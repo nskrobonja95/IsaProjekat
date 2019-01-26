@@ -55,4 +55,6 @@ public @Data class User implements Serializable {
 	@Column(name="passwordChanged")
 	private boolean passwordChanged;
 	
+	@Column(name="verificationToken")
+	private String verificationToken;
 }
