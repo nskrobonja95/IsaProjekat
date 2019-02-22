@@ -1,6 +1,7 @@
 package edu.ftn.isa.controllers.app;
 
-import java.util.Base64;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,9 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ftn.isa.dto.FriendsDTO;
 import edu.ftn.isa.dto.UserDTO;
+import edu.ftn.isa.model.Friends;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.payload.PasswordChangePayload;
 import edu.ftn.isa.repositories.UserRepository;
@@ -86,7 +90,50 @@ public class UserController {
 		User user = userRepo.findByUsername(username);
 		if(user == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+		
+		List<FriendsDTO> friendsDTO = new ArrayList<>();
+		
+		for(Friends friends : user.getPersons()){
+			if(friends.getFriendshipDate()){
+				friendsDTO.add(new FriendsDTO(friends.getFriends().getUsername(), friends.getFriends().getId(), friends.getFriendshipDate(),
+						"accepted"));
+			}else{
+				friendsDTO.add(new FriendsDTO(friends.getFriends().getUsername(), friends.getFriends().getId(), friends.getFriendshipDate(),
+						"requested"));
+			}
+				
+		}
+		for(Friends friends : user.getFriends()){
+			if(friends.getFriendshipDate()){
+				friendsDTO.add(new FriendsDTO(friends.getPersons().getUsername() ,friends.getPersons().getId(),friends.getFriendshipDate(),
+						"accepted"));
+			}else{
+				friendsDTO.add(new FriendsDTO(friends.getPersons().getUsername() ,friends.getPersons().getId(),friends.getFriendshipDate(),
+						"received"));
+			}
+				
+		}
+		
+		UserDTO userDTO = UserDTO.parseUsertoDTO(user);
+		userDTO.setFriends(friendsDTO);
+		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
+	}
+	@RequestMapping(value = "/searchFriends/{searchValue}", method = RequestMethod.GET)
+	public ResponseEntity<?> getSearchFriends(@PathVariable("searchValue") String searchValue) {
+		List<User> users = userRepo.querySearch(searchValue);
+		if (users.isEmpty()) {
+			return new ResponseEntity(HttpStatus.NO_CONTENT);
+			// You many decide to return HttpStatus.NOT_FOUND
+		}
+		List<UserDTO> usersDTO = new ArrayList<>();
+		
+		//System.out.println(users.getUsername());
+		for(User user : users){
+			if(user.isEnabled())
+			usersDTO.add(UserDTO.parseUsertoDTO(user));
+		}
+		System.out.println("Ovo je search"+usersDTO);
+		return new ResponseEntity<List<UserDTO>>(usersDTO, HttpStatus.OK);
 	}
 	
 }

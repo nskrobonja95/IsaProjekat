@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ftn.isa.dto.UserDTO;
 import edu.ftn.isa.model.Role;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.payload.LoginPayload;
@@ -57,7 +58,8 @@ public class AuthenticationController {
 		}
 		
 		User u = userRepo.findByUsername(loginPayload.getUsername());
-		return new ResponseEntity<User>(u, HttpStatus.OK);
+		UserDTO userDTO = UserDTO.parseUsertoDTO(u);
+		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
 	}
 	
 	@PostMapping("/register")
