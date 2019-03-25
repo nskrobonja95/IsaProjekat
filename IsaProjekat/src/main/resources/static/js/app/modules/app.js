@@ -47,8 +47,8 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
             .state('home-abstract.flights', {
                 url:'/flights',
                 views: {
-                    'flight-search': {
-                        templateUrl: "partials/flight-search"
+                    'flights': {
+                        templateUrl: "partials/flights"
                     }
 
                 }

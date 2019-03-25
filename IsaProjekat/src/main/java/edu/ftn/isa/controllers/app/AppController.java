@@ -17,14 +17,12 @@ public class AppController {
 
 	@RequestMapping("/")
 	String home(ModelMap modal) {
-		System.out.println("Upaooo");
 		modal.addAttribute("title","Flight Application");
 		return "index";
 	}
 
 	@RequestMapping(value="/partials/{page}")
 	String partialHandler(@PathVariable("page") final String page) {
-		System.out.println("trazi ovde "+page);
 		
 		return page;
 	}
