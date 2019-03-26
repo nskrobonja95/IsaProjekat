@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.ftn.isa.dto.AvioCompanyDTO;
 import edu.ftn.isa.dto.DestinationDTO;
+import edu.ftn.isa.dto.HotelDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
+import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.repositories.AvioRepository;
+import edu.ftn.isa.repositories.HotelRepository;
 
 @RestController
 @RequestMapping("/app")
@@ -24,6 +27,9 @@ public class UnregisteredUsersController {
 
 	@Autowired
 	private AvioRepository avioRepo;
+	
+	@Autowired
+	private HotelRepository hotelRepo;
 	
 	@GetMapping("/airlines")
 	public ResponseEntity<?> getAllAirlines() {
@@ -71,6 +77,18 @@ public class UnregisteredUsersController {
 			retVal.add(dest);
 		}
 		return new ResponseEntity<List<DestinationDTO>>(retVal, HttpStatus.OK);
+	}
+	
+	@GetMapping("/hotels")
+	public ResponseEntity<?> getAllHotels() {
+		List<Hotel> hotels = hotelRepo.findAll();
+		System.out.println(hotels);
+		List<HotelDTO> retVal = new ArrayList<HotelDTO>();
+		
+		for(Hotel hotel : hotels) {
+			retVal.add(HotelDTO.parseHotel(hotel));
+		}
+		return new ResponseEntity<List<HotelDTO>>(retVal, HttpStatus.OK);
 	}
 	
 }

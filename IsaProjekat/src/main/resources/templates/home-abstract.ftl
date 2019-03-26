@@ -243,7 +243,8 @@
 
 <div ui-view="confirm"></div>
 <div ui-view="flight-search"></div>
-<div ui-view="flights"></div>
+<div ui-view="avio-companies-list"></div>
+<div ui-view="hotels-list"></div>
 <div ui-view="profile-abstract"></div>
 <div ui-view="settings-abstract"></div>
 <script>

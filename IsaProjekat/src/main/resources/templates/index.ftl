@@ -37,6 +37,8 @@
         <script src="js/app/services/login.service.js"> </script>
         <script src="js/app/services/user.service.js"> </script>
         <script src="js/app/services/friend.service.js"> </script>
+        <script src="js/app/services/avio.service.js"> </script>
+        <script src="js/app/services/hotel.service.js"> </script>
 
         <#--  <script src="js/app/services/UserService.js"></script>
         <script src="js/app/services/authentication/AuthenticationService.js"> </script>
@@ -56,6 +58,8 @@
         <script src="js/app/controllers/FriendsListController.js"></script>
         <script src="js/app/controllers/FriendsSearchController.js"></script>
         <script src="js/app/controllers/GeneralSettingsController.js"></script>
+        <script src="js/app/controllers/AvioController.js"></script>
+        <script src="js/app/controllers/HotelController.js"></script>
 
         <#--  <script src="js/app/controllers/UserController.js"></script>
          <script src="js/app/controllers/ProfileController.js"></script>

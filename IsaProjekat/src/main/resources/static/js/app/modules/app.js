@@ -15,6 +15,8 @@ app.run(function($rootScope, $http, $cookies) {
 
 app.constant('urls', {
     USERS_SERVICE_API: 'http://localhost:8080/user/',
+    UNREGISTERED_USERS_SERVICE_API: 'http://localhost:8080/app/',
+    AVIO_SERVICE_API: 'http://localhost:8080/avio/',
     REGISTER_SERVICE_API : 'http://localhost:8080/auth/register',
     LOGIN_SERVICE_API : 'http://localhost:8080/auth/login',
     FRIENDS_SERVICE_API: 'http://localhost:8080/friend/',
@@ -44,16 +46,39 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 
 
             })
-            .state('home-abstract.flights', {
-                url:'/flights',
+            .state('home-abstract.avio-companies-list', {
+                url:'/avio-companies',
                 views: {
-                    'flights': {
-                        templateUrl: "partials/flights"
+                    'avio-companies-list': {
+                        templateUrl: "partials/avio-companies-list",
+                        controller: "AvioController",
+                        controllerAs: "avioCtrl"
                     }
 
+                },
+                resolve: {
+                    initialCompaniesList: ['$stateParams', 'AvioService',function($stateParams, AvioService){
+                       
+                        return AvioService.loadAllAvio();   
+                      }]
                 }
+            })
+            .state('home-abstract.hotels-list', {
+                url:'/hotels',
+                views: {
+                    'hotels-list': {
+                        templateUrl: "partials/hotels-list",
+                        controller: "HotelController",
+                        controllerAs: "hotelCtrl"
+                    }
 
-
+                },
+                resolve: {
+                    initialHotelsList: ['$stateParams', 'HotelService',function($stateParams, HotelService){
+                       
+                        return HotelService.loadAllHotels();   
+                      }]
+                }
             })
             .state('home-abstract.confirmReg', {
                 url:'/confirmReg',
@@ -176,7 +201,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                   }
                 }  
             })
-            $urlRouterProvider.otherwise('/flights');
+            $urlRouterProvider.otherwise('/avio-companies');
 
     }
 ]);
