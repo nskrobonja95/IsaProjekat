@@ -8,13 +8,13 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href style="color:white"><i class="fas fa-plane"></i> Flights <span class="sr-only">(current)</span></a>
+        <a class="nav-link" ui-sref="home-abstract.avio-companies-list()" style="color:white"><i class="fas fa-plane"></i> Flights <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href style="color:white" ><i class="fas fa-hotel"></i> Hotels <span class="sr-only">(current)</span></a>
+        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Hotels <span class="sr-only"></span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href style="color:white" ><i class="fas fa-car"></i> Car Hire</a>
+        <a class="nav-link" ui-sref="home-abstract.car-hire-companies-list()" style="color:white" ><i class="fas fa-car"></i> Car Hire</a>
       </li>
       
     </ul>
@@ -244,6 +244,7 @@
 <div ui-view="confirm"></div>
 <div ui-view="flight-search"></div>
 <div ui-view="avio-companies-list"></div>
+<div ui-view="car-hire-companies-list"></div>
 <div ui-view="hotels-list"></div>
 <div ui-view="profile-abstract"></div>
 <div ui-view="settings-abstract"></div>

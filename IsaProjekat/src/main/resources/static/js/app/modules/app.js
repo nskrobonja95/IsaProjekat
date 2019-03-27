@@ -5,7 +5,7 @@ app.run(function($rootScope, $http, $cookies) {
     $http.defaults.headers.get = { 'Content-type': 'application/json' };
 
     $rootScope.globals = $cookies.getObject('globals') || {};
-    console.log($rootScope);
+    //console.log($rootScope);
     if ($rootScope.globals.currentUser) {
         $http.defaults.headers.common['Authorization'] = 'Basic ' + $rootScope.globals.currentUser.authdata;
     }
@@ -60,6 +60,23 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     initialCompaniesList: ['$stateParams', 'AvioService',function($stateParams, AvioService){
                        
                         return AvioService.loadAllAvio();   
+                      }]
+                }
+            })
+            .state('home-abstract.car-hire-companies-list', {
+                url:'/car-hire-companies',
+                views: {
+                    'car-hire-companies-list': {
+                        templateUrl: "partials/car-hire-companies-list",
+                        controller: "CarHireController",
+                        controllerAs: "chCtrl"
+                    }
+
+                },
+                resolve: {
+                    initialCarHireCompaniesList: ['$stateParams', 'CarHireService',function($stateParams, CarHireService){
+                       
+                        return CarHireService.loadAllCarHireCompanies();   
                       }]
                 }
             })

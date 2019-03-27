@@ -11,7 +11,7 @@
         <div class="media" ng-repeat = "hotel in hotelCtrl.hotelsList" >
               <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>
               </div>
-              <img class="d-flex align-self-start" src="images/airplane-company.jpg" alt="Generic placeholder image">
+              <img class="d-flex align-self-start" src="images/hotels.jpg" alt="Generic placeholder image">
               <div class="media-body pl-3">
                 <div class="price">{{hotel.name}}<small>{{hotel.address}}</small></div>
                

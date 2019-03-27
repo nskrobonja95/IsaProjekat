@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.ftn.isa.dto.AvioCompanyDTO;
 import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.dto.HotelDTO;
+import edu.ftn.isa.dto.RentACarServiceDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Hotel;
+import edu.ftn.isa.model.RentACarService;
 import edu.ftn.isa.repositories.AvioRepository;
 import edu.ftn.isa.repositories.HotelRepository;
+import edu.ftn.isa.repositories.RentACarRepository;
 
 @RestController
 @RequestMapping("/app")
@@ -30,6 +33,9 @@ public class UnregisteredUsersController {
 	
 	@Autowired
 	private HotelRepository hotelRepo;
+	
+	@Autowired
+	private RentACarRepository rentACarRepo;
 	
 	@GetMapping("/airlines")
 	public ResponseEntity<?> getAllAirlines() {
@@ -89,6 +95,18 @@ public class UnregisteredUsersController {
 			retVal.add(HotelDTO.parseHotel(hotel));
 		}
 		return new ResponseEntity<List<HotelDTO>>(retVal, HttpStatus.OK);
+	}
+	
+	@GetMapping("/carHire")
+	public ResponseEntity<?> getAllRentACar() {
+		List<RentACarService> rentACars = rentACarRepo.findAll();
+		System.out.println(rentACars);
+		List<RentACarServiceDTO> retVal = new ArrayList<RentACarServiceDTO>();
+		
+		for(RentACarService rentACar : rentACars) {
+			retVal.add(RentACarServiceDTO.parseRentACar(rentACar));
+		}
+		return new ResponseEntity<List<RentACarServiceDTO>>(retVal, HttpStatus.OK);
 	}
 	
 }

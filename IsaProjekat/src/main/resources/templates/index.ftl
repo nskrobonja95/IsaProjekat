@@ -4,6 +4,7 @@
     <head>
         <meta http-equiv="expires" content="0">
         <title>${title}</title>
+        <link rel="shortcut icon" href="images/favicon.png" />
         <link href="css/app.css" rel="stylesheet"/>
         <link href="css/toolbar.css" rel="stylesheet"/>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
@@ -39,6 +40,7 @@
         <script src="js/app/services/friend.service.js"> </script>
         <script src="js/app/services/avio.service.js"> </script>
         <script src="js/app/services/hotel.service.js"> </script>
+        <script src="js/app/services/carHire.service.js"> </script>
 
         <#--  <script src="js/app/services/UserService.js"></script>
         <script src="js/app/services/authentication/AuthenticationService.js"> </script>
@@ -60,6 +62,7 @@
         <script src="js/app/controllers/GeneralSettingsController.js"></script>
         <script src="js/app/controllers/AvioController.js"></script>
         <script src="js/app/controllers/HotelController.js"></script>
+        <script src="js/app/controllers/CarHireController.js"></script>
 
         <#--  <script src="js/app/controllers/UserController.js"></script>
          <script src="js/app/controllers/ProfileController.js"></script>
