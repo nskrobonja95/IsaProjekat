@@ -192,7 +192,7 @@ public class AdminController {
 		user.setUsername(adminDto.getUsername());
 		user.setPassword(passwordEncoder.encode(adminDto.getPassword()));
 		user.setPasswordChanged(false);
-		user.setRole(Role.AvioAdmin);
+		user.setRole(Role.HotelAdmin);
 		userRepo.save(user);
 		
 		Hotel hotel = hotelRepo.findById(hotelId).get();
@@ -217,7 +217,7 @@ public class AdminController {
 		user.setUsername(adminDto.getUsername());
 		user.setPassword(passwordEncoder.encode(adminDto.getPassword()));
 		user.setPasswordChanged(false);
-		user.setRole(Role.AvioAdmin);
+		user.setRole(Role.RentACarAdmin);
 		userRepo.save(user);
 		
 		RentACarService ras = rentACarRepo.findById(RASId).get();
@@ -262,6 +262,14 @@ public class AdminController {
 	@GetMapping("/getRASAdminUsers")
 	public ResponseEntity<?> getAllRASAdminUsers() {
 		return new ResponseEntity<List<User>>(userRepo.findByRole(Role.RentACarAdmin), HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/deleteAvio/{id}")
+	public ResponseEntity<?> deleteAvio(
+			@PathVariable("id") Long avioId) {
+		AvioCompany avio = avioRepo.findById(avioId).get();
+		avioRepo.delete(avio);
+		return new ResponseEntity<User>(HttpStatus.OK);
 	}
 	
 }
