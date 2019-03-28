@@ -1,0 +1,412 @@
+/* 
+AlPhaD UI - Header Advance 
+
+* Version: 1.0
+* Build Date    :  27-2-2018 
+* Last Update   :  - []
+* Author: ALPhA D
+* Website: www.alphadsy.com
+* Github: www.github.com/alphadsy/
+* Lic : MIT 
+
+[Layout]
+
+[Color codes]
+
+[Typography]
+
+[content table]
+
+- header main css 
+  - header main css (lg)
+- #header1 css
+  - #header1 css (lg)
+.
+.
+.    
+- demo css (for demo purpose only)
+
+*/
+
+/* =======================================
+ header
+========================================*/
+.header {
+    position: relative;
+    width: 100vw;
+    height: 600px;
+}
+
+.header .center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 25%;
+    transform: translate(-50%, -50%);
+    z-index: 15;
+    padding: 1rem;
+}
+
+.header .left {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 50%;
+    height: 100%;
+    z-index: 5;
+}
+
+.header .right {
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    z-index: 5;
+}
+
+.header .scroll {
+    position: absolute;
+    top: 95%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+/*=== Large devices (desktops, 992px and up) ===*/
+@media (min-width: 992px) {
+    .header .center {
+        width: 50%;
+    }
+
+    .header .left {}
+
+    .header .right {}
+}
+
+
+/* =======================================
+ header#2
+========================================*/
+#header2 {
+    background: linear-gradient(to right,
+        #fff,
+        #fff 55%,
+        #F4F4F4 55%,
+        #F4F4F4 100%);
+}
+
+#header2 img {
+    position: absolute;
+    left: 15%;
+}
+
+#header2 .caption {
+    color: #000;
+    position: absolute;
+    top: 25%;
+    left: 15%;
+    width: 70%;
+    z-index: 5;
+    text-align: center;
+}
+
+#header2 .caption .title {
+    opacity: .9;
+    font-size: 5rem;
+    font-weight: 600;
+}
+
+#header2 .caption p {
+    color: #aaa;
+    margin-top: 2rem;
+}
+
+/*=== Large devices (desktops, 992px and up) ===*/
+@media (min-width: 992px) {
+    #header2 {
+        background: linear-gradient(to right,
+            #fff,
+            #fff 20%,
+            #F4F4F4 20%,
+            #F4F4F4 55%,
+            #DAE6E6 55%,
+            #DAE6E6 80%,
+            #F4F4F4 80%,
+            #F4F4F4 100%);
+    }
+
+    #header2 img {
+        left: 50%;
+        opacity: 1;
+    }
+
+    #header2 .caption {
+        top: 15%;
+        left: 10%;
+        width: 40%;
+        padding-right: 3rem;
+        z-index: 5;
+        text-align: left;
+    }
+
+    #header2 .caption p {
+        margin-top: 2rem;
+    }
+}
+
+
+/* =======================================
+demo css
+========================================*/
+
+/*=== for demo only ===*/
+.demo-title {
+    text-align: center;
+    color: #808080;
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+}
+
+.demo-more {
+    text-align: center;
+    color: #808080;
+    padding-top: 10vh;
+    padding-bottom: 10vh;
+}
+
+.demo-more i {
+    color: #696969;
+}
+
+.update-note {
+    position: absolute;
+    top: 2%;
+    left: 2%;
+    background-color: rgb(33, 33, 33);
+    color: #fff;
+    border-radius: 10px;
+    padding: 0 15px;
+}
+
+a {
+    text-decoration: underline;
+    color: #696969;
+    font-weight: 600;
+}
+
+a:hover {
+    color: #696969;
+}
+
+body {
+    overflow-x: hidden;
+    background: white;
+    background-size: cover;
+    font-family: 'Open Sans', sans-serif;
+    background-attachment: fixed;
+    background-position: center;
+}
+.airline-title {
+    color: #4765AB;
+}
+
+
+h2{
+    text-align:center;
+    padding: 20px;
+  }
+  /* Slider */
+  
+  .slick-slide {
+      margin: 0px 20px;
+  }
+  
+  .slick-slide img {
+      width: 100%;
+  }
+  
+  .slick-slider
+  {
+      position: relative;
+      display: block;
+      box-sizing: border-box;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+              user-select: none;
+      -webkit-touch-callout: none;
+      -khtml-user-select: none;
+      -ms-touch-action: pan-y;
+          touch-action: pan-y;
+      -webkit-tap-highlight-color: transparent;
+  }
+  
+  .slick-list
+  {
+      position: relative;
+      display: block;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+  }
+  .slick-list:focus
+  {
+      outline: none;
+  }
+  .slick-list.dragging
+  {
+      cursor: pointer;
+      cursor: hand;
+  }
+  
+  .slick-slider .slick-track,
+  .slick-slider .slick-list
+  {
+      -webkit-transform: translate3d(0, 0, 0);
+         -moz-transform: translate3d(0, 0, 0);
+          -ms-transform: translate3d(0, 0, 0);
+           -o-transform: translate3d(0, 0, 0);
+              transform: translate3d(0, 0, 0);
+  }
+  
+  .slick-track
+  {
+      position: relative;
+      top: 0;
+      left: 0;
+      display: block;
+  }
+  .slick-track:before,
+  .slick-track:after
+  {
+      display: table;
+      content: '';
+  }
+  .slick-track:after
+  {
+      clear: both;
+  }
+  .slick-loading .slick-track
+  {
+      visibility: hidden;
+  }
+  
+  .slick-slide
+  {
+      display: none;
+      float: left;
+      height: 100%;
+      min-height: 1px;
+  }
+  [dir='rtl'] .slick-slide
+  {
+      float: right;
+  }
+  .slick-slide img
+  {
+      display: block;
+  }
+  .slick-slide.slick-loading img
+  {
+      display: none;
+  }
+  .slick-slide.dragging img
+  {
+      pointer-events: none;
+  }
+  .slick-initialized .slick-slide
+  {
+      display: block;
+  }
+  .slick-loading .slick-slide
+  {
+      visibility: hidden;
+  }
+  .slick-vertical .slick-slide
+  {
+      display: block;
+      height: auto;
+      border: 1px solid transparent;
+  }
+  .slick-arrow.slick-hidden {
+      display: none;
+  }
+
+
+  /* accordion examples*/
+  a:hover,a:focus{
+    text-decoration: none;
+    outline: none;
+}
+#accordion{
+    border: 2px solid #3485ef;
+    border-radius: 20px;
+    overflow: hidden;
+}
+#accordion .panel{
+    border: none;
+    border-bottom: 2px solid #3485ef;
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+}
+#accordion .panel:last-child{
+    border-bottom: none;
+}
+#accordion .panel-heading{
+    padding: 0;
+    border: none;
+}
+#accordion .panel-title a{
+    display: block;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    background: #3485ef;
+    text-align: right;
+    border: none;
+    border-radius: 0;
+    position: relative;
+    transition: all 0.3s ease 0s;
+}
+#accordion .panel-title a.collapsed{
+    background: #fff;
+    color: #3485ef;
+}
+#accordion .panel-title a.collapsed:hover{
+    background: #3485ef;
+    color: #fff;
+}
+#accordion .panel-title a:after,
+#accordion .panel-title a.collapsed:after{
+    content: "\f107";
+    font-family: fontawesome;
+    font-size: 25px;
+    color: #fff;
+    position: absolute;
+    top: 17px;
+    left: 20px;
+    transition: all 0.3s ease-in-out 0s;
+}
+#accordion .panel-title a.collapsed:after{
+    content: "\f106";
+    color: #3485ef;
+}
+#accordion .panel-title a.collapsed:hover:after{
+    color: #fff;
+}
+#accordion .panel-body{
+    padding: 20px;
+    border: none;
+    font-size: 14px;
+    color: #888;
+    line-height: 25px;
+}
+.accordion-div{
+    margin-left: 25%;
+    margin-right: 25%;
+}

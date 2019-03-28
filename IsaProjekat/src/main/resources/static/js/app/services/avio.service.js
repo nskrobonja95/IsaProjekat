@@ -6,6 +6,7 @@
     function AvioService($http, $q, urls) {
         var service = {};
         service.loadAllAvio = loadAllAvio;
+        service.loadAvioById = loadAvioById;
 
         return service;
 
@@ -24,6 +25,22 @@
                         avioList: results[0]
                     };
                 });
+        }
+        function loadAvioById(id){
+            var avio = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'airlines/'+id)
+            .then(function (response) {
+                console.log("Avio service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  avio company!", error);
+            });
+
+        return $q.all([avio])
+            .then(function (results) {
+                return {
+                    avio: results[0]
+                };
+            });
         }
     }
 

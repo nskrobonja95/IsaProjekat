@@ -63,6 +63,22 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                       }]
                 }
             })
+            .state('home-abstract.avio-company',{
+                url:'/avio-company/:companyId',
+                views: {
+                    'avio-company': {
+                        templateUrl: "partials/avio-company",
+                        controller: "AvioCompanyController",
+                        controllerAs: "acCtrl"
+                    }
+                },
+                resolve: {
+                    initialCompanyData: ['$stateParams', 'AvioService',function($stateParams, AvioService){
+                       
+                        return AvioService.loadAvioById($stateParams.companyId);   
+                      }]
+                }
+            })
             .state('home-abstract.car-hire-companies-list', {
                 url:'/car-hire-companies',
                 views: {

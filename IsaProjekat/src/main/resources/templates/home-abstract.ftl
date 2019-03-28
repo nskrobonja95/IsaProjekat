@@ -244,6 +244,7 @@
 <div ui-view="confirm"></div>
 <div ui-view="flight-search"></div>
 <div ui-view="avio-companies-list"></div>
+<div ui-view="avio-company"></div>
 <div ui-view="car-hire-companies-list"></div>
 <div ui-view="hotels-list"></div>
 <div ui-view="profile-abstract"></div>

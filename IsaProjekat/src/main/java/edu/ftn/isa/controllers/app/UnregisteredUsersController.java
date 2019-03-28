@@ -43,7 +43,9 @@ public class UnregisteredUsersController {
 		List<AvioCompanyDTO> retVal = new ArrayList<AvioCompanyDTO>();
 		AvioCompanyDTO temp;
 		for(AvioCompany avio : avios) {
+			System.out.println(avio);
 			temp = new AvioCompanyDTO();
+			temp.setId(avio.getId());
 			temp.setAddress(avio.getAddress());
 			temp.setName(avio.getName());
 			temp.setPromo(avio.getPromo());
@@ -51,6 +53,14 @@ public class UnregisteredUsersController {
 			retVal.add(temp);
 		}
 		return new ResponseEntity<List<AvioCompanyDTO>>(retVal, HttpStatus.OK);
+	}
+	@GetMapping("airlines/{id}")
+	public ResponseEntity<?> getAvio(
+			@PathVariable("id") Long id) {
+		Optional<AvioCompany> optionalAvio = avioRepo.findById(id);
+		if(!optionalAvio.isPresent())
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<AvioCompany>(optionalAvio.get(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/getAllDestinations/{id}")
