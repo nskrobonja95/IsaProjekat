@@ -1,6 +1,6 @@
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#"><img alt="Brand" ng-src="images/airplane-logo" id="brandImg" width="75" height="75"></a>
+<nav class="navbar navbar-expand-lg navbar-custom">
+  <a class="navbar-brand" href="#"><img alt="Brand" ng-src="images/airplane-logo.png" id="brandImg" width="75" height="75"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -8,38 +8,38 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href><i class="fas fa-plane"></i> Flights <span class="sr-only">(current)</span></a>
+        <a class="nav-link" ui-sref="home-abstract.avio-companies-list()" style="color:white"><i class="fas fa-plane"></i> Flights <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href ><i class="fas fa-hotel"></i> Hotels <span class="sr-only">(current)</span></a>
+        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Hotels <span class="sr-only"></span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href ><i class="fas fa-car"></i> Car Hire</a>
+        <a class="nav-link" ui-sref="home-abstract.car-hire-companies-list()" style="color:white" ><i class="fas fa-car"></i> Car Hire</a>
       </li>
       
     </ul>
     
     <ul class="navbar-nav ml-auto" ng-if="globals.currentUser.username==null">
       <li class="nav-item">
-        <a  class="nav-link" href data-toggle="modal" data-target="#loginModal"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a  class="nav-link" href  style="color:white" data-toggle="modal" data-target="#loginModal"><i class="fas fa-sign-in-alt"></i> Login</a>
       </li>
       <li class="nav-item" >
-        <a  class="nav-link" href data-toggle="modal" data-target="#signupModal"><i class="fas fa-user-plus"></i> Sign up</a>
+        <a  class="nav-link" href data-toggle="modal" style="color:white"  data-target="#signupModal"><i class="fas fa-user-plus"></i> Sign up</a>
       </li>
       <li class="nav-item" ng-if="globals.currentUser.username!=null">
-        <a  class="nav-link" href="#" ng-click="baseCtrl.logout()"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+        <a  class="nav-link" href="#" style="color:white" ng-click="homeCtrl.logout()"><i class="fas fa-sign-out-alt"></i> Log Out</a>
       </li>
     </ul>
 
     <ul class="navbar-nav ml-auto" ng-if="globals.currentUser.username!=null">
         <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle"  id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-user-circle"></i> {{globals.currentUser.username}}
+        <a class="nav-link dropdown-toggle" href style="color:white" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-user-circle" ></i> {{globals.currentUser.username}}
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" ui-sref="guest-abstract.profile-abstract.profile-overview({username:globals.currentUser.username})">Your profile</a>
-          <a class="dropdown-item" ui-sref="guest-abstract.settings-abstract.general({username: globals.currentUser.username})">Settings</a>
-          <a  class="dropdown-item" href="#" ng-click="baseCtrl.logout()"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+          <a class="dropdown-item" href ui-sref="home-abstract.profile-abstract.profile-overview({username:globals.currentUser.username})">Your profile</a>
+          <a class="dropdown-item" href ui-sref="home-abstract.settings-abstract.general-settings()">Settings</a>
+          <a  class="dropdown-item" href ng-click="homeCtrl.logout()"><i class="fas fa-sign-out-alt"></i> Log Out</a>
         </div>
       </li>
     </ul>
@@ -197,7 +197,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form name="loginForm" ng-submit="homeCtrl.submitLogin()" role="form">
+        <form name="loginForm" ng-submit="homeCtrl.login()" role="form">
           <div class="form-group">
             <input type="text" class="form-control" name="username" placeholder="Username" ng-pattern="homeCtrl.usernamePattern"
               ng-model="homeCtrl.userLogin.username" ng-minlength="3" ng-maxlength="25" ng-required="true">
@@ -232,7 +232,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" ng-click="homeCtrl.submitLogin()" data-dismiss="modal" ng-disabled="homeCtrl.dataLoading || registerForm.passwordRepeat.$error.pattern"
+          <button type="button" ng-click="homeCtrl.login()" data-dismiss="modal" ng-disabled="homeCtrl.dataLoading || registerForm.passwordRepeat.$error.pattern"
             class="btn btn-primary">Sign in</button>
           <img ng-if="homeCtrl.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
       </div>
@@ -242,8 +242,13 @@
 
 
 <div ui-view="confirm"></div>
-<div ui-view="center"></div>
-
+<div ui-view="flight-search"></div>
+<div ui-view="avio-companies-list"></div>
+<div ui-view="avio-company"></div>
+<div ui-view="car-hire-companies-list"></div>
+<div ui-view="hotels-list"></div>
+<div ui-view="profile-abstract"></div>
+<div ui-view="settings-abstract"></div>
 <script>
   $('#loginModal').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal

@@ -14,9 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.ftn.isa.dto.AvioCompanyDTO;
 import edu.ftn.isa.dto.DestinationDTO;
+import edu.ftn.isa.dto.HotelDTO;
+import edu.ftn.isa.dto.RentACarServiceDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
+import edu.ftn.isa.model.Hotel;
+import edu.ftn.isa.model.RentACarService;
 import edu.ftn.isa.repositories.AvioRepository;
+import edu.ftn.isa.repositories.HotelRepository;
+import edu.ftn.isa.repositories.RentACarRepository;
 
 @RestController
 @RequestMapping("/app")
@@ -25,13 +31,21 @@ public class UnregisteredUsersController {
 	@Autowired
 	private AvioRepository avioRepo;
 	
+	@Autowired
+	private HotelRepository hotelRepo;
+	
+	@Autowired
+	private RentACarRepository rentACarRepo;
+	
 	@GetMapping("/airlines")
 	public ResponseEntity<?> getAllAirlines() {
 		List<AvioCompany> avios = avioRepo.findAll();
 		List<AvioCompanyDTO> retVal = new ArrayList<AvioCompanyDTO>();
 		AvioCompanyDTO temp;
 		for(AvioCompany avio : avios) {
+			System.out.println(avio);
 			temp = new AvioCompanyDTO();
+			temp.setId(avio.getId());
 			temp.setAddress(avio.getAddress());
 			temp.setName(avio.getName());
 			temp.setPromo(avio.getPromo());
@@ -40,8 +54,16 @@ public class UnregisteredUsersController {
 		}
 		return new ResponseEntity<List<AvioCompanyDTO>>(retVal, HttpStatus.OK);
 	}
+	@GetMapping("airlines/{id}")
+	public ResponseEntity<?> getAvio(
+			@PathVariable("id") Long id) {
+		Optional<AvioCompany> optionalAvio = avioRepo.findById(id);
+		if(!optionalAvio.isPresent())
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<AvioCompany>(optionalAvio.get(), HttpStatus.OK);
+	}
 	
-	@GetMapping("/getAllDestinations/{id}")
+	@GetMapping("/getAllDestinationsById/{id}")
 	public ResponseEntity<?> getDestinationsOfAvioCompany(
 			@PathVariable("id") Long avioId) {
 		Optional<AvioCompany> avio = avioRepo.findById(avioId);
@@ -71,6 +93,30 @@ public class UnregisteredUsersController {
 			retVal.add(dest);
 		}
 		return new ResponseEntity<List<DestinationDTO>>(retVal, HttpStatus.OK);
+	}
+	
+	@GetMapping("/hotels")
+	public ResponseEntity<?> getAllHotels() {
+		List<Hotel> hotels = hotelRepo.findAll();
+		System.out.println(hotels);
+		List<HotelDTO> retVal = new ArrayList<HotelDTO>();
+		
+		for(Hotel hotel : hotels) {
+			retVal.add(HotelDTO.parseHotel(hotel));
+		}
+		return new ResponseEntity<List<HotelDTO>>(retVal, HttpStatus.OK);
+	}
+	
+	@GetMapping("/carHire")
+	public ResponseEntity<?> getAllRentACar() {
+		List<RentACarService> rentACars = rentACarRepo.findAll();
+		System.out.println(rentACars);
+		List<RentACarServiceDTO> retVal = new ArrayList<RentACarServiceDTO>();
+		
+		for(RentACarService rentACar : rentACars) {
+			retVal.add(RentACarServiceDTO.parseRentACar(rentACar));
+		}
+		return new ResponseEntity<List<RentACarServiceDTO>>(retVal, HttpStatus.OK);
 	}
 	
 }

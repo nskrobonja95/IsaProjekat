@@ -1,23 +1,25 @@
-body, #mainWrapper {
-	height: 100%;
-	background-color:rgb(245, 245, 245);
+body,
+#mainWrapper {
+  height: 100%;
+  background-color: rgb(245, 245, 245);
 }
 
-body, .form-control{
-	font-size:12px!important;
+body,
+.form-control {
+  font-size: 12px !important;
 }
 
-.floatRight{
-	float:right;
-	margin-right: 18px;
+.floatRight {
+  float: right;
+  margin-right: 18px;
 }
 
-.has-error{
-	color:red;
+.has-error {
+  color: red;
 }
 
 .generic-container {
-  width:80%;
+  width: 80%;
   margin-left: 20px;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -29,14 +31,16 @@ body, .form-control{
 }
 
 .carddemoBasicUsage .card-media {
-  background-color: #999999; }
+  background-color: #999999;
+}
 
-  .listdemoBasicUsage md-divider {
-    margin-top: 10px;
-    margin-bottom: 0; }
+.listdemoBasicUsage md-divider {
+  margin-top: 10px;
+  margin-bottom: 0;
+}
 
-.chooseType{
-   
+.chooseType {
+
   border: 1px solid black;
   padding: 10px;
   align-content: center;
@@ -45,4 +49,264 @@ body, .form-control{
 #gmaps {
   width: 750px;
   height: 450px;
+}
+
+.flight-engine {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 50px;
+  padding: 20px;
+  z-index: 999;
+}
+
+.tab1.active {
+  display: block
+}
+
+.tab1 {
+  display: none
+}
+
+.tabing {
+  float: left;
+  width: 100%;
+  background: rgba(0, 130, 185, .8);
+  padding: 0 10px 10px 10px;
+  color: #fff;
+}
+
+.tabing ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  width: 100%;
+  float: left;
+}
+
+.tabing ul li {
+  float: left;
+}
+
+.tabing ul li a {
+  display: block;
+  padding: 5px;
+  text-decoration: none;
+  color: #fff;
+  background: rgba(0, 130, 185, .9);
+  margin: 0 10px 0 0;
+  padding: 5px 10px 5px 10px;
+  border-radius: 0px 0px 5px 5px;
+  font-size: 16px;
+  text-align: left;
+}
+
+.tabing ul li a.active {
+  background: #ba0400
+}
+
+.flight-tab {
+  width: 100%;
+  float: left;
+  margin-top: 10px;
+  padding: 15px
+}
+
+.flight-tab .textboxstyle {
+  width: 100%;
+  float: left;
+  color: #191919;
+  padding: 8px 10px 8px 35px;
+  border: none;
+  border-radius: 3px;
+  background: #f5f5f5;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.persent-one {
+  width: 19%;
+  float: left;
+  margin-right: 1%;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.persent-one i {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  color: #191919;
+  font-size: 18px;
+}
+
+.persent-one.less-per {
+  width: 16%;
+  float: left;
+  margin-right: 1%;
+}
+
+.persent-one.less-btn {
+  width: 5%;
+  float: left;
+  margin-right: 1%;
+}
+
+.persent-one.less-btn .cst-btn {
+  width: 85px;
+  height: 85px;
+  border-radius: 100%;
+  position: absolute;
+  top: -32px;
+}
+
+.navbar-custom {
+  
+  background-color: #4765AB;
+  /* #003580 */
+}
+
+/* 
+$('.tabing ul li a').click(function(e) {
+       e.stopPropagation();
+       e.preventDefault();
+       var tabcont = $(this).attr('href');
+       console.log(tabcont);
+       $('.tabing a').removeClass('active');
+       $(this).addClass('active');
+       $('.tab1').hide();
+       $(tabcont).show();
+   }); */
+
+/*
+   flights css
+   */
+
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+@import url('https://fonts.googleapis.com/css?family=Libre+Baskerville:400,700');
+
+h2 {
+  float: left;
+  width: 100%;
+  color: #fff;
+  margin-bottom: 40px;
+  font-size: 14px;
+  position: relartive;
+  z-index: 3;
+  margin-top: 30px
+}
+
+h2 span {
+  font-family: 'Libre Baskerville', serif;
+  display: block;
+  font-size: 45px;
+  text-transform: none;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  font-weight: 700
+}
+
+h2 a {
+  color: #fff;
+  font-weight: bold;
+}
+
+body {
+  background: #24C6DC;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #514A9D, #24C6DC);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #514A9D, #24C6DC);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.head {
+  float: left;
+  width: 100%;
+}
+
+.search-box {
+  width: 90%;
+  margin: 0 auto 40px;
+  box-shadow: 10px 13px 0 rgba(0, 0, 0, 0.2);
+}
+
+.listing-block {
+  background: #fff;
+  height: 500px;
+  padding-top: 20px;
+  overflow-y: scroll;
+}
+
+.slimScrollDiv {
+  width: 41% !important;
+}
+
+.media {
+  background: #fff;
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.media img {
+  width: 200px;
+  margin: 0;
+  height: 136px;
+}
+
+.media-body {
+  border: 1px solid #bcbcbc;
+  border-left: 0;
+  height: 136px;
+}
+
+.media .price {
+  float: left;
+  width: 100%;
+  font-size: 30px;
+  font-weight: 600;
+  color: #4765AB;
+}
+
+.media .price small {
+  display: block;
+  font-size: 17px;
+  color: #232323;
+}
+
+.media .stats {
+  float: left;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.media .stats span {
+  float: left;
+  margin-right: 10px;
+  font-size: 15px;
+}
+
+.media .stats span i {
+  margin-right: 7px;
+  color: #4765AB;
+}
+
+.media .address {
+  float: left;
+  width: 100%;
+  font-size: 14px;
+  margin-top: 5px;
+  color: #888;
+}
+
+.media .fav-box {
+  position: absolute;
+  right: 10px;
+  font-size: 20px;
+  top: 4px;
+  color: #E74C3C;
+}
+
+.map-box {
+  background-color: #A3CCFF;
 }

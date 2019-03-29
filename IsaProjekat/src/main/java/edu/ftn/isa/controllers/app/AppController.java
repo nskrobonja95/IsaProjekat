@@ -17,14 +17,12 @@ public class AppController {
 
 	@RequestMapping("/")
 	String home(ModelMap modal) {
-		System.out.println("Upaooo");
 		modal.addAttribute("title","Flight Application");
 		return "index";
 	}
 
 	@RequestMapping(value="/partials/{page}")
 	String partialHandler(@PathVariable("page") final String page) {
-		System.out.println("trazi ovde "+page);
 		
 		return page;
 	}
@@ -33,7 +31,8 @@ public class AppController {
 	 @RequestMapping(value= "/images/{image}", method = RequestMethod.GET,
 	            produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
 	    public ResponseEntity<InputStreamResource> getImage(@PathVariable("image") final String image) throws IOException {
-	        ClassPathResource imgFile = new ClassPathResource("images/"+image + ".png");
+		 	System.out.println(image);
+	        ClassPathResource imgFile = new ClassPathResource("images/"+image);
 	        return ResponseEntity
 	                .ok()
 	               // .contentType(MediaType.IMAGE_PNG, MediaType.IMAGE_JPEG)
