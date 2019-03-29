@@ -43,7 +43,7 @@ public class UnregisteredUsersController {
 		List<AvioCompanyDTO> retVal = new ArrayList<AvioCompanyDTO>();
 		AvioCompanyDTO temp;
 		for(AvioCompany avio : avios) {
-			System.out.println(avio);
+			//System.out.println(avio);
 			temp = new AvioCompanyDTO();
 			temp.setId(avio.getId());
 			temp.setAddress(avio.getAddress());
@@ -58,20 +58,23 @@ public class UnregisteredUsersController {
 	public ResponseEntity<?> getAvio(
 			@PathVariable("id") Long id) {
 		Optional<AvioCompany> optionalAvio = avioRepo.findById(id);
+		//System.out.println(optionalAvio);
 		if(!optionalAvio.isPresent())
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<AvioCompany>(optionalAvio.get(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/getAllDestinations/{id}")
+	@GetMapping("/getAllDestinationsById/{id}")
 	public ResponseEntity<?> getDestinationsOfAvioCompany(
 			@PathVariable("id") Long avioId) {
 		Optional<AvioCompany> avio = avioRepo.findById(avioId);
+		//System.out.println("Ovo su avio kompanije:"+avio);
 		if(!avio.isPresent())
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		AvioCompany avioComp = avio.get();
 		List<DestinationDTO> retVal = new ArrayList<DestinationDTO>();
 		for(Destination d: avioComp.getDestinations()) {
+			//System.out.println("ovo su destinacije:"+d);
 			DestinationDTO dest = new DestinationDTO();
 			dest.setName(d.getName());
 			retVal.add(dest);
@@ -81,7 +84,7 @@ public class UnregisteredUsersController {
 	
 	@GetMapping("/getAllDestinations/{name}")
 	public ResponseEntity<?> getDestinationsOfAvioCompanyByName(
-			@PathVariable("id") String avioName) {
+			@PathVariable("name") String avioName) {
 		Optional<AvioCompany> avio = avioRepo.findByName(avioName);
 		if(!avio.isPresent())
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

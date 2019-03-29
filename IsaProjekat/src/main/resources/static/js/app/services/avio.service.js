@@ -7,7 +7,7 @@
         var service = {};
         service.loadAllAvio = loadAllAvio;
         service.loadAvioById = loadAvioById;
-
+        service.loadDestinationsById = loadDestinationsById;
         return service;
 
         function loadAllAvio() {
@@ -42,6 +42,23 @@
                 };
             });
         }
+        function loadDestinationsById(id){
+            var dest = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'getAllDestinationsById/'+id)
+            .then(function (response) {
+                console.log("Avio service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  avio company destinations!", error);
+            });
+
+        return $q.all([dest])
+            .then(function (results) {
+                return {
+                    dest: results[0]
+                };
+            });
+        }
     }
+
 
 })();
