@@ -63,7 +63,17 @@ public class UnregisteredUsersController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<AvioCompany>(optionalAvio.get(), HttpStatus.OK);
 	}
-	
+	@GetMapping("hotels/{id}")
+	public ResponseEntity<?> getHotel(
+			@PathVariable("id") Long id) {
+		
+		Optional<Hotel> optionalHotel = hotelRepo.findById(id);
+		if(!optionalHotel.isPresent())
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		return new ResponseEntity<Hotel>(optionalHotel.get(), HttpStatus.OK);
+		
+	}
 	@GetMapping("/getAllDestinationsById/{id}")
 	public ResponseEntity<?> getDestinationsOfAvioCompany(
 			@PathVariable("id") Long avioId) {
@@ -108,16 +118,6 @@ public class UnregisteredUsersController {
 			retVal.add(HotelDTO.parseHotel(hotel));
 		}
 		return new ResponseEntity<List<HotelDTO>>(retVal, HttpStatus.OK);
-	}
-	
-	@GetMapping("hotel/{id}")
-	public ResponseEntity<?> getHotel(
-			@PathVariable("id") Long id) {
-		Optional<Hotel> optionalAvio = hotelRepo.findById(id);
-		//System.out.println(optionalAvio);
-		if(!optionalAvio.isPresent())
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		return new ResponseEntity<Hotel>(optionalAvio.get(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/carHire")

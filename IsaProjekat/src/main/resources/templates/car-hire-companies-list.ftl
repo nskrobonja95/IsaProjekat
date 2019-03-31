@@ -1,6 +1,6 @@
 <section class="head">
     <div class="container">
-        <h2 class="text-center" style="color:white; font-family: Arial, Helvetica, sans-serif;"><span>Rent-a-car companies</span></h2>
+        <h2 class="text-center" ><span style="color:white; font-family: Verdana, Geneva, sans-serif;">Rent-a-car companies</span></h2>
     </div>
 </section>
 <div class="clearfix"></div>
@@ -13,7 +13,7 @@
               </div>
               <img class="d-flex align-self-start" src="images/car-hire-company.jpg" alt="Generic placeholder image">
               <div class="media-body pl-3">
-                <div class="price">{{chCompany.name}}<small>{{chCompany.address}}</small></div>
+                <div class="price" ui-sref="home-abstract.car-hire-company({companyId:chCompany.id})">{{chCompany.name}}<small>{{chCompany.address}}</small></div>
                
                 <div class="address">{{chCompany.promo}}</div>
               </div>

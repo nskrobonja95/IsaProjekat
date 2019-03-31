@@ -1,4 +1,4 @@
-var app = angular.module('flightApp', ['ui.router', 'ngMaterial', 'ngMessages', 'ngCookies']);
+var app = angular.module('flightApp', ['ui.router', 'ngMaterial', 'ngMessages', 'ngCookies', 'star-rating']);
 
 app.run(function($rootScope, $http, $cookies) {
 
@@ -128,7 +128,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 },
                 resolve: {
                     initialHotel: ['$stateParams', 'HotelService',function($stateParams, HotelService){
-                        return HotelService.loadHotelById($stateParams.hotelId);
+                        return HotelService.loadHotelById($stateParams.hotelId); 
                       }]
                 }
             })

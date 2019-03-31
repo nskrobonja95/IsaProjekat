@@ -25,7 +25,7 @@ body,
   margin-bottom: 20px;
   padding: 20px;
   background-color: #EAE7E7;
-  border: 1px solid #ddd;
+  border: none;
   border-radius: 4px;
   box-shadow: 0 0 30px black;
 }
@@ -41,7 +41,7 @@ body,
 
 .chooseType {
 
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 10px;
   align-content: center;
 }
@@ -161,7 +161,7 @@ body,
 }
 
 .navbar-custom {
-  
+
   background-color: #4765AB;
   /* #003580 */
 }
@@ -212,12 +212,13 @@ h2 a {
 }
 
 body {
-  background: #24C6DC;
-  /* fallback for old browsers */
+  margin: 0;
+  /* background: #24C6DC;
+   fallback for old browsers 
   background: -webkit-linear-gradient(to bottom, #514A9D, #24C6DC);
-  /* Chrome 10-25, Safari 5.1-6 */
+  /* Chrome 10-25, Safari 5.1-6 
   background: linear-gradient(to bottom, #514A9D, #24C6DC);
-  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+*/
 }
 
 .head {
@@ -228,24 +229,28 @@ body {
 .search-box {
   width: 90%;
   margin: 0 auto 40px;
-  box-shadow: 10px 13px 0 rgba(0, 0, 0, 0.2);
+  /* box-shadow: 10px 13px 0 rgba(0, 0, 0, 0.2); */
 }
 
 .listing-block {
-  background: #fff;
+  /* background:?; */
   height: 500px;
   padding-top: 20px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
+
 
 .slimScrollDiv {
   width: 41% !important;
 }
 
 .media {
-  background: #fff;
+  background: rgba(73, 73, 73, 0.57);
   position: relative;
   margin-bottom: 15px;
+  border-radius: 25px;
+  border-style: none !important;
+
 }
 
 .media img {
@@ -255,7 +260,7 @@ body {
 }
 
 .media-body {
-  border: 1px solid #bcbcbc;
+  /* border: 1px solid #bcbcbc; */
   border-left: 0;
   height: 136px;
 }
@@ -296,7 +301,7 @@ body {
   width: 100%;
   font-size: 14px;
   margin-top: 5px;
-  color: #888;
+  color: white;
 }
 
 .media .fav-box {
@@ -309,4 +314,29 @@ body {
 
 .map-box {
   background-color: #A3CCFF;
+}
+
+/* Start rating css*/
+.rating {
+  color: #a9a9a9;
+  margin: 0;
+  padding: 0;
+}
+ul.rating {
+  display: inline-block;
+}
+.rating li {
+  list-style-type: none;
+  display: inline-block;
+  padding: 1px;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  font-size:20px;
+}
+.rating .filled {
+  color: orangered;
+}
+.clear{
+margin-top:20px;
 }

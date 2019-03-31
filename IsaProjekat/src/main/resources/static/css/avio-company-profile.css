@@ -202,7 +202,7 @@ a:hover {
 
 body {
     overflow-x: hidden;
-    background: white;
+    /* background: white; */
     background-size: cover;
     font-family: 'Open Sans', sans-serif;
     background-attachment: fixed;

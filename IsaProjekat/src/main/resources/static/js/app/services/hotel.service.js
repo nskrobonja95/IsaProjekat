@@ -8,6 +8,7 @@
         service.loadAllHotels = loadAllHotels;
         service.loadHotelById = loadHotelById;
 
+        
         return service;
 
         function loadAllHotels() {
