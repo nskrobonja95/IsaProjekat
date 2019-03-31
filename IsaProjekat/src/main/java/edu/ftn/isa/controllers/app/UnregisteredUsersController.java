@@ -110,6 +110,16 @@ public class UnregisteredUsersController {
 		return new ResponseEntity<List<HotelDTO>>(retVal, HttpStatus.OK);
 	}
 	
+	@GetMapping("hotel/{id}")
+	public ResponseEntity<?> getHotel(
+			@PathVariable("id") Long id) {
+		Optional<Hotel> optionalAvio = hotelRepo.findById(id);
+		//System.out.println(optionalAvio);
+		if(!optionalAvio.isPresent())
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<Hotel>(optionalAvio.get(), HttpStatus.OK);
+	}
+	
 	@GetMapping("/carHire")
 	public ResponseEntity<?> getAllRentACar() {
 		List<RentACarService> rentACars = rentACarRepo.findAll();

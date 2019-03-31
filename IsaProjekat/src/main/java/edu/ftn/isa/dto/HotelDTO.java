@@ -13,6 +13,7 @@ public @Data class HotelDTO {
 	
 	public static HotelDTO parseHotel(Hotel hotel) {
 		HotelDTO temp = new HotelDTO();
+		temp.setId(hotel.getId());
 		temp.setAddress(hotel.getAddress());
 		temp.setName(hotel.getName());
 		temp.setPromo(hotel.getPromo());

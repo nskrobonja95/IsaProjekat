@@ -53,7 +53,7 @@ public class AuthenticationController {
 			Authentication auth = authManager.authenticate
 					(new UsernamePasswordAuthenticationToken(
 							loginPayload.getUsername(), loginPayload.getPassword()));
-		} catch (AuthenticationException e) {
+		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		

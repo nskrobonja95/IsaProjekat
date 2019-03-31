@@ -6,5 +6,6 @@ angular.module('flightApp').controller('HotelController',
 
             var self = this;
             this.hotelsList = initialHotelsList.hotelsList;
+            console.log(this.hotelsList);
         }
     ]);

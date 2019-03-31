@@ -117,6 +117,21 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                       }]
                 }
             })
+            .state('home-abstract.hotel',{
+                url:'/hotel/:hotelId',
+                views: {
+                    'hotel': {
+                        templateUrl: "partials/hotel",
+                        controller: "HotelProfileController",
+                        controllerAs: "hpCtrl"
+                    }
+                },
+                resolve: {
+                    initialHotel: ['$stateParams', 'HotelService',function($stateParams, HotelService){
+                        return HotelService.loadHotelById($stateParams.hotelId);
+                      }]
+                }
+            })
             .state('home-abstract.confirmReg', {
                 url:'/confirmReg',
                 views: {

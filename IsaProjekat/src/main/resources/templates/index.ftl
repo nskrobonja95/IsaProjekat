@@ -67,6 +67,7 @@
         <script src="js/app/controllers/GeneralSettingsController.js"></script>
         <script src="js/app/controllers/AvioController.js"></script>
         <script src="js/app/controllers/HotelController.js"></script>
+        <script src="js/app/controllers/HotelProfileController.js"></script>
         <script src="js/app/controllers/AvioCompanyController.js"></script>
         <script src="js/app/controllers/CarHireController.js"></script>
 
