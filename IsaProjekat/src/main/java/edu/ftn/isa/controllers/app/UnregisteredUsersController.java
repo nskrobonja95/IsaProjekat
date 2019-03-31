@@ -63,7 +63,17 @@ public class UnregisteredUsersController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<AvioCompany>(optionalAvio.get(), HttpStatus.OK);
 	}
-	
+	@GetMapping("hotels/{id}")
+	public ResponseEntity<?> getHotel(
+			@PathVariable("id") Long id) {
+		
+		Optional<Hotel> optionalHotel = hotelRepo.findById(id);
+		if(!optionalHotel.isPresent())
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		return new ResponseEntity<Hotel>(optionalHotel.get(), HttpStatus.OK);
+		
+	}
 	@GetMapping("/getAllDestinationsById/{id}")
 	public ResponseEntity<?> getDestinationsOfAvioCompany(
 			@PathVariable("id") Long avioId) {
