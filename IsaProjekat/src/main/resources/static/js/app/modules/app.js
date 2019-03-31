@@ -76,6 +76,10 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     initialCompanyData: ['$stateParams', 'AvioService',function($stateParams, AvioService){
                        
                         return AvioService.loadAvioById($stateParams.companyId);   
+                      }],
+                      initialDestinationsData: ['$stateParams', 'AvioService',function($stateParams, AvioService){
+                       
+                        return AvioService.loadDestinationsById($stateParams.companyId);   
                       }]
                 }
             })
