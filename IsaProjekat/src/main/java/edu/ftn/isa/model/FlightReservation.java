@@ -3,6 +3,7 @@ package edu.ftn.isa.model;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,21 +21,11 @@ import lombok.Data;
 @Table(name="flightReservation")
 public @Data class FlightReservation {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="flightticketID")
-	private Long id;
-	
-	@ManyToOne
-	@JoinColumn(name="flight")
-	@NotNull
-	private Flight flight;
+	@EmbeddedId
+	private FlightReservationIdentity id;
 	
 	@Column(name="flightclass")
 	private FlightClass flightClass;
-	
-	@Column(name="seatnumber")
-	private Long seatNumber;
 	
 	@Column(name="name")
 	private String name;
@@ -48,5 +39,9 @@ public @Data class FlightReservation {
 	
 	@Column(name="isCanceled")
 	private boolean isCanceled;
+	
+	@ManyToOne
+	@JoinColumn(name="user_id")
+	private User user;
 	
 }

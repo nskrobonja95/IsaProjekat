@@ -91,33 +91,34 @@ public class ReservationController {
 	
 	@PostMapping("/flight")
 	public ResponseEntity<?> reserveFlight(
-			@RequestBody FlightReservationDTO reservationDto) {
+			@RequestBody List<FlightReservationDTO> reservationsDto) {
 		
 		FlightReservation reservation = new FlightReservation();
-		
-		if(reservationDto.getName() == null) {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-			CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
-			User user = userDetails.getUser();
-			reservation.setName(user.getName());
-			reservation.setLastname(user.getLastname());
-		} else {
-			reservation.setName(reservationDto.getName());
-			reservation.setLastname(reservationDto.getLastname());
+			
+		for(FlightReservationDTO reservationDto : reservationsDto) {
+			if(reservationDto.getName() == null) {
+				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+				CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+				User user = userDetails.getUser();
+				reservation.setName(user.getName());
+				reservation.setLastname(user.getLastname());
+			} else {
+				reservation.setName(reservationDto.getName());
+				reservation.setLastname(reservationDto.getLastname());
+			}
+			
+			//reservation.setFlight(flightRepo.findById(reservationDto.getFlightId()).get());
+			reservation.setCanceled(false);
+			reservation.setReserveDate(new Date());
+			//reservation.setSeatNumber(reservationDto.getSeatNumber());
+			
+			if(reservationDto.getFlightClass().equals("Economic")) {
+				reservation.setFlightClass(FlightClass.Economic);
+			} else {
+				reservation.setFlightClass(FlightClass.Bussiness);
+			}
 		}
-		
-		reservation.setFlight(flightRepo.findById(reservationDto.getFlightId()).get());
-		reservation.setCanceled(false);
-		reservation.setReserveDate(new Date());
-		reservation.setSeatNumber(reservationDto.getSeatNumber());
-		
-		if(reservationDto.getFlightClass().equals("Economic")) {
-			reservation.setFlightClass(FlightClass.Economic);
-		} else {
-			reservation.setFlightClass(FlightClass.Bussiness);
-		}
-		
-		flightResRepo.save(reservation);
+			flightResRepo.save(reservation);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

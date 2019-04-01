@@ -1,6 +1,9 @@
 package edu.ftn.isa.controllers.app;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,11 +21,16 @@ import edu.ftn.isa.dto.AvioCompanyDTO;
 import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.dto.HotelDTO;
 import edu.ftn.isa.dto.RentACarServiceDTO;
+import edu.ftn.isa.dto.RoundTripSearchDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
+import edu.ftn.isa.model.Flight;
 import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.RentACarService;
 import edu.ftn.isa.repositories.AvioRepository;
+import edu.ftn.isa.repositories.DestinationRepository;
+import edu.ftn.isa.repositories.FlightRepository;
+import edu.ftn.isa.repositories.FlightReservationRepository;
 import edu.ftn.isa.repositories.HotelRepository;
 import edu.ftn.isa.repositories.RentACarRepository;
 
@@ -32,10 +42,19 @@ public class UnregisteredUsersController {
 	private AvioRepository avioRepo;
 	
 	@Autowired
+	private FlightRepository flightRepo;
+	
+	@Autowired
+	private FlightReservationRepository flightResRepo;
+	
+	@Autowired
 	private HotelRepository hotelRepo;
 	
 	@Autowired
 	private RentACarRepository rentACarRepo;
+	
+	@Autowired
+	private DestinationRepository destRepo;
 	
 	@GetMapping("/airlines")
 	public ResponseEntity<?> getAllAirlines() {
@@ -130,6 +149,23 @@ public class UnregisteredUsersController {
 			retVal.add(RentACarServiceDTO.parseRentACar(rentACar));
 		}
 		return new ResponseEntity<List<RentACarServiceDTO>>(retVal, HttpStatus.OK);
+	}
+	
+	@PostMapping("/roundTripSearch")
+	public ResponseEntity<?> searchFlights(@RequestBody RoundTripSearchDTO searchDto) throws ParseException {
+		Date takeoff = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getDepartDate());
+		Date landing = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getReturnDate());
+		List<Flight> filteredFlights = flightRepo.roundTripSearch(takeoff, landing, destRepo.findByName(searchDto.getFrom()), destRepo.findByName(searchDto.getTo()));
+		List<Flight> retVal = new ArrayList<Flight>();
+		for(Flight f : filteredFlights) {
+			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
+			if(numOfRes < f.getNumberOfRows()) {
+				int availableSeats = f.getNumberOfRows() - numOfRes;
+				if(availableSeats >= searchDto.getNumOfPpl())
+					retVal.add(f);
+			}
+		}
+		return new ResponseEntity<List<Flight>>(retVal, HttpStatus.OK);
 	}
 	
 }

@@ -16,24 +16,24 @@
 					<div class="clearfix"> </div>
 					<div class="resp-tabs-container form-class">
 						<div class="tab-1 resp-tab-content roundtrip">
-							<form action="#" method="post">
+							<form ng-submit="avioCtrl.roundTripSearch()">
 								<div class="from">
 									<h3>From</h3>
-									<input type="text" name="city" class="city1 input-class"
+									<input type="text" name="city" ng-model="avioCtrl.roundTrip.from" class="city1 input-class"
 										placeholder="Type Departure City" required="">
 								</div>
 								<div class="to">
 									<h3>To</h3>
-									<input type="text" name="city" class="city2 input-class"
+									<input type="text" name="city" ng-model="avioCtrl.roundTrip.to" class="city2 input-class"
 										placeholder="Type Destination City" required="">
 								</div>
 								<div class="clear"></div>
 								<div class="date">
 									<div class="depart">
 										<h3>Depart</h3>
-										<input id="datepicker" class="input-class" name="Text" type="text"
-											value="mm/dd/yyyy" onfocus="this.value = '';"
-											onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}" required="">
+										<input id="datepicker" ng-model="avioCtrl.roundTrip.departDate" class="input-class" name="Text" type="text"
+											value="yyyy-MM-dd" onfocus="this.value = '';"
+											onblur="if (this.value == '') {this.value = 'yyyy-MM-dd';}" required="">
 										<span class="checkbox1">
 											<label class="checkbox"><input type="checkbox" name="" checked=""><i>
 												</i>Flexible with date</label>
@@ -41,9 +41,9 @@
 									</div>
 									<div class="return">
 										<h3>Return</h3>
-										<input id="datepicker1" class="input-class" name="Text" type="text"
-											value="mm/dd/yyyy" onfocus="this.value = '';"
-											onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}" required="">
+										<input id="datepicker1" ng-model="avioCtrl.roundTrip.returnDate" class="input-class" name="Text" type="text"
+											value="yyyy-MM-dd" onfocus="this.value = '';"
+											onblur="if (this.value == '') {this.value = 'yyyy-MM-dd';}" required="">
 										<span class="checkbox1">
 											<label class="checkbox"><input type="checkbox" name="" checked=""><i>
 												</i>Flexible with date</label>
@@ -53,12 +53,10 @@
 								</div>
 								<div class="class">
 									<h3>Class</h3>
-									<select id="w3_country1" onchange="change_country(this.value)"
+									<select id="w3_country1" ng-model="avioCtrl.roundTrip.flightClass"
 										class="frm-field required">
-										<option value="null">Economy</option>
-										<option value="null">Premium Economy</option>
-										<option value="null">Business</option>
-										<option value="null">First class</option>
+										<option value="Economic">Economy</option>
+										<option value="Bussiness">Business</option>
 									</select>
 
 								</div>
@@ -68,9 +66,9 @@
 										<h3>Adult:(12+ yrs)</h3>
 										<div class="quantity">
 											<div class="quantity-select">
-												<div class="entry value-minus">&nbsp;</div>
-												<div class="entry value"><span>1</span></div>
-												<div class="entry value-plus active">&nbsp;</div>
+												<div class="entry value-minus" ng-click="avioCtrl.decNumOfPpl()">&nbsp;</div>
+												<div class="entry value"><span ng-bind="avioCtrl.roundTrip.numOfPpl"></span></div>
+												<div class="entry value-plus active" ng-click="avioCtrl.incNumOfPpl()">&nbsp;</div>
 											</div>
 										</div>
 									</div>
@@ -290,17 +288,17 @@
 	<!-- //Calendar -->
 	<!--quantity-->
 	<script>
-		$('.value-plus').on('click', function () {
-			var divUpd = $(this).parent().find('.value'),
-				newVal = parseInt(divUpd.text(), 10) + 1;
-			divUpd.text(newVal);
-		});
+		//$('.value-plus').on('click', function () {
+		//	var divUpd = $(this).parent().find('.value'),
+		//		newVal = parseInt(divUpd.text(), 10) + 1;
+		//	divUpd.text(newVal);
+		//});
 
-		$('.value-minus').on('click', function () {
-			var divUpd = $(this).parent().find('.value'),
-				newVal = parseInt(divUpd.text(), 10) - 1;
-			if (newVal >= 1) divUpd.text(newVal);
-		});
+		//$('.value-minus').on('click', function () {
+		//	var divUpd = $(this).parent().find('.value'),
+		//		newVal = parseInt(divUpd.text(), 10) - 1;
+		//	if (newVal >= 1) divUpd.text(newVal);
+		//});
 	</script>
 	<!--//quantity-->
 	<!--load more-->
@@ -317,6 +315,8 @@
 				x = (x - 1 < 0) ? 1 : x - 1;
 				$('#myList li').not(':lt(' + x + ')').hide();
 			});
+
+
 		});
 	</script>
 	<!-- //load-more -->

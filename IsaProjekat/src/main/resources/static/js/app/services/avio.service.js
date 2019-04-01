@@ -8,6 +8,7 @@
         service.loadAllAvio = loadAllAvio;
         service.loadAvioById = loadAvioById;
         service.loadDestinationsById = loadDestinationsById;
+        service.roundTripSearch = roundTripSearch;
         return service;
 
         function loadAllAvio() {
@@ -51,14 +52,34 @@
                 console.log("Error occured while initializing  avio company destinations!", error);
             });
 
-        return $q.all([dest])
-            .then(function (results) {
-                return {
-                    dest: results[0]
-                };
-            });
+            return $q.all([dest])
+                .then(function (results) {
+                    return {
+                        dest: results[0]
+                    };
+                });
+            }
+
+            function roundTripSearch(searchObj){
+                var dest = $http.post(urls.UNREGISTERED_USERS_SERVICE_API+'roundTripSearch', searchObj)
+                .then(function (response) {
+                    console.log("Search response:", response);
+                    return response;
+                }, function (error) {
+                    console.log("Error occured while flight search!", error);
+                });
+    
+                return $q.all([dest])
+                    .then(function (results) {
+                        return {
+                            dest: results[0]
+                        };
+                    });
+            }
+
         }
-    }
+
+
 
 
 })();
