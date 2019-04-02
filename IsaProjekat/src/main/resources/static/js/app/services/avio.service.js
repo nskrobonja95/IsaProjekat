@@ -9,6 +9,8 @@
         service.loadAvioById = loadAvioById;
         service.loadDestinationsById = loadDestinationsById;
         service.roundTripSearch = roundTripSearch;
+        service.oneWaySearch = oneWaySearch;
+        service.multiCitySearch = multiCitySearch;
         return service;
 
         function loadAllAvio() {
@@ -62,6 +64,40 @@
 
             function roundTripSearch(searchObj){
                 var dest = $http.post(urls.UNREGISTERED_USERS_SERVICE_API+'roundTripSearch', searchObj)
+                .then(function (response) {
+                    console.log("Search response:", response);
+                    return response;
+                }, function (error) {
+                    console.log("Error occured while flight search!", error);
+                });
+    
+                return $q.all([dest])
+                    .then(function (results) {
+                        return {
+                            dest: results[0]
+                        };
+                    });
+            }
+
+            function oneWaySearch(searchObj){
+                var dest = $http.post(urls.UNREGISTERED_USERS_SERVICE_API+'oneWaySearch', searchObj)
+                .then(function (response) {
+                    console.log("Search response:", response);
+                    return response;
+                }, function (error) {
+                    console.log("Error occured while flight search!", error);
+                });
+    
+                return $q.all([dest])
+                    .then(function (results) {
+                        return {
+                            dest: results[0]
+                        };
+                    });
+            }
+
+            function multiCitySearch(searchObj){
+                var dest = $http.post(urls.UNREGISTERED_USERS_SERVICE_API+'multiCitySearch', searchObj)
                 .then(function (response) {
                     console.log("Search response:", response);
                     return response;

@@ -15,9 +15,14 @@ import edu.ftn.isa.model.Flight;
 
 public interface FlightRepository extends JpaRepository<Flight, Long>{
 
-	@Query("SELECT f FROM Flight f where date(f.takeoff) = date(:departDate) and date(f.landing) = date(:returnDate)"
-			+ " and f.from = :from and f.toDest like :to")
+	@Query("SELECT f FROM Flight f where date(f.takeoff) = date(:departDate)"
+			+ " and f.from = :from and f.toDest = :to")
 	List<Flight> roundTripSearch(@Param("departDate") Date departDate, 
-			@Param("returnDate") Date returnDate, @Param("from") Destination from, @Param("to") Destination to);
+			@Param("from") Destination from, @Param("to") Destination to);
+	
+	@Query("SELECT f FROM Flight f where date(f.takeoff) = date(:departDate)"
+			+ " and f.from = :from and f.toDest = :to")
+	List<Flight> oneWaySearch(@Param("departDate") Date departDate, 
+			@Param("from") Destination from, @Param("to") Destination to);
 	
 }

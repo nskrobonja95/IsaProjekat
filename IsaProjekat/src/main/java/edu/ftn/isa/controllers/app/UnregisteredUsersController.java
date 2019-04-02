@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.ftn.isa.dto.AvioCompanyDTO;
 import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.dto.HotelDTO;
+import edu.ftn.isa.dto.MultiCitySearchDTO;
 import edu.ftn.isa.dto.RentACarServiceDTO;
+import edu.ftn.isa.dto.RoundTripFlights;
 import edu.ftn.isa.dto.RoundTripSearchDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
@@ -153,19 +155,84 @@ public class UnregisteredUsersController {
 	
 	@PostMapping("/roundTripSearch")
 	public ResponseEntity<?> searchFlights(@RequestBody RoundTripSearchDTO searchDto) throws ParseException {
+		Date departDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getDepartDate());
+		Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getReturnDate());
+		Destination from = destRepo.findByName(searchDto.getFrom());
+		Destination to = destRepo.findByName(searchDto.getTo());
+		List<Flight> filteredFlights = flightRepo.roundTripSearch(departDate, from, to);
+		List<Flight> filteredReturnFlights = flightRepo.roundTripSearch(returnDate, to, from);
+		List<Flight> retValFlights = new ArrayList<Flight>();
+		List<Flight> retValReturnFlights = new ArrayList<Flight>();
+		for(Flight f : filteredFlights) {
+			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
+			if(numOfRes < f.getNumberOfSeats()) {
+				int availableSeats = f.getNumberOfSeats() - numOfRes;
+				if(availableSeats >= searchDto.getNumOfPpl())
+					retValFlights.add(f);
+			}
+		}
+		for(Flight f : filteredReturnFlights) {
+			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
+			if(numOfRes < f.getNumberOfSeats()) {
+				int availableSeats = f.getNumberOfSeats() - numOfRes;
+				if(availableSeats >= searchDto.getNumOfPpl())
+					retValReturnFlights.add(f);
+			}
+		}
+		RoundTripFlights retVal = new RoundTripFlights();
+		retVal.setDirectFlights(retValFlights);
+		retVal.setReturnFlights(retValReturnFlights);
+		return new ResponseEntity<RoundTripFlights>(retVal, HttpStatus.OK);
+	}
+	
+	@PostMapping("/oneWaySearch")
+	public ResponseEntity<?> searchFlightsOneWay(@RequestBody RoundTripSearchDTO searchDto) throws ParseException {
 		Date takeoff = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getDepartDate());
-		Date landing = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getReturnDate());
-		List<Flight> filteredFlights = flightRepo.roundTripSearch(takeoff, landing, destRepo.findByName(searchDto.getFrom()), destRepo.findByName(searchDto.getTo()));
+		List<Flight> filteredFlights = flightRepo.oneWaySearch(takeoff, destRepo.findByName(searchDto.getFrom()), destRepo.findByName(searchDto.getTo()));
 		List<Flight> retVal = new ArrayList<Flight>();
 		for(Flight f : filteredFlights) {
 			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
-			if(numOfRes < f.getNumberOfRows()) {
-				int availableSeats = f.getNumberOfRows() - numOfRes;
+			if(numOfRes < f.getNumberOfSeats()) {
+				int availableSeats = f.getNumberOfSeats() - numOfRes;
 				if(availableSeats >= searchDto.getNumOfPpl())
 					retVal.add(f);
 			}
 		}
 		return new ResponseEntity<List<Flight>>(retVal, HttpStatus.OK);
+	}
+	
+	@PostMapping("/multiCitySearch")
+	public ResponseEntity<?> searchFlightsMultiCity(@RequestBody MultiCitySearchDTO searchDto) throws ParseException {
+		Date takeoff1 = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getDepartDate1());
+		Date takeoff2 = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getDepartDate2());
+		Destination from = destRepo.findByName(searchDto.getFrom());
+		Destination midDest = destRepo.findByName(searchDto.getMidDest());
+		Destination to = destRepo.findByName(searchDto.getTo());
+		List<Flight> filteredFlights = flightRepo.oneWaySearch(takeoff1, from, midDest);
+		List<Flight> filteredFlights2 = flightRepo.oneWaySearch(takeoff2, midDest, to);
+		List<Flight> retValFlights = new ArrayList<Flight>();
+		List<Flight> retValFlights2 = new ArrayList<Flight>();
+		for(Flight f : filteredFlights) {
+			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
+			if(numOfRes < f.getNumberOfSeats()) {
+				int availableSeats = f.getNumberOfSeats() - numOfRes;
+				if(availableSeats >= searchDto.getNumOfPpl())
+					retValFlights.add(f);
+			}
+		}
+		for(Flight f : filteredFlights2) {
+			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
+			if(numOfRes < f.getNumberOfSeats()) {
+				int availableSeats = f.getNumberOfSeats() - numOfRes;
+				if(availableSeats >= searchDto.getNumOfPpl())
+					retValFlights2.add(f);
+			}
+		}
+		
+		RoundTripFlights retVal = new RoundTripFlights();
+		retVal.setDirectFlights(filteredFlights);
+		retVal.setReturnFlights(filteredFlights2);
+		return new ResponseEntity<RoundTripFlights>(retVal, HttpStatus.OK);
 	}
 	
 }

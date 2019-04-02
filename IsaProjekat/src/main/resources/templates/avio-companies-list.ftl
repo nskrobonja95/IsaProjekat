@@ -31,7 +31,7 @@
 								<div class="date">
 									<div class="depart">
 										<h3>Depart</h3>
-										<input id="datepicker" ng-model="avioCtrl.roundTrip.departDate" class="input-class" name="Text" type="text"
+										<input id="datepicker" ng-model="avioCtrl.roundTripDepartDate" class="input-class" name="Text" type="text"
 											value="yyyy-MM-dd" onfocus="this.value = '';"
 											onblur="if (this.value == '') {this.value = 'yyyy-MM-dd';}" required="">
 										<span class="checkbox1">
@@ -41,7 +41,7 @@
 									</div>
 									<div class="return">
 										<h3>Return</h3>
-										<input id="datepicker1" ng-model="avioCtrl.roundTrip.returnDate" class="input-class" name="Text" type="text"
+										<input id="datepicker1" ng-model="avioCtrl.roundTripReturnDate" class="input-class" name="Text" type="text"
 											value="yyyy-MM-dd" onfocus="this.value = '';"
 											onblur="if (this.value == '') {this.value = 'yyyy-MM-dd';}" required="">
 										<span class="checkbox1">
@@ -89,22 +89,22 @@
 							</form>
 						</div>
 						<div class="tab-1 resp-tab-content oneway">
-							<form action="#" method="post">
+							<form ng-submit="avioCtrl.oneWaySearch()">
 								<div class="from">
 									<h3>From</h3>
-									<input type="text" name="city" class="city1 input-class"
+									<input type="text" name="city" ng-model="avioCtrl.oneWay.from" class="city1 input-class"
 										placeholder="Type Departure City" required="">
 								</div>
 								<div class="to">
 									<h3>To</h3>
-									<input type="text" name="city" class="city2 input-class"
+									<input type="text" name="city" ng-model="avioCtrl.oneWay.to" class="city2 input-class"
 										placeholder="Type Destination City" required="">
 								</div>
 								<div class="clear"></div>
 								<div class="date">
 									<div class="depart">
 										<h3>Depart</h3>
-										<input class="date input-class" id="datepicker2" name="Text" type="text"
+										<input class="date input-class" ng-model="avioCtrl.oneWayDepartDate" id="datepicker2" name="Text" type="text"
 											value="mm/dd/yyyy" onfocus="this.value = '';"
 											onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}" required="">
 										<span class="checkbox1">
@@ -115,12 +115,10 @@
 								</div>
 								<div class="class">
 									<h3>Class</h3>
-									<select id="w3_country2" onchange="change_country(this.value)"
+									<select id="w3_country2" ng-model="avioCtrl.oneWay.flightClass"
 										class="frm-field required">
-										<option value="null">Economy</option>
-										<option value="null">Premium Economy</option>
-										<option value="null">Business</option>
-										<option value="null">First class</option>
+										<option value="Economic">Economy</option>
+										<option value="Bussiness">Business</option>
 									</select>
 
 								</div>
@@ -130,9 +128,9 @@
 										<h3>Adult:(12+ yrs)</h3>
 										<div class="quantity">
 											<div class="quantity-select">
-												<div class="entry value-minus">&nbsp;</div>
-												<div class="entry value"><span>1</span></div>
-												<div class="entry value-plus active">&nbsp;</div>
+												<div class="entry value-minus" ng-click="avioCtrl.decNumOfPplOneWay()">&nbsp;</div>
+												<div class="entry value"><span ng-bind="avioCtrl.oneWay.numOfPpl"></span></div>
+												<div class="entry value-plus active" ng-click="avioCtrl.incNumOfPplOneWay()">&nbsp;</div>
 											</div>
 										</div>
 									</div>
@@ -141,7 +139,7 @@
 										<div class="quantity">
 											<div class="quantity-select">
 												<div class="entry value-minus">&nbsp;</div>
-												<div class="entry value"><span>1</span></div>
+												<div class="entry value"><span></span></div>
 												<div class="entry value-plus active">&nbsp;</div>
 											</div>
 										</div>
@@ -155,22 +153,22 @@
 						</div>
 						<div class="tab-1 resp-tab-content multicity">
 
-							<form action="#" method="post">
+							<form>
 								<div class="from">
 									<h3>From</h3>
-									<input type="text" name="city" class="city1 input-class"
+									<input type="text" name="city" ng-model="avioCtrl.multiCity.from" class="city1 input-class"
 										placeholder="Type Departure City" required="">
 								</div>
 								<div class="to">
 									<h3>To</h3>
-									<input type="text" name="city" class="city2 input-class"
+									<input type="text" name="city" ng-model="avioCtrl.multiCity.midDest" class="city2 input-class"
 										placeholder="Type Destination City" required="">
 								</div>
 								<div class="clear"></div>
 								<div class="date">
 									<div class="depart">
 										<h3>Depart</h3>
-										<input class="date input-class" id="datepicker3" name="Text" type="text"
+										<input class="date input-class" ng-model="avioCtrl.multiCityDepartDate1" id="datepicker3" name="Text" type="text"
 											value="mm/dd/yyyy" onfocus="this.value = '';"
 											onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}" required="">
 										<span class="checkbox1">
@@ -181,12 +179,10 @@
 								</div>
 								<div class="class">
 									<h3>Class</h3>
-									<select id="w3_country3" onchange="change_country(this.value)"
+									<select id="w3_country3"
 										class="frm-field required">
-										<option value="null">Economy</option>
-										<option value="null">Premium Economy</option>
-										<option value="null">Business</option>
-										<option value="null">First class</option>
+										<option value="Economic">Economy</option>
+										<option value="Bussiness">Business</option>
 									</select>
 								</div>
 								<div class="clear"></div>
@@ -198,22 +194,22 @@
 									<li>
 
 										<div class="l_g spcl">
-											<form action="#" method="post" class="blackbg">
+											<form class="blackbg">
 												<div class="from">
 													<h3>From</h3>
-													<input type="text" name="city" class="city1 input-class"
+													<input type="text" name="city" ng-model="avioCtrl.multiCity.midDest" class="city1 input-class"
 														placeholder="Type Departure City" required="">
 												</div>
 												<div class="to">
 													<h3>To</h3>
-													<input type="text" name="city" class="city2 input-class"
+													<input type="text" name="city" ng-model="avioCtrl.multiCity.to" class="city2 input-class"
 														placeholder="Type Destination City" required="">
 												</div>
 												<div class="clear"></div>
 												<div class="date">
 													<div class="depart">
 														<h3>Depart</h3>
-														<input class="date input-class" id="datepicker4" name="Text"
+														<input class="date input-class" ng-model="avioCtrl.multiCityDepartDate2" id="datepicker4" name="Text"
 															type="text" value="mm/dd/yyyy" onfocus="this.value = '';"
 															onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}"
 															required="">
@@ -230,15 +226,15 @@
 										</div>
 
 									</li>
-									<form action="#" method="post">
+									<form ng-submit="avioCtrl.multiCitySearch()">
 										<div class="numofppl">
 											<div class="adults">
 												<h3>Adult:(12+ yrs)</h3>
 												<div class="quantity">
 													<div class="quantity-select">
-														<div class="entry value-minus">&nbsp;</div>
-														<div class="entry value"><span>1</span></div>
-														<div class="entry value-plus active">&nbsp;</div>
+														<div class="entry value-minus" ng-click="avioCtrl.decNumOfPplMultiCity()">&nbsp;</div>
+														<div class="entry value"><span ng-bind="avioCtrl.multiCity.numOfPpl"></span></div>
+														<div class="entry value-plus active" ng-click="avioCtrl.incNumOfPplMultiCity()">&nbsp;</div>
 													</div>
 												</div>
 											</div>
@@ -255,7 +251,7 @@
 											<div class="clear"></div>
 										</div>
 										<div class="clear"></div>
-										<input type="submit" value="Search Flights">
+										<input type="submit" value="Search Flights" />
 									</form>
 								</ul>
 							</div>

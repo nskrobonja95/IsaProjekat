@@ -31,7 +31,4 @@ public @Data class Destination implements Serializable {
 	@ManyToMany(mappedBy = "destinations")
 	private Collection<AvioCompany> avioCompanies;
 	
-	@JsonBackReference
-	@ManyToMany(mappedBy = "stops")
-	private Collection<Flight> flights;
 }
