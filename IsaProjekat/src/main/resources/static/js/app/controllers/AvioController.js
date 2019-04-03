@@ -1,11 +1,13 @@
 'use strict';
 
 angular.module('flightApp').controller('AvioController',
-    ['$scope', '$rootScope', '$state', 'AvioService', 'initialCompaniesList',
-        function ($scope, $rootScope, $state, AvioService, initialCompaniesList) {
+    ['$scope', '$rootScope', '$state', 'AvioService', 'initialCompaniesList','initialDestinationsList',
+        function ($scope, $rootScope, $state, AvioService, initialCompaniesList, initialDestinationsList) {
 
             var self = this;
-            this.companiesList = initialCompaniesList.avioList;
+            self.companiesList = initialCompaniesList.avioList;
+            console.log(initialDestinationsList);
+            self.destList = initialDestinationsList.destList;
             self.roundTripSearch = roundTripSearch;
             self.oneWaySearch = oneWaySearch;
             self.multiCitySearch = multiCitySearch;

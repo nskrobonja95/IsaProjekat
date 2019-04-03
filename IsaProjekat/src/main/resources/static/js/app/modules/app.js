@@ -1,4 +1,4 @@
-var app = angular.module('flightApp', ['ui.router', 'ngMaterial', 'ngMessages', 'ngCookies', 'star-rating']);
+var app = angular.module('flightApp', ['ui.router', 'ngMaterial', 'ngMessages', 'ngCookies', 'star-rating', 'ui.select', 'ngSanitize']);
 
 app.run(function($rootScope, $http, $cookies) {
 
@@ -57,9 +57,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
 
                 },
                 resolve: {
-                    initialCompaniesList: ['$stateParams', 'AvioService',function($stateParams, AvioService){
+                    initialCompaniesList: ['AvioService',function(AvioService){
                        
                         return AvioService.loadAllAvio();   
+                      }],
+                      initialDestinationsList: ['AvioService', function(AvioService){
+                        return AvioService.loadAllDestiantions();
                       }]
                 }
             })
