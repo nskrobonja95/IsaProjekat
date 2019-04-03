@@ -23,9 +23,6 @@ public @Data class Room {
 	@Column(name="roomID")
 	private Long id;
 	
-	@Column(name="airconditioning")
-	private boolean airConditioning;
-	
 	@Column(name="numofbeds")
 	private int numOfBeds;
 	
@@ -38,8 +35,5 @@ public @Data class Room {
 	
 	@Column(name="balcony")
 	private boolean balcony;
-	
-	/*@OneToMany(mappedBy="price")
-	private Collection<PriceOfRoom> prices;*/
 	
 }

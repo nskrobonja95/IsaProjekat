@@ -1,3 +1,118 @@
+<div>
+  <div class="search-box-div">
+
+      <div class="top-margin-div"></div>
+      <div  class="">
+        <h1 >Accomodation Booking</h1>
+      </div>
+      <div class="main-agileinfo">
+        <div class="sap_tabs">
+          <div id="horizontalTab">
+            <ul class="resp-tabs-list">
+              <li class="resp-tab-item"><span>Search</span></li>
+            </ul>
+            <div class="clearfix"></div>
+            <div class="resp-tabs-container form-class">
+              <div class="tab-1 resp-tab-content roundtrip">
+                <form ng-submit="hotelCtrl.search()">
+                  <div class="from">
+                    <h3>Destination</h3>
+                    <input type="text" name="city" ng-model="avioCtrl.searchObj.dest" class="city1 input-class"
+                      placeholder="Type Destination" required="">
+                  </div>
+                  <div class="clear"></div>
+                  <div class="date">
+                    <div class="depart">
+                      <h3>Check-in</h3>
+                      <input id="datepicker" ng-model="avioCtrl.checkInDate" class="input-class" name="Text" type="text"
+                        value="yyyy-MM-dd" onfocus="this.value = '';"
+                        onblur="if (this.value == '') {this.value = 'yyyy-MM-dd';}" required="">
+                      <span class="checkbox1">
+                        <label class="checkbox"><input type="checkbox" name="" checked=""><i>
+                          </i>Flexible with date</label>
+                      </span>
+                    </div>
+                    <div class="return">
+                      <h3>Check-out</h3>
+                      <input id="datepicker1" ng-model="avioCtrl.checkOutDate" class="input-class" name="Text" type="text"
+                        value="yyyy-MM-dd" onfocus="this.value = '';"
+                        onblur="if (this.value == '') {this.value = 'yyyy-MM-dd';}" required="">
+                      <span class="checkbox1">
+                        <label class="checkbox"><input type="checkbox" name="" checked=""><i>
+                          </i>Flexible with date</label>
+                      </span>
+                    </div>
+                    <div class="clear"></div>
+                  </div>
+                  <div class="clear"></div>
+                    <div class="clear"></div>
+                  </div>
+                  <div class="clear"></div>
+                  <input type="submit" value="Search Flights">
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="top-margin-div"></div>
+	<!--script for portfolio-->
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#horizontalTab').easyResponsiveTabs({
+				type: 'default', //Types: default, vertical, accordion           
+				width: 'auto', //auto or any width like 600px
+				fit: true // 100% fit in a container
+			});
+		});
+	</script>
+	<!--//script for portfolio-->
+	<!-- Calendar -->
+	<script>
+		$(function () {
+			$("#datepicker,#datepicker1,#datepicker2,#datepicker3, #datepicker4").datepicker();
+		});
+	</script>
+	<!-- //Calendar -->
+	<!--quantity-->
+	<script>
+		//$('.value-plus').on('click', function () {
+		//	var divUpd = $(this).parent().find('.value'),
+		//		newVal = parseInt(divUpd.text(), 10) + 1;
+		//	divUpd.text(newVal);
+		//});
+
+		//$('.value-minus').on('click', function () {
+		//	var divUpd = $(this).parent().find('.value'),
+		//		newVal = parseInt(divUpd.text(), 10) - 1;
+		//	if (newVal >= 1) divUpd.text(newVal);
+		//});
+	</script>
+	<!--//quantity-->
+	<!--load more-->
+	<script>
+		$(document).ready(function () {
+			size_li = $("#myList li").size();
+			x = 1;
+			$('#myList li:lt(' + x + ')').show();
+			$('#loadMore').click(function () {
+				x = (x + 1 <= size_li) ? x + 1 : size_li;
+				$('#myList li:lt(' + x + ')').show();
+			});
+			$('#showLess').click(function () {
+				x = (x - 1 < 0) ? 1 : x - 1;
+				$('#myList li').not(':lt(' + x + ')').hide();
+			});
+
+
+		});
+	</script>
+	<!-- //load-more -->
+<div class="top-margin-div" style="text-align:center;" >
+		<h2 style="position: relative; top: 50%; transform: translateY(-50%); color:black;">Search Flights, Hotels & Car Hire to our most popular destinations....</h2>
+	</div>
 <div class="search-box-div">
   <section class="head">
     <div class="container">
@@ -6,19 +121,22 @@
   </section>
   <div class="clearfix"></div>
   <section class="search-box">
-    <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12 listing-block">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 listing-block">
         <div class="media" ng-repeat = "hotel in hotelCtrl.hotelsList" >
-              <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>
-              </div>
-              <img class="d-flex align-self-start" src="images/hotels.jpg" alt="Generic placeholder image">
-              <div class="media-body pl-3">
-                <div class="price"><a class="price" ui-sref="home-abstract.hotel({hotelId:hotel.id})">{{hotel.name}}</a><small>{{hotel.address}}</small></div>
-               
-                <div class="address">{{hotel.promo}}</div>
-              </div>
+          <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i></div>
+          <img class="d-flex align-self-start" src="images/hotels.jpg" alt="Generic placeholder image">
+          <div class="media-body pl-3">
+            <div class="price"><a class="price" ui-sref="home-abstract.hotel({hotelId:hotel.id})">{{hotel.name}}</a><small>{{hotel.address}}</small>
             </div>
+            <div class="address">{{hotel.promo}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
             <#--
         <div class="media">
             <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>

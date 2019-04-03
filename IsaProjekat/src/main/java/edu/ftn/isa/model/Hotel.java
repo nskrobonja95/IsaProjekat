@@ -28,6 +28,10 @@ public @Data class Hotel {
 	@Column(name="hoteladdress")
 	private String address;
 	
+	@ManyToOne
+	@JoinColumn(name = "destination", nullable=true)
+	private Destination destination;
+	
 	@NotNull
 	@Column(name="hotelpromo")
 	private String promo;

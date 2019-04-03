@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('flightApp').controller('AvioController',
-    ['$scope', '$rootScope', '$state', 'AvioService', 'initialCompaniesList',
-        function ($scope, $rootScope, $state, AvioService, initialCompaniesList) {
+    ['$scope', '$rootScope', '$state', 'AvioService', 'SearchService', 'initialCompaniesList',
+        function ($scope, $rootScope, $state, AvioService, SearchService, initialCompaniesList) {
 
             var self = this;
             this.companiesList = initialCompaniesList.avioList;
@@ -40,8 +40,8 @@ angular.module('flightApp').controller('AvioController',
 
             function multiCitySearch() {
                 console.log(self.multiCity);
-                self.multiCity.departDate1 = formatDateString(self.multiCityDepartDate1);
-                self.multiCity.departDate2 = formatDateString(self.multiCityDepartDate2);
+                self.multiCity.departDate1 = SearchService.formatDateString(self.multiCityDepartDate1);
+                self.multiCity.departDate2 = SearchService.formatDateString(self.multiCityDepartDate2);
                 console.log(self.multiCity);
                 AvioService.multiCitySearch(self.multiCity);
             }
@@ -69,14 +69,6 @@ angular.module('flightApp').controller('AvioController',
             function decNumOfPplMultiCity() {
                 if(self.multiCity.numOfPpl > 1) self.multiCity.numOfPpl-=1;
             }
-
-            function formatDateString(datestring) {
-                console.log("Begin: " + datestring);
-                var retVal;
-                var splitted = datestring.split("/");
-                retVal = splitted[2] + "-" + splitted[0] + "-" + splitted[1];
-                console.log("End: " + retVal);
-                return retVal;
-            }
+            
         }
     ]);

@@ -48,6 +48,7 @@
         <script src="js/app/services/avio.service.js"> </script>
         <script src="js/app/services/hotel.service.js"> </script>
         <script src="js/app/services/carHire.service.js"> </script>
+        <script src="js/app/services/search.service.js"> </script>
 
         <!-- Directives -->
         <script src="js/app/directives/starRating.directive.js"> </script>
