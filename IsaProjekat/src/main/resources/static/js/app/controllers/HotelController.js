@@ -12,6 +12,7 @@ angular.module('flightApp').controller('HotelController',
             console.log(this.hotelsList);
 
             function search() {
+                alert("ASD");
                 searchObj.checkIn = SearchService.formatDateString(self.checkInDate);
                 searchObj.checkOut = SearchService.formatDateString(self.checkOutDate);
                 console.log(searchObj);

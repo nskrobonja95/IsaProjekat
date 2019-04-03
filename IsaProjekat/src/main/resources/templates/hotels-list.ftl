@@ -48,7 +48,7 @@
                     <div class="clear"></div>
                   </div>
                   <div class="clear"></div>
-                  <input type="submit" value="Search Flights">
+                  <input type="submit" value="Search Hotels">
                 </form>
               </div>
             </div>

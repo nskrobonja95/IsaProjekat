@@ -95,6 +95,20 @@ public class UnregisteredUsersController {
 		return new ResponseEntity<Hotel>(optionalHotel.get(), HttpStatus.OK);
 		
 	}
+	@GetMapping("getAllDestinations")
+	public ResponseEntity<?> getAllDestinations(){
+		List<Destination> allDests = destRepo.findAll();
+		List<DestinationDTO> retVal = new ArrayList<DestinationDTO>();
+		for(Destination d : allDests) {
+			retVal.add(new DestinationDTO(d.getName()));
+			
+		}
+		
+		return new ResponseEntity<List<DestinationDTO>>(retVal, HttpStatus.OK);
+
+		
+		
+	}
 	@GetMapping("/getAllDestinationsById/{id}")
 	public ResponseEntity<?> getDestinationsOfAvioCompany(
 			@PathVariable("id") Long avioId) {
@@ -132,7 +146,7 @@ public class UnregisteredUsersController {
 	@GetMapping("/hotels")
 	public ResponseEntity<?> getAllHotels() {
 		List<Hotel> hotels = hotelRepo.findAll();
-		System.out.println(hotels);
+		//System.out.println(hotels);
 		List<HotelDTO> retVal = new ArrayList<HotelDTO>();
 		
 		for(Hotel hotel : hotels) {

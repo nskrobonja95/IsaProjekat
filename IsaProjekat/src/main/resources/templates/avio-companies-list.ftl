@@ -1,9 +1,9 @@
-<div >
+<div>
 	<div class="search-box-div">
 
 		<div class="top-margin-div"></div>
-		<div  class="">
-		<h1 >Flight Ticket Booking</h1>
+		<div class="">
+			<h1>Flight Ticket Booking</h1>
 		</div>
 		<div class="main-agileinfo">
 			<div class="sap_tabs">
@@ -19,20 +19,41 @@
 							<form ng-submit="avioCtrl.roundTripSearch()">
 								<div class="from">
 									<h3>From</h3>
-									<input type="text" name="city" ng-model="avioCtrl.roundTrip.from" class="city1 input-class"
-										placeholder="Type Departure City" required="">
+									<#-- <input type="text" name="city" ng-model="avioCtrl.roundTrip.from"
+										class="city1 input-class" placeholder="Type Departure City" required=""> -->
+										<ui-select class="city1 input-class" ng-model="avioCtrl.roundTrip.from"
+											theme="selectize" ng-disabled="ctrl.disabled" style="width: 300px;"
+											title="From">
+											<ui-select-match placeholder="Select or search a location in the list...">
+												{{$select.selected.name}}</ui-select-match>
+											<ui-select-choices
+												repeat="location in avioCtrl.destList | filter: $select.search">
+												<span ng-bind-html="location.name | highlight: $select.search"></span>
+											</ui-select-choices>
+										</ui-select>
 								</div>
 								<div class="to">
 									<h3>To</h3>
-									<input type="text" name="city" ng-model="avioCtrl.roundTrip.to" class="city2 input-class"
-										placeholder="Type Destination City" required="">
+									<#-- <input type="text" name="city" ng-model="avioCtrl.roundTrip.to"
+										class="city2 input-class" placeholder="Type Destination City" required=""> -->
+										<ui-select class="city2 input-class" ng-model="avioCtrl.roundTrip.to"
+											theme="selectize" ng-disabled="ctrl.disabled" style="width: 300px;"
+											title="From">
+											<ui-select-match placeholder="Select or search a location in the list...">
+												{{$select.selected.name}}</ui-select-match>
+											<ui-select-choices
+												repeat="location in avioCtrl.destList | filter: $select.search">
+												<span ng-bind-html="location.name | highlight: $select.search"></span>
+											</ui-select-choices>
+										</ui-select>
 								</div>
 								<div class="clear"></div>
 								<div class="date">
 									<div class="depart">
 										<h3>Depart</h3>
-										<input id="datepicker" ng-model="avioCtrl.roundTripDepartDate" class="input-class" name="Text" type="text"
-											value="yyyy-MM-dd" onfocus="this.value = '';"
+										<input id="datepicker" ng-model="avioCtrl.roundTripDepartDate"
+											class="input-class" name="Text" type="text" value="yyyy-MM-dd"
+											onfocus="this.value = '';"
 											onblur="if (this.value == '') {this.value = 'yyyy-MM-dd';}" required="">
 										<span class="checkbox1">
 											<label class="checkbox"><input type="checkbox" name="" checked=""><i>
@@ -41,8 +62,9 @@
 									</div>
 									<div class="return">
 										<h3>Return</h3>
-										<input id="datepicker1" ng-model="avioCtrl.roundTripReturnDate" class="input-class" name="Text" type="text"
-											value="yyyy-MM-dd" onfocus="this.value = '';"
+										<input id="datepicker1" ng-model="avioCtrl.roundTripReturnDate"
+											class="input-class" name="Text" type="text" value="yyyy-MM-dd"
+											onfocus="this.value = '';"
 											onblur="if (this.value == '') {this.value = 'yyyy-MM-dd';}" required="">
 										<span class="checkbox1">
 											<label class="checkbox"><input type="checkbox" name="" checked=""><i>
@@ -54,7 +76,7 @@
 								<div class="class">
 									<h3>Class</h3>
 									<select id="w3_country1" ng-model="avioCtrl.roundTrip.flightClass"
-										class="frm-field required">
+										class="frm-field required" style="float: left;">
 										<option value="Economic">Economy</option>
 										<option value="Bussiness">Business</option>
 									</select>
@@ -66,9 +88,12 @@
 										<h3>Adult:(12+ yrs)</h3>
 										<div class="quantity">
 											<div class="quantity-select">
-												<div class="entry value-minus" ng-click="avioCtrl.decNumOfPpl()">&nbsp;</div>
-												<div class="entry value"><span ng-bind="avioCtrl.roundTrip.numOfPpl"></span></div>
-												<div class="entry value-plus active" ng-click="avioCtrl.incNumOfPpl()">&nbsp;</div>
+												<div class="entry value-minus" ng-click="avioCtrl.decNumOfPpl()">&nbsp;
+												</div>
+												<div class="entry value"><span
+														ng-bind="avioCtrl.roundTrip.numOfPpl"></span></div>
+												<div class="entry value-plus active" ng-click="avioCtrl.incNumOfPpl()">
+													&nbsp;</div>
 											</div>
 										</div>
 									</div>
@@ -92,20 +117,41 @@
 							<form ng-submit="avioCtrl.oneWaySearch()">
 								<div class="from">
 									<h3>From</h3>
-									<input type="text" name="city" ng-model="avioCtrl.oneWay.from" class="city1 input-class"
-										placeholder="Type Departure City" required="">
+									<#-- <input type="text" name="city" ng-model="avioCtrl.oneWay.from"
+										class="city1 input-class" placeholder="Type Departure City" required=""> -->
+										<ui-select class="city1 input-class" ng-model="avioCtrl.oneWay.from"
+											theme="selectize" ng-disabled="ctrl.disabled" style="width: 300px;"
+											title="From">
+											<ui-select-match placeholder="Select or search a location in the list...">
+												{{$select.selected.name}}</ui-select-match>
+											<ui-select-choices
+												repeat="location in avioCtrl.destList | filter: $select.search">
+												<span ng-bind-html="location.name | highlight: $select.search"></span>
+											</ui-select-choices>
+										</ui-select>
 								</div>
 								<div class="to">
 									<h3>To</h3>
-									<input type="text" name="city" ng-model="avioCtrl.oneWay.to" class="city2 input-class"
-										placeholder="Type Destination City" required="">
+									<#-- <input type="text" name="city" ng-model="avioCtrl.oneWay.to"
+										class="city2 input-class" placeholder="Type Destination City" required=""> -->
+										<ui-select class="city2 input-class" ng-model="avioCtrl.oneWay.to"
+											theme="selectize" ng-disabled="ctrl.disabled" style="width: 300px;"
+											title="From">
+											<ui-select-match placeholder="Select or search a location in the list...">
+												{{$select.selected.name}}</ui-select-match>
+											<ui-select-choices
+												repeat="location in avioCtrl.destList | filter: $select.search">
+												<span ng-bind-html="location.name | highlight: $select.search"></span>
+											</ui-select-choices>
+										</ui-select>
 								</div>
 								<div class="clear"></div>
 								<div class="date">
 									<div class="depart">
 										<h3>Depart</h3>
-										<input class="date input-class" ng-model="avioCtrl.oneWayDepartDate" id="datepicker2" name="Text" type="text"
-											value="mm/dd/yyyy" onfocus="this.value = '';"
+										<input class="date input-class" ng-model="avioCtrl.oneWayDepartDate"
+											id="datepicker2" name="Text" type="text" value="mm/dd/yyyy"
+											onfocus="this.value = '';"
 											onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}" required="">
 										<span class="checkbox1">
 											<label class="checkbox"><input type="checkbox" name="" checked=""><i>
@@ -128,9 +174,12 @@
 										<h3>Adult:(12+ yrs)</h3>
 										<div class="quantity">
 											<div class="quantity-select">
-												<div class="entry value-minus" ng-click="avioCtrl.decNumOfPplOneWay()">&nbsp;</div>
-												<div class="entry value"><span ng-bind="avioCtrl.oneWay.numOfPpl"></span></div>
-												<div class="entry value-plus active" ng-click="avioCtrl.incNumOfPplOneWay()">&nbsp;</div>
+												<div class="entry value-minus" ng-click="avioCtrl.decNumOfPplOneWay()">
+													&nbsp;</div>
+												<div class="entry value"><span
+														ng-bind="avioCtrl.oneWay.numOfPpl"></span></div>
+												<div class="entry value-plus active"
+													ng-click="avioCtrl.incNumOfPplOneWay()">&nbsp;</div>
 											</div>
 										</div>
 									</div>
@@ -156,20 +205,41 @@
 							<form>
 								<div class="from">
 									<h3>From</h3>
-									<input type="text" name="city" ng-model="avioCtrl.multiCity.from" class="city1 input-class"
-										placeholder="Type Departure City" required="">
+									<#-- <input type="text" name="city" ng-model="avioCtrl.multiCity.from"
+										class="city1 input-class" placeholder="Type Departure City" required=""> -->
+										<ui-select class="city1 input-class" ng-model="avioCtrl.multiCity.from"
+											theme="selectize" ng-disabled="ctrl.disabled" style="width: 300px;"
+											title="From">
+											<ui-select-match placeholder="Select or search a location in the list...">
+												{{$select.selected.name}}</ui-select-match>
+											<ui-select-choices
+												repeat="location in avioCtrl.destList | filter: $select.search">
+												<span ng-bind-html="location.name | highlight: $select.search"></span>
+											</ui-select-choices>
+										</ui-select>
 								</div>
 								<div class="to">
 									<h3>To</h3>
-									<input type="text" name="city" ng-model="avioCtrl.multiCity.midDest" class="city2 input-class"
-										placeholder="Type Destination City" required="">
+									<#-- <input type="text" name="city" ng-model="avioCtrl.multiCity.midDest"
+										class="city2 input-class" placeholder="Type Destination City" required=""> -->
+										<ui-select class="city2 input-class" ng-model="avioCtrl.multiCity.midDest"
+											theme="selectize" ng-disabled="ctrl.disabled" style="width: 300px;"
+											title="From">
+											<ui-select-match placeholder="Select or search a location in the list...">
+												{{$select.selected.name}}</ui-select-match>
+											<ui-select-choices
+												repeat="location in avioCtrl.destList | filter: $select.search">
+												<span ng-bind-html="location.name | highlight: $select.search"></span>
+											</ui-select-choices>
+										</ui-select>
 								</div>
 								<div class="clear"></div>
 								<div class="date">
 									<div class="depart">
 										<h3>Depart</h3>
-										<input class="date input-class" ng-model="avioCtrl.multiCityDepartDate1" id="datepicker3" name="Text" type="text"
-											value="mm/dd/yyyy" onfocus="this.value = '';"
+										<input class="date input-class" ng-model="avioCtrl.multiCityDepartDate1"
+											id="datepicker3" name="Text" type="text" value="mm/dd/yyyy"
+											onfocus="this.value = '';"
 											onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}" required="">
 										<span class="checkbox1">
 											<label class="checkbox"><input type="checkbox" name="" checked=""><i>
@@ -179,8 +249,7 @@
 								</div>
 								<div class="class">
 									<h3>Class</h3>
-									<select id="w3_country3"
-										class="frm-field required">
+									<select id="w3_country3" class="frm-field required">
 										<option value="Economic">Economy</option>
 										<option value="Bussiness">Business</option>
 									</select>
@@ -197,20 +266,50 @@
 											<form class="blackbg">
 												<div class="from">
 													<h3>From</h3>
-													<input type="text" name="city" ng-model="avioCtrl.multiCity.midDest" class="city1 input-class"
-														placeholder="Type Departure City" required="">
+													<#-- <input type="text" name="city"
+														ng-model="avioCtrl.multiCity.midDest" class="city1 input-class"
+														placeholder="Type Departure City" required=""> -->
+														<ui-select class="city1 input-class"
+															ng-model="avioCtrl.multiCity.midDest" theme="selectize"
+															ng-disabled="ctrl.disabled" style="width: 300px;"
+															title="From">
+															<ui-select-match
+																placeholder="Select or search a location in the list...">
+																{{$select.selected.name}}</ui-select-match>
+															<ui-select-choices
+																repeat="location in avioCtrl.destList | filter: $select.search">
+																<span
+																	ng-bind-html="location.name | highlight: $select.search"></span>
+															</ui-select-choices>
+														</ui-select>
 												</div>
 												<div class="to">
 													<h3>To</h3>
-													<input type="text" name="city" ng-model="avioCtrl.multiCity.to" class="city2 input-class"
-														placeholder="Type Destination City" required="">
+													<#-- <input type="text" name="city" ng-model="avioCtrl.multiCity.to"
+														class="city2 input-class" placeholder="Type Destination City"
+														required=""> -->
+														<ui-select class="city2 input-class"
+															ng-model="avioCtrl.multiCity.to" theme="selectize"
+															ng-disabled="ctrl.disabled" style="width: 300px;"
+															title="From">
+															<ui-select-match
+																placeholder="Select or search a location in the list...">
+																{{$select.selected.name}}</ui-select-match>
+															<ui-select-choices
+																repeat="location in avioCtrl.destList | filter: $select.search">
+																<span
+																	ng-bind-html="location.name | highlight: $select.search"></span>
+															</ui-select-choices>
+														</ui-select>
 												</div>
 												<div class="clear"></div>
 												<div class="date">
 													<div class="depart">
 														<h3>Depart</h3>
-														<input class="date input-class" ng-model="avioCtrl.multiCityDepartDate2" id="datepicker4" name="Text"
-															type="text" value="mm/dd/yyyy" onfocus="this.value = '';"
+														<input class="date input-class"
+															ng-model="avioCtrl.multiCityDepartDate2" id="datepicker4"
+															name="Text" type="text" value="mm/dd/yyyy"
+															onfocus="this.value = '';"
 															onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}"
 															required="">
 														<span class="checkbox1">
@@ -232,9 +331,12 @@
 												<h3>Adult:(12+ yrs)</h3>
 												<div class="quantity">
 													<div class="quantity-select">
-														<div class="entry value-minus" ng-click="avioCtrl.decNumOfPplMultiCity()">&nbsp;</div>
-														<div class="entry value"><span ng-bind="avioCtrl.multiCity.numOfPpl"></span></div>
-														<div class="entry value-plus active" ng-click="avioCtrl.incNumOfPplMultiCity()">&nbsp;</div>
+														<div class="entry value-minus"
+															ng-click="avioCtrl.decNumOfPplMultiCity()">&nbsp;</div>
+														<div class="entry value"><span
+																ng-bind="avioCtrl.multiCity.numOfPpl"></span></div>
+														<div class="entry value-plus active"
+															ng-click="avioCtrl.incNumOfPplMultiCity()">&nbsp;</div>
 													</div>
 												</div>
 											</div>
@@ -319,40 +421,42 @@
 
 
 
-	<div class="top-margin-div" style="text-align:center;" >
-		<h2 style="position: relative; top: 50%; transform: translateY(-50%); color:black;">Search Flights, Hotels & Car Hire to our most popular destinations....</h2>
+	<div class="top-margin-div" style="text-align:center;">
+		<h2 style="position: relative; top: 50%; transform: translateY(-50%); color:black;">Search Flights, Hotels & Car
+			Hire to our most popular destinations....</h2>
 	</div>
 	<div class="company-list-box-div">
 		<div class="">
-		<section class="head">
-			
-			<div class="top-margin-div "></div>
-			<h1 class="text-center " style="margin:25px">Airline companies</h1>
-			
-		</section>
-		<div class="clearfix"></div>
-		<section class="search-box list-box-div">
-			<div class="container-fluid " style="border:none !important; border-style:none;" >
-				<div class="row" style="border:none !important; border-style:none;">
-					<div class="col-md-12 listing-block" style="border:none !important; border-style:none;">
-						<div class="media" ng-repeat="avioCompany in avioCtrl.companiesList" style="border:none !important; border-style:none;">
-							<div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>
-							</div>
-							<img class="d-flex align-self-start" style="border-radius:25px 0px 0px 25px;" src="images/airplane-company.jpg"
-								alt="Generic placeholder image">
-							<div class="media-body pl-3">
-								<div class="price"><a class="price"
-										ui-sref="home-abstract.avio-company({companyId:avioCompany.id})">{{avioCompany.name}}</a><small>{{avioCompany.address}}</small>
+			<section class="head">
+
+				<div class="top-margin-div "></div>
+				<h1 class="text-center " style="margin:25px">Airline companies</h1>
+
+			</section>
+			<div class="clearfix"></div>
+			<section class="search-box list-box-div">
+				<div class="container-fluid " style="border:none !important; border-style:none;">
+					<div class="row" style="border:none !important; border-style:none;">
+						<div class="col-md-12 listing-block" style="border:none !important; border-style:none;">
+							<div class="media" ng-repeat="avioCompany in avioCtrl.companiesList"
+								style="border:none !important; border-style:none;">
+								<div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>
 								</div>
+								<img class="d-flex align-self-start" style="border-radius:25px 0px 0px 25px;"
+									src="images/airplane-company.jpg" alt="Generic placeholder image">
+								<div class="media-body pl-3">
+									<div class="price"><a class="price"
+											ui-sref="home-abstract.avio-company({companyId:avioCompany.id})">{{avioCompany.name}}</a><small>{{avioCompany.address}}</small>
+									</div>
 
-								<div class="address">{{avioCompany.promo}}</div>
+									<div class="address">{{avioCompany.promo}}</div>
+								</div>
 							</div>
-						</div>
 
+						</div>
 					</div>
-				</div>
-		</section>
-		<div class="top-margin-div "></div>
-	</div>
+			</section>
+			<div class="top-margin-div "></div>
+		</div>
 	</div>
 </div>

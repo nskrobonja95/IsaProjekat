@@ -1,15 +1,16 @@
 'use strict';
 
 angular.module('flightApp').controller('AvioController',
-    ['$scope', '$rootScope', '$state', 'AvioService', 'SearchService', 'initialCompaniesList',
-        function ($scope, $rootScope, $state, AvioService, SearchService, initialCompaniesList) {
+    ['$scope', '$rootScope', '$state', 'AvioService', 'SearchService', 'initialDestinationsList', 'initialCompaniesList',
+        function ($scope, $rootScope, $state, AvioService, SearchService, initialDestinationsList, initialCompaniesList) {
 
             var self = this;
-            this.companiesList = initialCompaniesList.avioList;
+            self.companiesList = initialCompaniesList.avioList;
+            console.log(initialDestinationsList);
+            self.destList = initialDestinationsList.destList;
             self.roundTripSearch = roundTripSearch;
             self.oneWaySearch = oneWaySearch;
             self.multiCitySearch = multiCitySearch;
-            self.formatDateString = formatDateString;
             self.incNumOfPpl = incNumOfPpl;
             self.decNumOfPpl = decNumOfPpl;
             self.incNumOfPplOneWay = incNumOfPplOneWay;
@@ -25,15 +26,19 @@ angular.module('flightApp').controller('AvioController',
 
             function roundTripSearch() {
                 console.log(self.roundTrip);
-                self.roundTrip.departDate = formatDateString(self.roundTripDepartDate);
-                self.roundTrip.returnDate = formatDateString(self.roundTripReturnDate);
+                self.roundTrip.departDate = SearchService.formatDateString(self.roundTripDepartDate);
+                self.roundTrip.returnDate = SearchService.formatDateString(self.roundTripReturnDate);
+                self.roundTrip.from = self.roundTrip.from.name;
+                self.roundTrip.to = self.roundTrip.to.name;
                 console.log(self.roundTrip);
                 AvioService.roundTripSearch(self.roundTrip);
             }
 
             function oneWaySearch() {
                 console.log(self.oneWay);
-                self.oneWay.departDate = formatDateString(self.oneWayDepartDate);
+                self.oneWay.departDate = SearchService.formatDateString(self.oneWayDepartDate);
+                self.oneWay.from = self.oneWay.from.name;
+                self.oneWay.to = self.oneWay.to.name;
                 console.log(self.oneWay);
                 AvioService.oneWaySearch(self.oneWay);
             }
@@ -42,6 +47,9 @@ angular.module('flightApp').controller('AvioController',
                 console.log(self.multiCity);
                 self.multiCity.departDate1 = SearchService.formatDateString(self.multiCityDepartDate1);
                 self.multiCity.departDate2 = SearchService.formatDateString(self.multiCityDepartDate2);
+                self.multiCity.from = self.multiCity.from.name;
+                self.multiCity.midDest = self.multiCity.midDest.name;
+                self.multiCity.to = self.multiCity.to.name;
                 console.log(self.multiCity);
                 AvioService.multiCitySearch(self.multiCity);
             }
@@ -69,6 +77,6 @@ angular.module('flightApp').controller('AvioController',
             function decNumOfPplMultiCity() {
                 if(self.multiCity.numOfPpl > 1) self.multiCity.numOfPpl-=1;
             }
-            
+
         }
     ]);

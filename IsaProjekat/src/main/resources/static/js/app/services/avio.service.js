@@ -11,8 +11,25 @@
         service.roundTripSearch = roundTripSearch;
         service.oneWaySearch = oneWaySearch;
         service.multiCitySearch = multiCitySearch;
+        service.loadAllDestiantions = loadAllDestiantions;
         return service;
+        
+        function loadAllDestiantions(){
+            var destList = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'getAllDestinations')
+            .then(function (response) {
+                console.log("Avio service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing list of all destinations!", error);
+            });
 
+        return $q.all([destList])
+            .then(function (results) {
+                return {
+                    destList: results[0]
+                };
+            });
+        }
         function loadAllAvio() {
             var avioList = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'airlines')
                 .then(function (response) {
