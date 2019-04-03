@@ -25,7 +25,6 @@ import edu.ftn.isa.dto.RentACarServiceDTO;
 import edu.ftn.isa.dto.RoundTripFlights;
 import edu.ftn.isa.dto.RoundTripSearchDTO;
 import edu.ftn.isa.dto.SearchHotelRequestDTO;
-import edu.ftn.isa.dto.SearchHotelResponseDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
