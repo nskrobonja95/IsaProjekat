@@ -30,16 +30,15 @@ public @Data class HotelReservation {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name="hotel_id")
-	private Hotel hotel;
-	
-	@ManyToOne
 	@JoinColumn(name="room_id")
 	private Room room;
 	
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private User user;
+	
+	@Column(name="flightResId")
+	private Double flightResId;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
 	@Column(name="arrivaldate")

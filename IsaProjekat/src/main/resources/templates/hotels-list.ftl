@@ -17,14 +17,24 @@
                 <form ng-submit="hotelCtrl.search()">
                   <div class="from">
                     <h3>Destination</h3>
-                    <input type="text" name="city" ng-model="avioCtrl.searchObj.dest" class="city1 input-class"
-                      placeholder="Type Destination" required="">
+                    <#-- <input type="text" name="city" ng-model="avioCtrl.multiCity.from"
+										class="city1 input-class" placeholder="Type Departure City" required=""> -->
+										<ui-select class="city1 input-class" ng-model="hotelCtrl.searchObj.dest"
+											theme="selectize" ng-disabled="ctrl.disabled" style="width: 300px;"
+											title="From">
+											<ui-select-match placeholder="Select or search a location in the list...">
+												{{$select.selected.name}}</ui-select-match>
+											<ui-select-choices
+												repeat="location in hotelCtrl.destList | filter: $select.search">
+												<span ng-bind-html="location.name | highlight: $select.search"></span>
+											</ui-select-choices>
+										</ui-select>
                   </div>
                   <div class="clear"></div>
                   <div class="date">
                     <div class="depart">
                       <h3>Check-in</h3>
-                      <input id="datepicker" ng-model="avioCtrl.checkInDate" class="input-class" name="Text" type="text"
+                      <input id="datepicker" ng-model="hotelCtrl.checkInDate" class="input-class" name="Text" type="text"
                         value="yyyy-MM-dd" onfocus="this.value = '';"
                         onblur="if (this.value == '') {this.value = 'yyyy-MM-dd';}" required="">
                       <span class="checkbox1">
@@ -34,7 +44,7 @@
                     </div>
                     <div class="return">
                       <h3>Check-out</h3>
-                      <input id="datepicker1" ng-model="avioCtrl.checkOutDate" class="input-class" name="Text" type="text"
+                      <input id="datepicker1" ng-model="hotelCtrl.checkOutDate" class="input-class" name="Text" type="text"
                         value="yyyy-MM-dd" onfocus="this.value = '';"
                         onblur="if (this.value == '') {this.value = 'yyyy-MM-dd';}" required="">
                       <span class="checkbox1">
@@ -42,10 +52,6 @@
                           </i>Flexible with date</label>
                       </span>
                     </div>
-                    <div class="clear"></div>
-                  </div>
-                  <div class="clear"></div>
-                    <div class="clear"></div>
                   </div>
                   <div class="clear"></div>
                   <input type="submit" value="Search Hotels">

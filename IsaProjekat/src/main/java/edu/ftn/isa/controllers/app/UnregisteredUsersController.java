@@ -24,17 +24,21 @@ import edu.ftn.isa.dto.MultiCitySearchDTO;
 import edu.ftn.isa.dto.RentACarServiceDTO;
 import edu.ftn.isa.dto.RoundTripFlights;
 import edu.ftn.isa.dto.RoundTripSearchDTO;
+import edu.ftn.isa.dto.SearchHotelRequestDTO;
+import edu.ftn.isa.dto.SearchHotelResponseDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
 import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.RentACarService;
+import edu.ftn.isa.model.Room;
 import edu.ftn.isa.repositories.AvioRepository;
 import edu.ftn.isa.repositories.DestinationRepository;
 import edu.ftn.isa.repositories.FlightRepository;
 import edu.ftn.isa.repositories.FlightReservationRepository;
 import edu.ftn.isa.repositories.HotelRepository;
 import edu.ftn.isa.repositories.RentACarRepository;
+import edu.ftn.isa.repositories.RoomRepository;
 
 @RestController
 @RequestMapping("/app")
@@ -57,6 +61,9 @@ public class UnregisteredUsersController {
 	
 	@Autowired
 	private DestinationRepository destRepo;
+	
+	@Autowired
+	private RoomRepository roomRepo;
 	
 	@GetMapping("/airlines")
 	public ResponseEntity<?> getAllAirlines() {
@@ -247,6 +254,14 @@ public class UnregisteredUsersController {
 		retVal.setDirectFlights(filteredFlights);
 		retVal.setReturnFlights(filteredFlights2);
 		return new ResponseEntity<RoundTripFlights>(retVal, HttpStatus.OK);
+	}
+	
+	@PostMapping("/searchHotels")
+	public ResponseEntity<?> searchHotels(@RequestBody SearchHotelRequestDTO searchDto) throws ParseException {
+		Date checkInDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckIn());
+		Date checkOutDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckOut());
+		List<Room> availableRooms = roomRepo.searchAvailableRooms(checkInDate, checkOutDate, destRepo.findByName(searchDto.getDest()));
+		return new ResponseEntity<List<Room>>(availableRooms, HttpStatus.OK);
 	}
 	
 }

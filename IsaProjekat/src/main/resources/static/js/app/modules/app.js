@@ -117,6 +117,9 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     initialHotelsList: ['$stateParams', 'HotelService',function($stateParams, HotelService){
                        
                         return HotelService.loadAllHotels();   
+                      }],
+                      initialDestinationsList: ['AvioService', function(AvioService){
+                        return AvioService.loadAllDestiantions();
                       }]
                 }
             })
