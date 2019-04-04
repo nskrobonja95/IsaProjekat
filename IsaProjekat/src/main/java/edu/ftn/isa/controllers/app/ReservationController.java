@@ -61,13 +61,11 @@ public class ReservationController {
 	@PostMapping("/room/{id}")
 	public ResponseEntity<?> reserveRoom(@RequestBody HotelReservationDTO reservationDto) {
 		
-		Optional<Hotel> hotel = hotelRepo.findById(reservationDto.getHotelId());
 		Optional<Room> room = roomRepo.findById(reservationDto.getRoomId());
         Optional<User> user = userRepo.findById(reservationDto.getUserId());
 		
 		HotelReservation reservation = new HotelReservation();
 		reservation.setCanceled(false);
-		reservation.setHotel(hotel.get());
 		reservation.setRoom(room.get());
 		reservation.setUser(user.get());
 		reservation.setArrivalDate(reservationDto.getArrivalDate());
@@ -75,7 +73,7 @@ public class ReservationController {
 		List<HotelService> services = new ArrayList<HotelService>();
 		
 		for(int i=0; i<reservationDto.getHotelServiceNames().size(); ++i) {
-			HotelService service = hotelServRepo.findByNameAndHotel(reservationDto.getHotelServiceNames().get(i), reservation.getHotel());
+			HotelService service = hotelServRepo.findByNameAndHotel(reservationDto.getHotelServiceNames().get(i), room.get().getHotel());
 			if(service != null)
 				services.add(service);
 		}
