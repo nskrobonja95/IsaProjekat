@@ -31,7 +31,13 @@ angular.module('flightApp').controller('AvioController',
                 self.roundTrip.from = self.roundTrip.from.name;
                 self.roundTrip.to = self.roundTrip.to.name;
                 console.log(self.roundTrip);
-                AvioService.roundTripSearch(self.roundTrip);
+                AvioService.roundTripSearch(self.roundTrip)
+                    .then(function (response) {
+                        console.log("Response of the search:", response);
+                        
+                    }, function (errResponse) {
+                        console.log("Error response of the search:", errResponse);
+                    });
             }
 
             function oneWaySearch() {
@@ -40,7 +46,13 @@ angular.module('flightApp').controller('AvioController',
                 self.oneWay.from = self.oneWay.from.name;
                 self.oneWay.to = self.oneWay.to.name;
                 console.log(self.oneWay);
-                AvioService.oneWaySearch(self.oneWay);
+                AvioService.oneWaySearch(self.oneWay)
+                    .then(function (response) {
+                        console.log("Response of the search:", response);
+                        $state.go('home-abstract.flight-search-results', {flightSearchData:JSON.stringify(response)});
+                    }, function (errResponse) {
+                        console.log("Error response of the search:", errResponse);
+                    });
             }
 
             function multiCitySearch() {
@@ -51,7 +63,12 @@ angular.module('flightApp').controller('AvioController',
                 self.multiCity.midDest = self.multiCity.midDest.name;
                 self.multiCity.to = self.multiCity.to.name;
                 console.log(self.multiCity);
-                AvioService.multiCitySearch(self.multiCity);
+                AvioService.multiCitySearch(self.multiCity)
+                    .then(function (response) {
+                        console.log("Response of the search:", response);
+                    }, function (errResponse) {
+                        console.log("Error response of the search:", errResponse);
+                    });
             }
 
             function incNumOfPpl() {
@@ -59,7 +76,7 @@ angular.module('flightApp').controller('AvioController',
             }
 
             function decNumOfPpl() {
-                if(self.roundTrip.numOfPpl > 1) self.roundTrip.numOfPpl-=1;
+                if (self.roundTrip.numOfPpl > 1) self.roundTrip.numOfPpl -= 1;
             }
 
             function incNumOfPplOneWay() {
@@ -67,7 +84,7 @@ angular.module('flightApp').controller('AvioController',
             }
 
             function decNumOfPplOneWay() {
-                if(self.oneWay.numOfPpl > 1) self.oneWay.numOfPpl-=1;
+                if (self.oneWay.numOfPpl > 1) self.oneWay.numOfPpl -= 1;
             }
 
             function incNumOfPplMultiCity() {
@@ -75,7 +92,7 @@ angular.module('flightApp').controller('AvioController',
             }
 
             function decNumOfPplMultiCity() {
-                if(self.multiCity.numOfPpl > 1) self.multiCity.numOfPpl-=1;
+                if (self.multiCity.numOfPpl > 1) self.multiCity.numOfPpl -= 1;
             }
 
         }

@@ -146,7 +146,7 @@ public class UnregisteredUsersController {
 	@GetMapping("/hotels")
 	public ResponseEntity<?> getAllHotels() {
 		List<Hotel> hotels = hotelRepo.findAll();
-		//System.out.println(hotels);
+		System.out.println(hotels);
 		List<HotelDTO> retVal = new ArrayList<HotelDTO>();
 		
 		for(Hotel hotel : hotels) {

@@ -85,6 +85,7 @@
     <script src="js/app/controllers/AvioCompanyController.js"></script>
     <script src="js/app/controllers/CarHireController.js"></script>
     <script src="js/app/controllers/HotelProfileController.js"></script>
+    <script src="js/app/controllers/FlightSearchResultsController.js"></script>
 
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"

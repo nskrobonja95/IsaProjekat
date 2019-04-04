@@ -66,6 +66,19 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                       }]
                 }
             })
+            .state('home-abstract.flight-search-results', {
+                url: '/flight-search-results',
+                views: {
+                    'flight-search-results': {
+                        templateUrl: "partials/flight-search-results",
+                        controller: "FlightSearchResultsController",
+                        controllerAs: "fsCtrl"
+                    }
+                },
+                params: {
+                    flightSearchData: null 
+                }
+            })
             .state('home-abstract.avio-company',{
                 url:'/avio-company/:companyId',
                 views: {
