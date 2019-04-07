@@ -34,6 +34,7 @@ angular.module('flightApp').controller('AvioController',
                 AvioService.roundTripSearch(self.roundTrip)
                     .then(function (response) {
                         console.log("Response of the search:", response);
+                        $state.go('home-abstract.flight-search-results', {flightSearchData:JSON.stringify(response)});
                         
                     }, function (errResponse) {
                         console.log("Error response of the search:", errResponse);
@@ -66,6 +67,7 @@ angular.module('flightApp').controller('AvioController',
                 AvioService.multiCitySearch(self.multiCity)
                     .then(function (response) {
                         console.log("Response of the search:", response);
+                        $state.go('home-abstract.flight-search-results', {flightSearchData:JSON.stringify(response)});
                     }, function (errResponse) {
                         console.log("Error response of the search:", errResponse);
                     });
