@@ -262,7 +262,7 @@ body {
 .media-body {
   /* border: 1px solid #bcbcbc; */
   border-left: 0;
-  height: 136px;
+  /* height: 136px; */
 }
 
 .media .price {
