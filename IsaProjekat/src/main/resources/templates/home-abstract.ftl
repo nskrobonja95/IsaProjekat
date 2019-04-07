@@ -252,6 +252,7 @@
 <div ui-view="settings-abstract"></div>
 <div ui-view="confirm"></div>
 <div ui-view="flight-search-results"></div>
+<div ui-view="hotel-search-results"></div>
 
 <script>
   $('#loginModal').on('show.bs.modal', function (event) {

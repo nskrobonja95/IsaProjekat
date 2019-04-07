@@ -17,7 +17,13 @@ angular.module('flightApp').controller('HotelController',
                 self.searchObj.checkOut = SearchService.formatDateString(self.checkOutDate);
                 self.searchObj.dest = self.searchObj.dest.name;
                 console.log(self.searchObj);
-                HotelService.search(self.searchObj);
+                HotelService.search(self.searchObj)
+                    .then(function(response) {
+                        console.log("Response of the search:", response);
+                        $state.go('home-abstract.hotel-search-results', {hotelSearchData:JSON.stringify(response)});
+                    }, function (errResponse) {
+                        console.log("Error response of the search:", errResponse);
+                    });
             }
         }
     ]);

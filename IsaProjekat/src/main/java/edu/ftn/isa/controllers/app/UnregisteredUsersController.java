@@ -25,6 +25,7 @@ import edu.ftn.isa.dto.RentACarServiceDTO;
 import edu.ftn.isa.dto.RoundTripFlights;
 import edu.ftn.isa.dto.RoundTripSearchDTO;
 import edu.ftn.isa.dto.SearchHotelRequestDTO;
+import edu.ftn.isa.dto.SearchHotelResponseDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
@@ -152,7 +153,6 @@ public class UnregisteredUsersController {
 	@GetMapping("/hotels")
 	public ResponseEntity<?> getAllHotels() {
 		List<Hotel> hotels = hotelRepo.findAll();
-		System.out.println(hotels);
 		List<HotelDTO> retVal = new ArrayList<HotelDTO>();
 		
 		for(Hotel hotel : hotels) {
@@ -164,7 +164,6 @@ public class UnregisteredUsersController {
 	@GetMapping("/carHire")
 	public ResponseEntity<?> getAllRentACar() {
 		List<RentACarService> rentACars = rentACarRepo.findAll();
-		System.out.println(rentACars);
 		List<RentACarServiceDTO> retVal = new ArrayList<RentACarServiceDTO>();
 		
 		for(RentACarService rentACar : rentACars) {
