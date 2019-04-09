@@ -43,13 +43,13 @@ public @Data class Flight {
 	@JoinColumn(name = "todest_id", nullable = false)
 	private Destination toDest;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd@HH:mm")
-	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="takeoff")
 	private Date takeoff;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd@HH:mm")
-	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="landing")
 	private Date landing;
 	

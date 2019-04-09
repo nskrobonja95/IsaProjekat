@@ -19,7 +19,6 @@ import edu.ftn.isa.dto.FlightReservationDTO;
 import edu.ftn.isa.dto.HotelReservationDTO;
 import edu.ftn.isa.model.FlightClass;
 import edu.ftn.isa.model.FlightReservation;
-import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.HotelReservation;
 import edu.ftn.isa.model.HotelService;
 import edu.ftn.isa.model.Room;

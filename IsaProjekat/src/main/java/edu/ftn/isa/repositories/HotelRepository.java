@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Hotel;
-import edu.ftn.isa.model.Room;
 
 public interface HotelRepository extends JpaRepository<Hotel, Long>{
 

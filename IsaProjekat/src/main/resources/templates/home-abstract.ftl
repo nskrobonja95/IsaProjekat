@@ -245,13 +245,14 @@
 <div ui-view="flight-search"></div>
 <div ui-view="avio-companies-list" style="padding: 0; margin:0"></div>
 <div ui-view="avio-company"></div>
-<div ui-view="hotel"></div>
+<div ui-view="hotel-profile"></div>
 <div ui-view="car-hire-companies-list"></div>
 <div ui-view="hotels-list"></div>
 <div ui-view="profile-abstract"></div>
 <div ui-view="settings-abstract"></div>
 <div ui-view="confirm"></div>
-
+<div ui-view="flight-search-results"></div>
+<div ui-view="hotel-search-results"></div>
 
 <script>
   $('#loginModal').on('show.bs.modal', function (event) {
