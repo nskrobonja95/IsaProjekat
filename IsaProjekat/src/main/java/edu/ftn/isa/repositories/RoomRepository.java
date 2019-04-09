@@ -24,5 +24,14 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 			+ "and hr.canceled = false)")
 	List<Room> searchAvailableRooms(@Param("checkIn") Date checkIn,
 			@Param("checkOut") Date checkOut, @Param("dest") Destination dest);
+
+	@Query("SELECT r FROM Room r LEFT JOIN Hotel h ON r.hotel = h "
+			+ "WHERE h.id = :hotelId and "
+			+ "r NOT IN (SELECT r1 FROM Room r1 INNER JOIN HotelReservation hr "
+			+ "ON r1 = hr.room "
+			+ "WHERE (hr.arrivalDate BETWEEN :checkIn and :checkOut or "
+			+ " hr.departingDate BETWEEN :checkIn and :checkOut) "
+			+ "and hr.canceled = false)")
+	List<Room> searchAvailableRoomsForHotel(@Param("checkIn") Date checkIn, @Param("checkOut") Date checkOut, @Param("hotelId") Long hotelId);
 	
 }

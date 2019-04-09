@@ -1,4 +1,54 @@
-<#--  {{hsCtrl.searchRes}}  -->
+<link rel="stylesheet" href="css/avio-company-profile.css" />
+<div class="demo-title">
+  <h1 class="display-1 airline-title">{{hpCtrl.hotel.name}}</h1>
+  <p>Address: <a href="#">{{hpCtrl.hotel.address}}</a></p>
+  <p>Promo: {{hpCtrl.hotel.promo}}</p>
+  <br>
+  <div style="display:inline-block;"><p>Rating:<div star-rating rating-value="rating.current" max="rating.max" editable="rating.editable">  </div></p></div>
+  </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="date">
+            <div class="depart">
+                <h3>Check in</h3>
+                <input id="check-in" ng-model="hpCtrl.checkInDate"
+                    class="input-class" name="Text" type="text" value="yyyy-MM-dd"
+                    onfocus="this.value = '';"
+                    onblur="if (this.value == '') {this.value = 'yyyy-MM-dd';}" required="">
+                <span class="checkbox1">
+                    <label class="checkbox"><input type="checkbox" name="" checked=""><i>
+                        </i>Flexible with date</label>
+                </span>
+            </div>
+            <div class="return">
+                <h3>Check out</h3>
+                <input id="check-out" ng-model="hpCtrl.checkOutDate"
+                    class="input-class" name="Text" type="text" value="yyyy-MM-dd"
+                    onfocus="this.value = '';"
+                    onblur="if (this.value == '') {this.value = 'yyyy-MM-dd';}" required="">
+                <span class="checkbox1">
+                    <label class="checkbox"><input type="checkbox" name="" checked=""><i>
+                        </i>Flexible with date</label>
+                </span>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+    <form>
+    
+
+ <div class="chiller_cb" ng-repeat="service in hpCtrl.hotelServices">
+    <input id="{{service.name}}" type="checkbox">
+    <label for="{{service.name}}">{{service.name}}</label>
+    <span></span>
+  </div>
+
+    </form>
+</div>
+<br>
+<button class="btn btn-primary" style="color:blue;" ng-click="hpCtrl.search()">Search</button>
+
 <div id="searchId">
 
     <!-- <div class="mt-5"></div> -->
@@ -14,11 +64,10 @@
      <div class="col-md-9">
                     <div class="row">
                         <div class="col-md-12">
-                            <h2>Available hotels</h2>
-                            <p> 3 Reasons to Visit: gambling, entertainment & relaxation </p>
+                            <h2>Available rooms</h2>
                         </div>
                     </div>
-                    <div class="row mb-3" ng-repeat="hotel in hsCtrl.searchRes.hotels.hotels">
+                    <div class="row mb-3" ng-repeat="room in hpCtrl.availableRooms">
                         
                         <div class="col-md-12">
                             <div class="card">
@@ -29,46 +78,39 @@
                                         </div>
                                         <div class="col-md-6  card-body">
                                             <div class="list-title">
-                                                <ul class="list-inline list-unstyled">
+                                                <ul class="list-unstyled">
                                                     <li class="list-inline-item">
-                                                        <a ui-sref="home-abstract.hotel-profile({hotelId:hotel.id, checkIn:hsCtrl.searchRes.hotels.checkIn, checkOut:hsCtrl.searchRes.hotels.checkOut})"
-                                                         style="color:blue;">
-                                                            <h4>{{hotel.name}}</h4>
+                                                        <a style="color:blue;">
+                                                            <h4>{{room.description}}</h4>
                                                         </a>
                                                     </li>
-                                                    <li class="list-inline-item text-warning">
+                                                    <li class="list-item text-warning">
                                                         <i class="fa fa-star"></i>
                                                         <i class="fa fa-star"></i>
                                                         <i class="fa fa-star"></i>
                                                         <i class="fa fa-star"></i>
                                                         <i class="fa fa-star-half"></i>
                                                     </li>
-                                                    <li class="list-inline-item text-success">
+                                                    <#--  <li class="list-item text-success">
                                                         <i class="fa fa-thumbs-up"></i>
-                                                    </li>
+                                                    </li>  -->
                                                 </ul>
                                             </div>
-                                            <div class="list-location">
-                                                <a href="#" style="color:blue;">
-                                                    <i class="fa fa-map-marker"></i>
-                                                    <small> {{hotel.destination.name}}</small>
-                                                </a>
-                                            </div>
                                             <div class="list-descrip">
-                                                <small>{{hotel.promo}} </small>
+                                                <small>Number of beds: {{room.numOfBeds}}</small>
                                             </div>
                                         </div>
                                         <div class="col-md-3 border-left card-body">
                                             <ul class="list-unstyled">
-                                                <#--  <li>
+                                                <li>
                                                     <h3>500 RSD</h3>
                                                 </li>
                                                 <li class="text-secondary">
                                                     <small>350</small>
                                                 </li>
                                                 <li>
-                                                    <button class="btn btn-primary">Book</button>
-                                                </li>  -->
+                                                    <button class="btn btn-primary" style="color:blue;">Book</button>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -100,3 +142,9 @@
         </div>
     </section>
 </div>
+
+<script>
+    $(function () {
+        $("#check-in,#check-out").datepicker();
+    });
+</script>

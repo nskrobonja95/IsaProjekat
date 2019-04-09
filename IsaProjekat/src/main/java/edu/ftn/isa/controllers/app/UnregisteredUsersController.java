@@ -24,12 +24,14 @@ import edu.ftn.isa.dto.MultiCitySearchDTO;
 import edu.ftn.isa.dto.RentACarServiceDTO;
 import edu.ftn.isa.dto.RoundTripFlights;
 import edu.ftn.isa.dto.RoundTripSearchDTO;
+import edu.ftn.isa.dto.SearchAvailableRoomsForHotelDTO;
 import edu.ftn.isa.dto.SearchHotelRequestDTO;
 import edu.ftn.isa.dto.SearchHotelResponseDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
 import edu.ftn.isa.model.Hotel;
+import edu.ftn.isa.model.HotelService;
 import edu.ftn.isa.model.RentACarService;
 import edu.ftn.isa.model.Room;
 import edu.ftn.isa.repositories.AvioRepository;
@@ -37,6 +39,7 @@ import edu.ftn.isa.repositories.DestinationRepository;
 import edu.ftn.isa.repositories.FlightRepository;
 import edu.ftn.isa.repositories.FlightReservationRepository;
 import edu.ftn.isa.repositories.HotelRepository;
+import edu.ftn.isa.repositories.HotelServicesRepository;
 import edu.ftn.isa.repositories.RentACarRepository;
 import edu.ftn.isa.repositories.RoomRepository;
 
@@ -64,6 +67,9 @@ public class UnregisteredUsersController {
 	
 	@Autowired
 	private RoomRepository roomRepo;
+	
+	@Autowired
+	private HotelServicesRepository hsRepo;
 	
 	@GetMapping("/airlines")
 	public ResponseEntity<?> getAllAirlines() {
@@ -254,12 +260,45 @@ public class UnregisteredUsersController {
 		return new ResponseEntity<RoundTripFlights>(retVal, HttpStatus.OK);
 	}
 	
-	@PostMapping("/searchHotels")
-	public ResponseEntity<?> searchHotels(@RequestBody SearchHotelRequestDTO searchDto) throws ParseException {
+	@PostMapping("/searchAvailableRooms")
+	public ResponseEntity<?> searchRooms(@RequestBody SearchHotelRequestDTO searchDto) throws ParseException {
 		Date checkInDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckIn());
 		Date checkOutDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckOut());
 		List<Room> availableRooms = roomRepo.searchAvailableRooms(checkInDate, checkOutDate, destRepo.findByName(searchDto.getDest()));
 		return new ResponseEntity<List<Room>>(availableRooms, HttpStatus.OK);
+	}
+	
+	@PostMapping("/searchHotels")
+	public ResponseEntity<?> searchHotels(@RequestBody SearchHotelRequestDTO searchDto) throws ParseException {
+		Date checkInDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckIn());
+		Date checkOutDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckOut());
+		List<Hotel> availableHotels = hotelRepo.searchAvailableHotels(checkInDate, checkOutDate, destRepo.findByName(searchDto.getDest()));
+		SearchHotelResponseDTO response = new SearchHotelResponseDTO();
+		response.setCheckIn(searchDto.getCheckIn());
+		response.setCheckOut(searchDto.getCheckOut());
+		response.setHotels(availableHotels);
+		return new ResponseEntity<SearchHotelResponseDTO>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping("/searchAvailableRoomsForHotel")
+	public ResponseEntity<?> searchRooms(@RequestBody SearchAvailableRoomsForHotelDTO searchDto) throws ParseException {
+		Date checkInDate = null;
+		Date checkOutDate = null;
+		try {
+			checkInDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckIn());
+			checkOutDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckOut());
+		} catch(Exception e) {
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		List<Room> availableRooms = roomRepo.searchAvailableRoomsForHotel(checkInDate, checkOutDate, searchDto.getHotel());
+		return new ResponseEntity<List<Room>>(availableRooms, HttpStatus.OK);
+	}
+	
+	@GetMapping("/loadHotelServices/{hotelId}")
+	public ResponseEntity<?> loadHotelServices(@PathVariable("hotelId") Long hotelId) {
+		Hotel h = hotelRepo.findById(hotelId).get();
+		List<HotelService> services = hsRepo.findByHotel(h);
+		return new ResponseEntity<List<HotelService>>(services, HttpStatus.OK);
 	}
 	
 }

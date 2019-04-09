@@ -7,8 +7,10 @@ import lombok.Data;
 
 public @Data class SearchHotelResponseDTO {
 
-	private Hotel hotel;
+	private List<Hotel> hotels;
 	
-	private List<RoomDTO> rooms;
+	private String checkIn;
+	
+	private String checkOut;
 	
 }

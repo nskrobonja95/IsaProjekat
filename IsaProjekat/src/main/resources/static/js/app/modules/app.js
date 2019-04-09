@@ -92,6 +92,31 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     hotelSearchData: null
                 }
             })
+            .state('home-abstract.hotel-profile', {
+                url: '/hotel-profile/:hotelId/:checkIn/:checkOut',
+                views: {
+                    'hotel-profile': {
+                        templateUrl: "partials/hotel-profile",
+                        controller: "HotelProfileController",
+                        controllerAs: "hpCtrl"
+                    }
+                },
+                resolve: {
+                    availableRooms: ['$stateParams', 'HotelService',function($stateParams, HotelService){
+                        console.log("search for available rooms");
+                        console.log($stateParams.hotelId); 
+                        console.log($stateParams.checkIn);
+                        console.log($stateParams.checkOut);
+                        return HotelService.getAvailableRoomsForHotel($stateParams.hotelId, $stateParams.checkIn, $stateParams.checkOut);
+                    }],
+                    initialHotel: ['$stateParams', 'HotelService',function($stateParams, HotelService){
+                        return HotelService.loadHotelById($stateParams.hotelId);
+                    }],
+                    initialHotelServices: ['$stateParams', 'HotelService',function($stateParams, HotelService){
+                        return HotelService.loadHotelServicesById($stateParams.hotelId);
+                    }]
+                }
+            })
             .state('home-abstract.avio-company',{
                 url:'/avio-company/:companyId',
                 views: {
@@ -146,21 +171,6 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                       }],
                       initialDestinationsList: ['AvioService', function(AvioService){
                         return AvioService.loadAllDestiantions();
-                      }]
-                }
-            })
-            .state('home-abstract.hotel',{
-                url:'/hotel/:hotelId',
-                views: {
-                    'hotel': {
-                        templateUrl: "partials/hotel",
-                        controller: "HotelProfileController",
-                        controllerAs: "hpCtrl"
-                    }
-                },
-                resolve: {
-                    initialHotel: ['$stateParams', 'HotelService',function($stateParams, HotelService){
-                        return HotelService.loadHotelById($stateParams.hotelId); 
                       }]
                 }
             })

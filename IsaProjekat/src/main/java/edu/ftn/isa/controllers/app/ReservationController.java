@@ -19,7 +19,6 @@ import edu.ftn.isa.dto.FlightReservationDTO;
 import edu.ftn.isa.dto.HotelReservationDTO;
 import edu.ftn.isa.model.FlightClass;
 import edu.ftn.isa.model.FlightReservation;
-import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.HotelReservation;
 import edu.ftn.isa.model.HotelService;
 import edu.ftn.isa.model.Room;
@@ -73,7 +72,7 @@ public class ReservationController {
 		List<HotelService> services = new ArrayList<HotelService>();
 		
 		for(int i=0; i<reservationDto.getHotelServiceNames().size(); ++i) {
-			HotelService service = hotelServRepo.findByNameAndHotel(reservationDto.getHotelServiceNames().get(i), room.get().getHotel());
+			HotelService service = hotelServRepo.retrieveByNameAndHotel(reservationDto.getHotelServiceNames().get(i), room.get().getHotel().getId());
 			if(service != null)
 				services.add(service);
 		}
