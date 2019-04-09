@@ -255,12 +255,20 @@ public class UnregisteredUsersController {
 		return new ResponseEntity<RoundTripFlights>(retVal, HttpStatus.OK);
 	}
 	
-	@PostMapping("/searchHotels")
-	public ResponseEntity<?> searchHotels(@RequestBody SearchHotelRequestDTO searchDto) throws ParseException {
+	@PostMapping("/searchAvailableRooms")
+	public ResponseEntity<?> searchRooms(@RequestBody SearchHotelRequestDTO searchDto) throws ParseException {
 		Date checkInDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckIn());
 		Date checkOutDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckOut());
 		List<Room> availableRooms = roomRepo.searchAvailableRooms(checkInDate, checkOutDate, destRepo.findByName(searchDto.getDest()));
 		return new ResponseEntity<List<Room>>(availableRooms, HttpStatus.OK);
+	}
+	
+	@PostMapping("/searchHotels")
+	public ResponseEntity<?> searchHotels(@RequestBody SearchHotelRequestDTO searchDto) throws ParseException {
+		Date checkInDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckIn());
+		Date checkOutDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckOut());
+		List<Hotel> availableRooms = hotelRepo.searchAvailableHotels(checkInDate, checkOutDate, destRepo.findByName(searchDto.getDest()));
+		return new ResponseEntity<List<Hotel>>(availableRooms, HttpStatus.OK);
 	}
 	
 }
