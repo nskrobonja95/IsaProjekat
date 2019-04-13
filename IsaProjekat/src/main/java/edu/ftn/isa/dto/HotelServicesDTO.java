@@ -3,6 +3,7 @@ package edu.ftn.isa.dto;
 import javax.validation.constraints.NotNull;
 
 import edu.ftn.isa.model.Hotel;
+import edu.ftn.isa.model.Room;
 import lombok.Data;
 
 public @Data class HotelServicesDTO {

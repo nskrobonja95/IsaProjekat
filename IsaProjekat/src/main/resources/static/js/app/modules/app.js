@@ -16,6 +16,7 @@ app.run(function($rootScope, $http, $cookies) {
 app.constant('urls', {
     USERS_SERVICE_API: 'http://localhost:8080/user/',
     UNREGISTERED_USERS_SERVICE_API: 'http://localhost:8080/app/',
+    RESERVATION_SERVICE_API: 'http://localhost:8080/reserve/',
     AVIO_SERVICE_API: 'http://localhost:8080/avio/',
     REGISTER_SERVICE_API : 'http://localhost:8080/auth/register',
     LOGIN_SERVICE_API : 'http://localhost:8080/auth/login',
@@ -103,10 +104,6 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 },
                 resolve: {
                     availableRooms: ['$stateParams', 'HotelService',function($stateParams, HotelService){
-                        console.log("search for available rooms");
-                        console.log($stateParams.hotelId); 
-                        console.log($stateParams.checkIn);
-                        console.log($stateParams.checkOut);
                         return HotelService.getAvailableRoomsForHotel($stateParams.hotelId, $stateParams.checkIn, $stateParams.checkOut);
                     }],
                     initialHotel: ['$stateParams', 'HotelService',function($stateParams, HotelService){

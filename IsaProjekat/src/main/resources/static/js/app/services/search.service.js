@@ -10,20 +10,16 @@
         return service;
 
         function formatDateString(datestring) {
-            console.log("Begin: " + datestring);
             var retVal;
             var splitted = datestring.split("/");
             retVal = splitted[2] + "-" + splitted[0] + "-" + splitted[1];
-            console.log("End: " + retVal);
             return retVal;
         }
 
         function reverseFormatDateString(datestring) {
-            console.log("Begin: " + datestring);
             var retVal;
             var splitted = datestring.split("-");
-            retVal = splitted[2] + "/" + splitted[0] + "/" + splitted[1];
-            console.log("End: " + retVal);
+            retVal = splitted[1] + "/" + splitted[2] + "/" + splitted[0];
             return retVal;
         }
 

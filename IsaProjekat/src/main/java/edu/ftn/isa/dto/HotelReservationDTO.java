@@ -8,16 +8,15 @@ import javax.persistence.Column;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import edu.ftn.isa.model.Hotel;
+import edu.ftn.isa.model.HotelService;
 import edu.ftn.isa.model.Room;
 import lombok.Data;
 
 public @Data class HotelReservationDTO {
 
-	private Long hotelId;
-	
 	private Long roomId;
 	
-	private Long userId;
+	private Long flightResId;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
 	private Date arrivalDate;
@@ -25,6 +24,6 @@ public @Data class HotelReservationDTO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
 	private Date departingDate;
 	
-	private List<String> hotelServiceNames;
+	private List<String> hotelServices;
 	
 }

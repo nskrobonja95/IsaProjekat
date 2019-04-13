@@ -43,4 +43,8 @@ public @Data class HotelService {
 	@ManyToMany(mappedBy = "services")
 	private Collection<HotelReservation> reservations;
 	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "hotelServices")
+	private Collection<Room> rooms;
+	
 }

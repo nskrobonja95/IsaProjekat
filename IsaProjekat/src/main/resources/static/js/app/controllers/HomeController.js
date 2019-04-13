@@ -63,10 +63,6 @@ angular.module('flightApp').controller('HomeController',
                 self.dataLoading = true;
                 LoginService.Login(self.userLogin.username, self.userLogin.password, function (response) {
                     if (response.status == 200) {
-                        console.log('trebalo bi ovde da udje', response.status);
-                        console.log(response);
-                        console.log("a ovo je data od response");
-                        console.log(response.data);
                         LoginService.SetCredentials(self.userLogin.username, self.userLogin.password, response.data.role);
 
                         console.log($rootScope.globals);
