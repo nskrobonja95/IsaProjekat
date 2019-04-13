@@ -39,10 +39,11 @@
     
 
  <div class="chiller_cb" ng-repeat="service in hpCtrl.hotelServices">
-    <input id="{{service.name}}" type="checkbox">
-    <label for="{{service.name}}">{{service.name}}</label>
+    <input id="{{service.name}}" type="checkbox" ng-model="hpCtrl.filterItems[service.name]">
+    <label for="{{service.name}}">{{service.name}}({{service.rate}}$ {{service.charge}})</label>
     <span></span>
   </div>
+  <#--  <button class="btn" ng-click="hpCtrl.check()">Check</button>  -->
 
     </form>
 </div>
@@ -67,7 +68,7 @@
                             <h2>Available rooms</h2>
                         </div>
                     </div>
-                    <div class="row mb-3" ng-repeat="room in hpCtrl.availableRooms">
+                    <div class="row mb-3" ng-repeat="room in hpCtrl.availableRooms | filter:hpCtrl.filterServices">
                         
                         <div class="col-md-12">
                             <div class="card">
@@ -103,13 +104,16 @@
                                         <div class="col-md-3 border-left card-body">
                                             <ul class="list-unstyled">
                                                 <li>
-                                                    <h3>500 RSD</h3>
+                                                    <div ng-repeat="price in room.prices">
+                                                        <h3 ng-if="hpCtrl.activePriceCheck(price)">{{price.price}}$</h3>
+                                                    </div>
                                                 </li>
-                                                <li class="text-secondary">
+                                                <#--  <li class="text-secondary">
                                                     <small>350</small>
-                                                </li>
+                                                </li>  -->
                                                 <li>
-                                                    <button class="btn btn-primary" style="color:blue;">Book</button>
+                                                    <button id="{{room.id}}" ng-click="hpCtrl.bookRoom(room)" class="btn btn-primary" style="color:blue;">Book</button>
+                                                    <img ng-if="room.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                                                 </li>
                                             </ul>
                                         </div>

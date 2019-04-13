@@ -38,7 +38,7 @@ public @Data class HotelReservation {
 	private User user;
 	
 	@Column(name="flightResId")
-	private Double flightResId;
+	private Long flightResId;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
 	@Column(name="arrivaldate")

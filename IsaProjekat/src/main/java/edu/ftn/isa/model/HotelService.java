@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -26,8 +27,8 @@ public @Data class HotelService {
 	private Long id;
 	
 	@ManyToOne
-	@JoinColumn(name="room_id")
-	private Room room;
+	@JoinColumn(name="hotel_id")
+	private Hotel hotel;
 	
 	@Column(name="servicename")
 	private String name;
@@ -41,5 +42,9 @@ public @Data class HotelService {
 	@JsonManagedReference
 	@ManyToMany(mappedBy = "services")
 	private Collection<HotelReservation> reservations;
+	
+	@JsonIgnore
+	@ManyToMany(mappedBy = "hotelServices")
+	private Collection<Room> rooms;
 	
 }

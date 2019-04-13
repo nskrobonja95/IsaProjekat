@@ -10,6 +10,7 @@
         service.search = search;
         service.getAvailableRoomsForHotel = getAvailableRoomsForHotel;
         service.loadHotelServicesById = loadHotelServicesById;
+        service.bookRoom = bookRoom;
         return service;
 
         function loadAllHotels() {
@@ -115,6 +116,23 @@
                 .then(function (results) {
                     return {
                         hotelServices: results[0]
+                    };
+                });
+        }
+
+        function bookRoom(obj) {
+            var bookingRoomResponse = $http.post(urls.RESERVATION_SERVICE_API+'room', obj)
+            .then(function (response) {
+                console.log("Book room response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while bookung room!", error);
+            });
+
+            return $q.all([bookingRoomResponse])
+                .then(function (results) {
+                    return {
+                        bookingRoomResponse: results[0]
                     };
                 });
         }
