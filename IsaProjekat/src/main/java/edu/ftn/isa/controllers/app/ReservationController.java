@@ -69,7 +69,7 @@ public class ReservationController {
 		reservation.setCanceled(false);
 		reservation.setUser(userDetails.getUser());
 		reservation.setRoom(room);
-		reservation.setFlightResId(reservationDto.getFlightResId());
+//		reservation.setFlightResId(reservationDto.getFlightResId());
 		reservation.setArrivalDate(reservationDto.getArrivalDate());
 		reservation.setDepartingDate(reservationDto.getDepartingDate());
 		List<HotelService> services = new ArrayList<HotelService>();
