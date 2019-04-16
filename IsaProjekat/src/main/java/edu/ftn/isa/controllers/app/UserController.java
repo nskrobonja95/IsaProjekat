@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,11 +20,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ftn.isa.dto.FriendsDTO;
+import edu.ftn.isa.dto.ReservationsDTO;
 import edu.ftn.isa.dto.UserDTO;
+import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.Friends;
+import edu.ftn.isa.model.HotelReservation;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.payload.PasswordChangePayload;
+import edu.ftn.isa.repositories.FlightReservationRepository;
+import edu.ftn.isa.repositories.HotelReservationRepository;
 import edu.ftn.isa.repositories.UserRepository;
+import edu.ftn.isa.security.CustomUserDetails;
 import edu.ftn.isa.services.AuthService;
 
 @RequestMapping("/user")
@@ -34,6 +42,12 @@ public class UserController {
 	
 	@Autowired
 	private AuthService authService;
+	
+	@Autowired
+	private FlightReservationRepository flightResRepo;
+	
+	@Autowired
+	private HotelReservationRepository hotelResRepo;
 	
 	@PutMapping("/edit/{oldusername}")
 	public ResponseEntity<?> editUser(
@@ -134,6 +148,20 @@ public class UserController {
 		}
 		System.out.println("Ovo je search"+usersDTO);
 		return new ResponseEntity<List<UserDTO>>(usersDTO, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/reservations", method = RequestMethod.GET)
+	public ResponseEntity<?> getReservationsOfUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		
+		List<FlightReservation> fReservations = flightResRepo.findByUser(userDetails.getUser());
+		List<HotelReservation> boundedHotelReservations = hotelResRepo.findByUserAndBoundedToFlightRes(userDetails.getUser());
+		List<HotelReservation> soleHotelReservations = hotelResRepo.findSoleReservationsByUser(userDetails.getUser());
+		
+		List<ReservationsDTO> retVal = new ArrayList<ReservationsDTO>();
+		return null;
+		
 	}
 	
 }

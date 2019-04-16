@@ -9,10 +9,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -37,8 +40,13 @@ public @Data class HotelReservation {
 	@JoinColumn(name="user_id")
 	private User user;
 	
-	@Column(name="flightResId")
-	private Long flightResId;
+	@ManyToOne
+	@JoinColumns({
+			@JoinColumn(name = "flight_res_id", referencedColumnName = "flightticketID"),
+			@JoinColumn(name = "flight_id", referencedColumnName = "flight"),
+			@JoinColumn(name = "seat_number", referencedColumnName = "seatnumber")})
+	@Nullable
+	private FlightReservation flightResId;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
 	@Column(name="arrivaldate")
@@ -58,5 +66,9 @@ public @Data class HotelReservation {
 	
 	@Column(name="canceled")
 	private boolean canceled;
+	
+	@Column(name="status")
+	private ReservationStatus status;
+	
 	
 }

@@ -44,4 +44,7 @@ public @Data class FlightReservation {
 	@JoinColumn(name="user_id")
 	private User user;
 	
+	@Column(name="status")
+	private ReservationStatus status;
+	
 }
