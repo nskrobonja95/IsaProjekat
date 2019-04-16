@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -24,15 +25,16 @@ public @Data class PriceOfRoom {
 	@Column(name="priceID")
 	private Long id;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="roomID")
 	private Room room;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd@HH:mm")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
 	@Column(name="active_from")
 	private Date activeFrom;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd@HH:mm")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm")
 	@Column(name="active_to")
 	private Date activeTo;
 	

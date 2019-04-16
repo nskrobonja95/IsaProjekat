@@ -9,7 +9,7 @@ import lombok.Data;
 public @Data class HotelServicesDTO {
 
 	@NotNull
-	private Room room;
+	private Hotel hotel;
 	
 	@NotNull
 	private String name;

@@ -57,33 +57,30 @@ public class ReservationController {
 	@Autowired
 	private FlightReservationRepository flightResRepo;
 	
-	@PostMapping("/room/{id}")
+	@PostMapping("/room")
 	public ResponseEntity<?> reserveRoom(@RequestBody HotelReservationDTO reservationDto) {
 		
-		Optional<Room> room = roomRepo.findById(reservationDto.getRoomId());
-        Optional<User> user = userRepo.findById(reservationDto.getUserId());
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		
+		Room room = roomRepo.findById(reservationDto.getRoomId()).get();
 		
 		HotelReservation reservation = new HotelReservation();
 		reservation.setCanceled(false);
-		reservation.setRoom(room.get());
-		reservation.setUser(user.get());
+		reservation.setUser(userDetails.getUser());
+		reservation.setRoom(room);
+//		reservation.setFlightResId(reservationDto.getFlightResId());
 		reservation.setArrivalDate(reservationDto.getArrivalDate());
 		reservation.setDepartingDate(reservationDto.getDepartingDate());
 		List<HotelService> services = new ArrayList<HotelService>();
-		
-		for(int i=0; i<reservationDto.getHotelServiceNames().size(); ++i) {
-			HotelService service = hotelServRepo.retrieveByNameAndHotel(reservationDto.getHotelServiceNames().get(i), room.get().getHotel().getId());
-			if(service != null)
+		for(HotelService service : room.getHotelServices()) {
+			if(reservationDto.getHotelServices().contains(service.getName()))
 				services.add(service);
 		}
 		reservation.setServices(services);
 		
-		HotelReservation savedRes = hotelResRepo.save(reservation);
-		savedRes.getRoom().setHotel(null);
-		for(HotelService service: savedRes.getServices()) {
-			service.setReservations(null);
-		}
-		return new ResponseEntity<HotelReservation>(savedRes, HttpStatus.OK);
+		hotelResRepo.save(reservation);
+		return new ResponseEntity<Long>(355L, HttpStatus.OK);
 	}
 	
 	@PostMapping("/flight")

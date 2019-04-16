@@ -10,7 +10,7 @@ public class HotelServicesConverter {
 
 	public HotelServicesDTO fromModelToDto(HotelService service) {
 		HotelServicesDTO serviceDTO = new HotelServicesDTO();
-		serviceDTO.setRoom(service.getRoom());
+		serviceDTO.setHotel(service.getHotel());
 		serviceDTO.setName(service.getName());
 		serviceDTO.setCharge(service.getCharge());
 		serviceDTO.setRate(service.getRate());
