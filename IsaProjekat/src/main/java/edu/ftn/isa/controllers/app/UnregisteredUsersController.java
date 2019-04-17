@@ -38,6 +38,7 @@ import edu.ftn.isa.repositories.AvioRepository;
 import edu.ftn.isa.repositories.DestinationRepository;
 import edu.ftn.isa.repositories.FlightRepository;
 import edu.ftn.isa.repositories.FlightReservationRepository;
+import edu.ftn.isa.repositories.FlightSeatRepository;
 import edu.ftn.isa.repositories.HotelRepository;
 import edu.ftn.isa.repositories.HotelServicesRepository;
 import edu.ftn.isa.repositories.RentACarRepository;
@@ -70,6 +71,9 @@ public class UnregisteredUsersController {
 	
 	@Autowired
 	private HotelServicesRepository hsRepo;
+	
+	@Autowired
+	private FlightSeatRepository flightSeatRepo;
 	
 	@GetMapping("/airlines")
 	public ResponseEntity<?> getAllAirlines() {
@@ -189,20 +193,26 @@ public class UnregisteredUsersController {
 		List<Flight> retValFlights = new ArrayList<Flight>();
 		List<Flight> retValReturnFlights = new ArrayList<Flight>();
 		for(Flight f : filteredFlights) {
-			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
-			if(numOfRes < f.getNumberOfSeats()) {
-				int availableSeats = f.getNumberOfSeats() - numOfRes;
-				if(availableSeats >= searchDto.getNumOfPpl())
-					retValFlights.add(f);
-			}
+			int numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
+			if(numOfAvailableSeats >= searchDto.getNumOfPpl())
+				retValFlights.add(f);
+//			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
+//			if(numOfRes < f.getNumberOfSeats()) {
+//				int availableSeats = f.getNumberOfSeats() - numOfRes;
+//				if(availableSeats >= searchDto.getNumOfPpl())
+//					retValFlights.add(f);
+//			}
 		}
 		for(Flight f : filteredReturnFlights) {
-			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
-			if(numOfRes < f.getNumberOfSeats()) {
-				int availableSeats = f.getNumberOfSeats() - numOfRes;
-				if(availableSeats >= searchDto.getNumOfPpl())
-					retValReturnFlights.add(f);
-			}
+			int numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
+			if(numOfAvailableSeats >= searchDto.getNumOfPpl())
+				retValFlights.add(f);
+//			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
+//			if(numOfRes < f.getNumberOfSeats()) {
+//				int availableSeats = f.getNumberOfSeats() - numOfRes;
+//				if(availableSeats >= searchDto.getNumOfPpl())
+//					retValReturnFlights.add(f);
+//			}
 		}
 		RoundTripFlights retVal = new RoundTripFlights();
 		retVal.setDirectFlights(retValFlights);
@@ -216,12 +226,15 @@ public class UnregisteredUsersController {
 		List<Flight> filteredFlights = flightRepo.oneWaySearch(takeoff, destRepo.findByName(searchDto.getFrom()), destRepo.findByName(searchDto.getTo()));
 		List<Flight> retVal = new ArrayList<Flight>();
 		for(Flight f : filteredFlights) {
-			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
-			if(numOfRes < f.getNumberOfSeats()) {
-				int availableSeats = f.getNumberOfSeats() - numOfRes;
-				if(availableSeats >= searchDto.getNumOfPpl())
-					retVal.add(f);
-			}
+			int numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
+			if(numOfAvailableSeats >= searchDto.getNumOfPpl())
+				retVal.add(f);
+//			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
+//			if(numOfRes < f.getNumberOfSeats()) {
+//				int availableSeats = f.getNumberOfSeats() - numOfRes;
+//				if(availableSeats >= searchDto.getNumOfPpl())
+//					retVal.add(f);
+//			}
 		}
 		return new ResponseEntity<List<Flight>>(retVal, HttpStatus.OK);
 	}
@@ -238,20 +251,26 @@ public class UnregisteredUsersController {
 		List<Flight> retValFlights = new ArrayList<Flight>();
 		List<Flight> retValFlights2 = new ArrayList<Flight>();
 		for(Flight f : filteredFlights) {
+			int numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
+			if(numOfAvailableSeats >= searchDto.getNumOfPpl())
+				retValFlights.add(f);
 			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
-			if(numOfRes < f.getNumberOfSeats()) {
-				int availableSeats = f.getNumberOfSeats() - numOfRes;
-				if(availableSeats >= searchDto.getNumOfPpl())
-					retValFlights.add(f);
-			}
+//			if(numOfRes < f.getNumberOfSeats()) {
+//				int availableSeats = f.getNumberOfSeats() - numOfRes;
+//				if(availableSeats >= searchDto.getNumOfPpl())
+//					retValFlights.add(f);
+//			}
 		}
 		for(Flight f : filteredFlights2) {
-			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
-			if(numOfRes < f.getNumberOfSeats()) {
-				int availableSeats = f.getNumberOfSeats() - numOfRes;
-				if(availableSeats >= searchDto.getNumOfPpl())
-					retValFlights2.add(f);
-			}
+			int numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
+			if(numOfAvailableSeats >= searchDto.getNumOfPpl())
+				retValFlights2.add(f);
+//			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
+//			if(numOfRes < f.getNumberOfSeats()) {
+//				int availableSeats = f.getNumberOfSeats() - numOfRes;
+//				if(availableSeats >= searchDto.getNumOfPpl())
+//					retValFlights2.add(f);
+//			}
 		}
 		
 		RoundTripFlights retVal = new RoundTripFlights();

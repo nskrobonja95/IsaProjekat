@@ -161,12 +161,12 @@ public class UserController {
 	public ResponseEntity<?> getReservationsOfUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		
-		List<FlightReservation> fReservations = flightResRepo.findByUser(userDetails.getUser());
 		List<FlightReservationDTO> retVal = new ArrayList<FlightReservationDTO>();
-		for(FlightReservation res : fReservations) {
-			retVal.add(transformFromModel(res));
-		}
+//		List<FlightReservation> fReservations = flightResRepo.findByUser(userDetails.getUser());
+//		List<FlightReservationDTO> retVal = new ArrayList<FlightReservationDTO>();
+//		for(FlightReservation res : fReservations) {
+//			retVal.add(transformFromModel(res));
+//		}
 		
 		return new ResponseEntity<List<FlightReservationDTO>>(retVal, HttpStatus.OK);
 		
@@ -174,11 +174,8 @@ public class UserController {
 	
 	public FlightReservationDTO transformFromModel(FlightReservation fr) {
 		FlightReservationDTO retVal = new FlightReservationDTO();
-//		retVal.setFlightClass(fr.getFlightClass().name());
-		retVal.setFlightId(fr.getId().getFlightId());
 		retVal.setLastname(fr.getLastname());
 		retVal.setName(fr.getName());
-		retVal.setSeatNumber(fr.getId().getSeatNumber());
 		retVal.setFlight(flightRepo.findById(retVal.getFlightId()).get());
 		return retVal;
 	}

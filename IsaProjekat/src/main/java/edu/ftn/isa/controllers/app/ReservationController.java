@@ -102,7 +102,7 @@ public class ReservationController {
 			}
 			
 			//reservation.setFlight(flightRepo.findById(reservationDto.getFlightId()).get());
-			reservation.setCanceled(false);
+//			reservation.setCanceled(false);
 			reservation.setReserveDate(new Date());
 			//reservation.setSeatNumber(reservationDto.getSeatNumber());
 			

@@ -21,10 +21,8 @@ public @Data class FlightReservationDTO {
 	public FlightReservationDTO transformFromModel(FlightReservation fr) {
 		FlightReservationDTO retVal = new FlightReservationDTO();
 //		retVal.setFlightClass(fr.getFlightClass().name());
-		retVal.setFlightId(fr.getId().getFlightId());
 		retVal.setLastname(fr.getLastname());
 		retVal.setName(fr.getName());
-		retVal.setSeatNumber(fr.getId().getSeatNumber());
 		return retVal;
 	}
 	
