@@ -24,9 +24,6 @@ public @Data class FlightReservation {
 	@EmbeddedId
 	private FlightReservationIdentity id;
 	
-	@Column(name="flightclass")
-	private FlightClass flightClass;
-	
 	@Column(name="name")
 	private String name;
 	

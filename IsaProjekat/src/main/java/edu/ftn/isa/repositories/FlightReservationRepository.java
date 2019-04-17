@@ -15,7 +15,9 @@ public interface FlightReservationRepository extends JpaRepository<FlightReserva
 	@Query("select count(*) from FlightReservation f where f.id.flightId = :flightId")
 	int countNumOfReservationsForFlight(@Param("flightId") Long flightId);
 
-	List<FlightReservation> findByUser(User user);
+	@Query("select fr from FlightReservation fr left join Flight f on f.id = fr.id.flightId where "
+			+ "fr.user = :user and date(f.takeoff) > date(current_date())")
+	List<FlightReservation> findByUser(@Param("user") User user);
 	
 //	@Query("SELECT new edu.ftn.dto.HotelFlightReservationDTO(fr.flight, fr.flightticketid, fr.seatnumber) "
 //			+ "FROM air_company.flight_reservation as fr " + 
