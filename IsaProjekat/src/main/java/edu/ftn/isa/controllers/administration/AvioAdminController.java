@@ -16,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ftn.isa.dto.DestinationsWrapper;
+import edu.ftn.isa.dto.SeatConfigDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
+import edu.ftn.isa.model.FlightSeat;
 import edu.ftn.isa.repositories.AvioRepository;
 import edu.ftn.isa.repositories.DestinationRepository;
 import edu.ftn.isa.repositories.FlightRepository;
+import edu.ftn.isa.repositories.FlightSeatRepository;
 
 @RestController
 @RequestMapping("/avioadmin")
@@ -35,6 +38,8 @@ public class AvioAdminController {
 	
 	@Autowired
 	private AvioRepository avioRepo;
+	
+	@Autowired FlightSeatRepository flightSeatRepo;
 
 	@PostMapping("/addFlight")
 	public ResponseEntity<?> addFlight(@Valid
@@ -91,6 +96,26 @@ public class AvioAdminController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		flight.setAvioCompany(avio.get());
 		flightRepo.save(flight);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/createSeats/{flightId}")
+	public ResponseEntity<?> createSeats(@RequestBody SeatConfigDTO configDto, 
+			@PathVariable("flightId") Long flightId) {
+		Flight f = flightRepo.findById(flightId).get();
+		int seatNumber = 0;
+		for(int i=0; i<configDto.getNumOfCols(); ++i) {
+			for(int j=0; j<configDto.getNumOfRows(); ++j) {
+				FlightSeat fs = new FlightSeat();
+				fs.setAvailable(true);
+				fs.setFastReservation(false);
+				fs.setFlight(f);
+				fs.setColNo(j);
+				fs.setRowNo(i);
+				fs.setSeatNumber(++seatNumber);
+				flightSeatRepo.save(fs);
+			}
+		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

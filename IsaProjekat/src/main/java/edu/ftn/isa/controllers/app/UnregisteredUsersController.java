@@ -206,7 +206,7 @@ public class UnregisteredUsersController {
 		for(Flight f : filteredReturnFlights) {
 			int numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
 			if(numOfAvailableSeats >= searchDto.getNumOfPpl())
-				retValFlights.add(f);
+				retValReturnFlights.add(f);
 //			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
 //			if(numOfRes < f.getNumberOfSeats()) {
 //				int availableSeats = f.getNumberOfSeats() - numOfRes;

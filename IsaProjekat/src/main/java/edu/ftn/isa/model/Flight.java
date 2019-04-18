@@ -57,4 +57,10 @@ public @Data class Flight {
 	@Column(name="number_of_seats")
 	private int numberOfSeats;
 	
+	@Column(name="baggageOver7Price")
+	private int baggageOver7Price;
+	
+	@Column(name="baggageOver20Price")
+	private int baggageOver20Price;
+	
 }
