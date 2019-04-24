@@ -40,7 +40,6 @@ public @Data class AvioCompany implements Serializable {
 	@Column(name="promo")
 	private String promo;
 	
-	@JsonManagedReference
 	@ManyToMany
 	@JoinTable(
 			name = "PERSISTING_AVIO_DESTINATION", 

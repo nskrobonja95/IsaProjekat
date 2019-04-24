@@ -6,7 +6,7 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.username==null || globals.currentUser.userType=='User'">
       <li class="nav-item active">
         <a class="nav-link" ui-sref="home-abstract.avio-companies-list()" style="color:white"><i class="fas fa-plane"></i> Flights <span class="sr-only">(current)</span></a>
       </li>
@@ -16,7 +16,30 @@
       <li class="nav-item">
         <a class="nav-link" ui-sref="home-abstract.car-hire-companies-list()" style="color:white" ><i class="fas fa-car"></i> Car Hire</a>
       </li>
-      
+    </ul>
+
+    <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.userType=='AvioAdmin'">
+      <li class="nav-item active">
+        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Avio-Company <span class="sr-only"></span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Destinations <span class="sr-only"></span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Discounts <span class="sr-only"></span></a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.userType=='HotelAdmin'">
+      <li class="nav-item active">
+        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Hotel <span class="sr-only"></span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Rooms <span class="sr-only"></span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Discounts <span class="sr-only"></span></a>
+      </li>
     </ul>
     
     <ul class="navbar-nav ml-auto" ng-if="globals.currentUser.username==null">
@@ -253,6 +276,8 @@
 <div ui-view="confirm"></div>
 <div ui-view="flight-search-results"></div>
 <div ui-view="hotel-search-results"></div>
+<div ui-view="avio-admin"></div>
+<div ui-view="hotel-admin"></div>
 
 <script>
   $('#loginModal').on('show.bs.modal', function (event) {

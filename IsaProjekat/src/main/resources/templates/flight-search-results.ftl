@@ -8,12 +8,18 @@
 				<h1 class="text-center " style="margin:25px">Search results</h1>
 
 			</section>
+			<div>
+				<h3>Filters:</h3>
+				<input class="input-class" type="text" placeholder="Airline" ng-model="fsCtrl.airlineFilter" />
+				<input class="input-class" type="text" placeholder="Duration" ng-model="fsCtrl.durationFilter" />
+				<input class="input-class" type="text" placeholder="Price" ng-model="fsCtrl.priceFilter" />
+			</div>
 			<div class="clearfix"></div>
 			<section class="search-box list-box-div">
 				<div class="container-fluid " style="border:none !important; border-style:none;">
 					<div class="row" style="border:none !important; border-style:none;">
 						<div class="col-md-12 listing-block" style="float: right; border:none !important; border-style:none;">
-							<div class="media" ng-repeat="flights in fsCtrl.flightsList"
+							<div class="media" ng-repeat="flights in fsCtrl.flightsList | filter: fsCtrl.filterFlights"
 								style="border:none !important; border-style:none;">
 								
 								<div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i>

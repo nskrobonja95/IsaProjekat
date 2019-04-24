@@ -11,6 +11,7 @@
         service.getAvailableRoomsForHotel = getAvailableRoomsForHotel;
         service.loadHotelServicesById = loadHotelServicesById;
         service.bookRoom = bookRoom;
+        service.loadHotelForAdmin = loadHotelForAdmin;
         return service;
 
         function loadAllHotels() {
@@ -133,6 +134,23 @@
                 .then(function (results) {
                     return {
                         bookingRoomResponse: results[0]
+                    };
+                });
+        }
+
+        function loadHotelForAdmin() {
+            var hotel = $http.get(urls.HOTEL_ADMIN_API+'getHotel')
+            .then(function (response) {
+                console.log("Hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  Hotel!", error);
+            });
+
+            return $q.all([hotel])
+                .then(function (results) {
+                    return {
+                        hotel: results[0]
                     };
                 });
         }
