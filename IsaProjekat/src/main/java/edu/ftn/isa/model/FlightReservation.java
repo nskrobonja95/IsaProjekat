@@ -15,7 +15,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -30,18 +29,11 @@ public @Data class FlightReservation {
 	@Column(name="flightReservationId")
 	private Long id;
 	
-	@Column(name="seatnumber")
-	@NotNull
-	private int seatNumber;
-	
 	@Column(name="name")
 	private String name;
 	
 	@Column(name="lastname")
 	private String lastname;
-	
-	@Column(name="passport_number")
-	private String passportNumber;
 	
 	@JsonFormat(pattern="yyyy:MM:dd")
 	@Column(name="reserveDate")
@@ -54,10 +46,6 @@ public @Data class FlightReservation {
 	@Column(name="status")
 	private ReservationStatus status;
 	
-
-	@OneToMany(mappedBy="flightReservation", cascade = CascadeType.ALL)
-	private List<Flight> flights;
-
 	@Column(name="fastReservation")
 	private boolean fastReservation;
 	
@@ -66,6 +54,5 @@ public @Data class FlightReservation {
     	joinColumns = @JoinColumn(name = "reservationId"),
     	inverseJoinColumns = @JoinColumn(name = "seatId") )
 	private List<FlightSeat> flightReservationSeats;
-
 	
 }
