@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Hotel;
+import edu.ftn.isa.model.User;
 
 public interface HotelRepository extends JpaRepository<Hotel, Long>{
 
@@ -24,5 +25,7 @@ public interface HotelRepository extends JpaRepository<Hotel, Long>{
 			+ "and hr.canceled = false)")
 	List<Hotel> searchAvailableHotels(@Param("checkIn") Date checkIn,
 			@Param("checkOut") Date checkOut, @Param("dest") Destination dest);
+
+	Hotel findByAdmin(User user);
 	
 }

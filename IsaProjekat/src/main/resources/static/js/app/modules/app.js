@@ -16,19 +16,18 @@ app.run(function($rootScope, $http, $cookies) {
 app.constant('urls', {
     USERS_SERVICE_API: 'http://localhost:8080/user/',
     UNREGISTERED_USERS_SERVICE_API: 'http://localhost:8080/app/',
+    AVIO_ADMIN_API: 'http://localhost:8080/avioadmin/',
+    HOTEL_ADMIN_API: 'http://localhost:8080/hoteladmin/',
     RESERVATION_SERVICE_API: 'http://localhost:8080/reserve/',
     AVIO_SERVICE_API: 'http://localhost:8080/avio/',
     REGISTER_SERVICE_API : 'http://localhost:8080/auth/register',
     LOGIN_SERVICE_API : 'http://localhost:8080/auth/login',
     FRIENDS_SERVICE_API: 'http://localhost:8080/friend/',
-    CINEMAS_SERVICE_API : 'http://localhost:8080/SpringBootCRUDApp/cinemasApi/cinemas',
     AUTHENTICATION_SERVICE_API : 'http://localhost:8080/auth/',
-    THEATRES_SERVICE_API : 'http://localhost:8080/SpringBootCRUDApp/theatresApi/theatres',
     SEARCH_FRIENDS_SERVICE_API : 'http://localhost:8080/SpringBootCRUDApp/api/searchFriends/',
     ADDING_FRIEND_API: 'http://localhost:8080/SpringBootCRUDApp/api/addFriend/',
     REFUSING_FRIEND_API: 'http://localhost:8080/SpringBootCRUDApp/api/refuse/',
-    ACCEPTING_FRIEND_API: 'http://localhost:8080/SpringBootCRUDApp/api/accept/',
-    OBJECT_SERVICE_API : 'http://localhost:8080/SpringBootCRUDApp/theatresApi/registerObject'
+    ACCEPTING_FRIEND_API: 'http://localhost:8080/SpringBootCRUDApp/api/accept/'
 });
 
 app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
@@ -125,13 +124,47 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 },
                 resolve: {
                     initialCompanyData: ['$stateParams', 'AvioService',function($stateParams, AvioService){
-                       
                         return AvioService.loadAvioById($stateParams.companyId);   
                       }],
                       initialDestinationsData: ['$stateParams', 'AvioService',function($stateParams, AvioService){
-                       
                         return AvioService.loadDestinationsById($stateParams.companyId);   
                       }]
+                }
+            })
+            .state('home-abstract.avio-admin',{
+                url:'/avio-admin',
+                views: {
+                    'avio-admin': {
+                        templateUrl: "partials/avio-admin",
+                        controller: "AvioAdminController",
+                        controllerAs: "avioAdminCtrl"
+                    }
+                },
+                resolve: {
+                    companyData: ['AvioService', function(AvioService){
+                        return AvioService.loadAvioForAdmin()
+                                .then(function(response) {
+                                    debugger;
+                                    return response;
+                                }, function(errResponse) {
+                                    console.log(errResponse);
+                                });
+                    }]
+                }
+            })
+            .state('home-abstract.hotel-admin',{
+                url:'/hotel-admin',
+                views: {
+                    'hotel-admin': {
+                        templateUrl: "partials/hotel-admin",
+                        controller: "HotelAdminController",
+                        controllerAs: "hotelAdminCtrl"
+                    }
+                },
+                resolve: {
+                    hotelData: ['HotelService', function(HotelService){
+                        return HotelService.loadHotelForAdmin();
+                    }]
                 }
             })
             .state('home-abstract.car-hire-companies-list', {

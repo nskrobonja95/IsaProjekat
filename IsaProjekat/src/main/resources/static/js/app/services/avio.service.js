@@ -12,6 +12,7 @@
         service.oneWaySearch = oneWaySearch;
         service.multiCitySearch = multiCitySearch;
         service.loadAllDestiantions = loadAllDestiantions;
+        service.loadAvioForAdmin = loadAvioForAdmin;
         return service;
         
         function loadAllDestiantions(){
@@ -55,7 +56,7 @@
                 console.log("Error occured while initializing  avio company!", error);
             });
 
-        return $q.all([avio])
+            return $q.all([avio])
             .then(function (results) {
                 return {
                     avio: results[0]
@@ -130,9 +131,23 @@
                     });
             }
 
+            function loadAvioForAdmin(){
+                debugger;
+                var airline = $http.get(urls.AVIO_ADMIN_API+'getCompany')
+                .then(function (response) {
+                    console.log("Avio response for admin:", response);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured when trying to retrieve airline for admin!", error);
+                });
+    
+                return $q.all([airline])
+                    .then(function (results) {
+                        return {
+                            airline: results[0]
+                        };
+                    });
+            }
         }
-
-
-
 
 })();

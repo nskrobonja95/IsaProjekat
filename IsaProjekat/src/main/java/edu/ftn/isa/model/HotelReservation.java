@@ -13,6 +13,7 @@ import javax.persistence.JoinColumns;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.lang.Nullable;
@@ -40,11 +41,7 @@ public @Data class HotelReservation {
 	@JoinColumn(name="user_id")
 	private User user;
 	
-	@ManyToOne
-	@JoinColumns({
-			@JoinColumn(name = "flight_res_id", referencedColumnName = "flightticketID"),
-			@JoinColumn(name = "flight_id", referencedColumnName = "flight"),
-			@JoinColumn(name = "seat_number", referencedColumnName = "seatnumber")})
+	@OneToOne
 	@Nullable
 	private FlightReservation flightResId;
 	

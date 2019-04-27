@@ -1,0 +1,1 @@
+HELLO, HOTEL ADMIN !

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ftn.isa.dto.FlightReservationDTO;
 import edu.ftn.isa.dto.FriendsDTO;
 import edu.ftn.isa.dto.ReservationsDTO;
 import edu.ftn.isa.dto.UserDTO;
@@ -27,6 +29,7 @@ import edu.ftn.isa.model.Friends;
 import edu.ftn.isa.model.HotelReservation;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.payload.PasswordChangePayload;
+import edu.ftn.isa.repositories.FlightRepository;
 import edu.ftn.isa.repositories.FlightReservationRepository;
 import edu.ftn.isa.repositories.HotelReservationRepository;
 import edu.ftn.isa.repositories.UserRepository;
@@ -35,6 +38,7 @@ import edu.ftn.isa.services.AuthService;
 
 @RequestMapping("/user")
 @RestController
+@Transactional
 public class UserController {
 
 	@Autowired
@@ -45,6 +49,9 @@ public class UserController {
 	
 	@Autowired
 	private FlightReservationRepository flightResRepo;
+	
+	@Autowired
+	private FlightRepository flightRepo;
 	
 	@Autowired
 	private HotelReservationRepository hotelResRepo;
@@ -150,18 +157,27 @@ public class UserController {
 		return new ResponseEntity<List<UserDTO>>(usersDTO, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/reservations", method = RequestMethod.GET)
+	@RequestMapping(value = "/flightReservations", method = RequestMethod.GET)
 	public ResponseEntity<?> getReservationsOfUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		List<FlightReservationDTO> retVal = new ArrayList<FlightReservationDTO>();
+//		List<FlightReservation> fReservations = flightResRepo.findByUser(userDetails.getUser());
+//		List<FlightReservationDTO> retVal = new ArrayList<FlightReservationDTO>();
+//		for(FlightReservation res : fReservations) {
+//			retVal.add(transformFromModel(res));
+//		}
 		
-		List<FlightReservation> fReservations = flightResRepo.findByUser(userDetails.getUser());
-		List<HotelReservation> boundedHotelReservations = hotelResRepo.findByUserAndBoundedToFlightRes(userDetails.getUser());
-		List<HotelReservation> soleHotelReservations = hotelResRepo.findSoleReservationsByUser(userDetails.getUser());
+		return new ResponseEntity<List<FlightReservationDTO>>(retVal, HttpStatus.OK);
 		
-		List<ReservationsDTO> retVal = new ArrayList<ReservationsDTO>();
-		return null;
-		
+	}
+	
+	public FlightReservationDTO transformFromModel(FlightReservation fr) {
+		FlightReservationDTO retVal = new FlightReservationDTO();
+		retVal.setLastname(fr.getLastname());
+		retVal.setName(fr.getName());
+		retVal.setFlight(flightRepo.findById(retVal.getFlightId()).get());
+		return retVal;
 	}
 	
 }

@@ -102,15 +102,15 @@ public class ReservationController {
 			}
 			
 			//reservation.setFlight(flightRepo.findById(reservationDto.getFlightId()).get());
-			reservation.setCanceled(false);
+//			reservation.setCanceled(false);
 			reservation.setReserveDate(new Date());
 			//reservation.setSeatNumber(reservationDto.getSeatNumber());
 			
-			if(reservationDto.getFlightClass().equals("Economic")) {
-				reservation.setFlightClass(FlightClass.Economic);
-			} else {
-				reservation.setFlightClass(FlightClass.Bussiness);
-			}
+//			if(reservationDto.getFlightClass().equals("Economic")) {
+//				reservation.setFlightClass(FlightClass.Economic);
+//			} else {
+//				reservation.setFlightClass(FlightClass.Bussiness);
+//			}
 		}
 			flightResRepo.save(reservation);
 		

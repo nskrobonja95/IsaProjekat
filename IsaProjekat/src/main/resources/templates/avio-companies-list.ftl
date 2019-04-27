@@ -78,7 +78,7 @@
 									<select id="w3_country1" ng-model="avioCtrl.roundTrip.flightClass"
 										class="frm-field required" style="float: left;">
 										<option value="Economic">Economy</option>
-										<option value="Bussiness">Business</option>
+										<option value="Business">Business</option>
 									</select>
 
 								</div>

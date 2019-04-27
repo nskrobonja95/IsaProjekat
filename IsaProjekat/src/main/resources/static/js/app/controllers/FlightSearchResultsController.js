@@ -5,6 +5,10 @@ angular.module('flightApp').controller('FlightSearchResultsController', [
     function ($scope, $rootScope, $state, $stateParams) {
         var self = this;
         self.searchRes = JSON.parse($stateParams.flightSearchData);
+        self.filterFlights = filterFlights;
+        self.airlineFilterCheck = airlineFilterCheck;
+        self.durationFilterCheck = durationFilterCheck;
+        self.priceFilterCheck = priceFilterCheck;
         self.flightsList = [];
         if(self.searchRes.dest.data.directFlights){
             console.log("Uslo u round", self.searchRes.dest.data);
@@ -42,6 +46,31 @@ angular.module('flightApp').controller('FlightSearchResultsController', [
             
            
             
+        }
+
+        function filterFlights(flightObj) {
+            console.log("FILTERING...");
+            debugger;
+            console.log(self.airlineFilterCheck(flightObj.flight));
+            console.log(self.priceFilterCheck(flightObj));
+            return self.airlineFilterCheck(flightObj.flight) && self.priceFilterCheck(flightObj);
+        }
+
+        function airlineFilterCheck(flight) {
+            if(self.airlineFilter == '' || self.airlineFilter == undefined)return true;
+            for(var i=0; i<flight.length; ++i) {
+                if(flight[i].avioCompany.name.toUpperCase().includes(self.airlineFilter.toUpperCase()))return true;
+            }
+            return false;
+        }
+
+        function durationFilterCheck(flight) {
+            //to do
+        }
+
+        function priceFilterCheck(flight) {
+            if(self.priceFilter == '' || self.priceFilter == undefined) return true;
+            return flight.price <= Number(self.priceFilter);
         }
     }
 ]);
