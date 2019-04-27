@@ -28,7 +28,7 @@
 									<div class="address">Price: {{flights.price}}</div>
 								</div>
                                 <div style="margin: auto; height:100%" >
-                                    <a href="#"  class="btn btn-outlined btn-theme btn-lg d-flex align-self-start"  data-wow-delay="0.7s">Purchase Now</a>
+                                    <a href="#"  class="btn btn-outlined btn-theme btn-lg d-flex align-self-start"  data-wow-delay="0.7s">Select</a>
                                     <a href="#"  class="btn btn-outlined btn-theme btn-lg d-flex align-self-start"  data-wow-delay="0.7s">Book hotel</a>
                                 </div>
                         
