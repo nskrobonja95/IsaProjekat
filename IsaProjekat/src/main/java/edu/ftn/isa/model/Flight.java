@@ -54,7 +54,10 @@ public @Data class Flight {
 	@Column(name="bussinessprice")
 	private Double bussinessClassPrice;
 	
-	@Column(name="number_of_seats")
-	private int numberOfSeats;
+	@Column(name="number_of_business_seats")
+	private int numberOfBusinessSeats;
+	
+	@Column(name="number_of_economic_seats")
+	private int numberOfEconomicSeats;
 	
 }

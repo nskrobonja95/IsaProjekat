@@ -1,15 +1,15 @@
 package edu.ftn.isa.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -27,11 +27,18 @@ public @Data class FlightReservation {
 	@Column(name="flightclass")
 	private FlightClass flightClass;
 	
+	@Column(name="seatnumber")
+	@NotNull
+	private int seatNumber;
+	
 	@Column(name="name")
 	private String name;
 	
 	@Column(name="lastname")
 	private String lastname;
+	
+	@Column(name="passport_number")
+	private String passportNumber;
 	
 	@JsonFormat(pattern="yyyy:MM:dd")
 	@Column(name="reserveDate")
@@ -46,5 +53,8 @@ public @Data class FlightReservation {
 	
 	@Column(name="status")
 	private ReservationStatus status;
+	
+	@OneToMany(mappedBy="flightReservation", cascade = CascadeType.ALL)
+	private List<Flight> flights;
 	
 }

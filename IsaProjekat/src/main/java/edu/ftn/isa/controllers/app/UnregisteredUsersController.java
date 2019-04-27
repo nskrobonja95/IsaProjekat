@@ -190,18 +190,35 @@ public class UnregisteredUsersController {
 		List<Flight> retValReturnFlights = new ArrayList<Flight>();
 		for(Flight f : filteredFlights) {
 			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
-			if(numOfRes < f.getNumberOfSeats()) {
-				int availableSeats = f.getNumberOfSeats() - numOfRes;
-				if(availableSeats >= searchDto.getNumOfPpl())
-					retValFlights.add(f);
+			if(searchDto.getFlightClass().equals("Economic")) {
+				if(numOfRes < f.getNumberOfEconomicSeats()) {
+					int availableSeats = f.getNumberOfEconomicSeats() - numOfRes;
+					if(availableSeats >= searchDto.getNumOfPpl())
+						retValFlights.add(f);
+				}
+			}else if(searchDto.getFlightClass().equals("Business")) {
+				if(numOfRes < f.getNumberOfBusinessSeats()) {
+					int availableSeats = f.getNumberOfBusinessSeats() - numOfRes;
+					if(availableSeats >= searchDto.getNumOfPpl())
+						retValFlights.add(f);
+				}
 			}
+			
 		}
 		for(Flight f : filteredReturnFlights) {
 			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
-			if(numOfRes < f.getNumberOfSeats()) {
-				int availableSeats = f.getNumberOfSeats() - numOfRes;
-				if(availableSeats >= searchDto.getNumOfPpl())
-					retValReturnFlights.add(f);
+			if(searchDto.getFlightClass().equals("Economic")) {
+				if(numOfRes < f.getNumberOfEconomicSeats()) {
+					int availableSeats = f.getNumberOfEconomicSeats() - numOfRes;
+					if(availableSeats >= searchDto.getNumOfPpl())
+						retValReturnFlights.add(f);
+				}
+			}else if(searchDto.getFlightClass().equals("Business")) {
+				if(numOfRes < f.getNumberOfBusinessSeats()) {
+					int availableSeats = f.getNumberOfBusinessSeats() - numOfRes;
+					if(availableSeats >= searchDto.getNumOfPpl())
+						retValReturnFlights.add(f);
+				}
 			}
 		}
 		RoundTripFlights retVal = new RoundTripFlights();
@@ -217,10 +234,20 @@ public class UnregisteredUsersController {
 		List<Flight> retVal = new ArrayList<Flight>();
 		for(Flight f : filteredFlights) {
 			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
-			if(numOfRes < f.getNumberOfSeats()) {
-				int availableSeats = f.getNumberOfSeats() - numOfRes;
-				if(availableSeats >= searchDto.getNumOfPpl())
-					retVal.add(f);
+			if(searchDto.getFlightClass().equals("Economic")) {
+				
+			
+				if(numOfRes < f.getNumberOfEconomicSeats()) {
+					int availableSeats = f.getNumberOfEconomicSeats() - numOfRes;
+					if(availableSeats >= searchDto.getNumOfPpl())
+						retVal.add(f);
+				}
+			} else if (searchDto.getFlightClass().equals("Business")) {
+				if(numOfRes < f.getNumberOfBusinessSeats()) {
+					int availableSeats = f.getNumberOfBusinessSeats() - numOfRes;
+					if(availableSeats >= searchDto.getNumOfPpl())
+						retVal.add(f);
+				}
 			}
 		}
 		return new ResponseEntity<List<Flight>>(retVal, HttpStatus.OK);
@@ -237,20 +264,39 @@ public class UnregisteredUsersController {
 		List<Flight> filteredFlights2 = flightRepo.oneWaySearch(takeoff2, midDest, to);
 		List<Flight> retValFlights = new ArrayList<Flight>();
 		List<Flight> retValFlights2 = new ArrayList<Flight>();
+		
 		for(Flight f : filteredFlights) {
+			
 			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
-			if(numOfRes < f.getNumberOfSeats()) {
-				int availableSeats = f.getNumberOfSeats() - numOfRes;
-				if(availableSeats >= searchDto.getNumOfPpl())
-					retValFlights.add(f);
+			if(searchDto.getFlightClass().equals("Economic")) {
+				if(numOfRes < f.getNumberOfEconomicSeats()) {
+					int availableSeats = f.getNumberOfEconomicSeats() - numOfRes;
+					if(availableSeats >= searchDto.getNumOfPpl())
+						retValFlights.add(f);
+				}
+			}else if(searchDto.getFlightClass().equals("Business")) {
+				if(numOfRes < f.getNumberOfBusinessSeats()) {
+					int availableSeats = f.getNumberOfBusinessSeats() - numOfRes;
+					if(availableSeats >= searchDto.getNumOfPpl())
+						retValFlights.add(f);
+				}
 			}
+			
 		}
 		for(Flight f : filteredFlights2) {
 			int numOfRes = flightResRepo.countNumOfReservationsForFlight(f.getId());
-			if(numOfRes < f.getNumberOfSeats()) {
-				int availableSeats = f.getNumberOfSeats() - numOfRes;
-				if(availableSeats >= searchDto.getNumOfPpl())
-					retValFlights2.add(f);
+			if(searchDto.getFlightClass().equals("Business")) {
+				if(numOfRes < f.getNumberOfBusinessSeats()) {
+					int availableSeats = f.getNumberOfBusinessSeats() - numOfRes;
+					if(availableSeats >= searchDto.getNumOfPpl())
+						retValFlights2.add(f);
+				}
+			}else if(searchDto.getFlightClass().equals("Economic")) {
+				if(numOfRes < f.getNumberOfEconomicSeats()) {
+					int availableSeats = f.getNumberOfEconomicSeats() - numOfRes;
+					if(availableSeats >= searchDto.getNumOfPpl())
+						retValFlights2.add(f);
+				}
 			}
 		}
 		
