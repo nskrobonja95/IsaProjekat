@@ -51,9 +51,8 @@ angular.module('flightApp').controller('HomeController',
                 }
             }
             function logout(){
-                console.log("Radi logout")
                 LoginService.ClearCredentials();
-                $state.go('home-abstract.flights');
+                $state.go('home-abstract.avio-companies-list');
             }
             function login() {
                 (function initController() {
@@ -66,11 +65,18 @@ angular.module('flightApp').controller('HomeController',
                         LoginService.SetCredentials(self.userLogin.username, self.userLogin.password, response.data.role);
 
                         console.log($rootScope.globals);
+                        debugger;
                         self.dataLoading = false;
                         $("#loginModal").modal("hide");
                         self.userLogin.username = '';
                         self.userLogin.password = '';
-                        $state.go('home-abstract.flights');
+                        if($rootScope.globals.currentUser.userType == 'User') {
+                            $state.go('home-abstract.avio-companies-list');
+                        } else if($rootScope.globals.currentUser.userType == 'AvioAdmin') {
+                            $state.go('home-abstract.avio-admin');
+                        } else if($rootScope.globals.currentUser.userType == 'HotelAdmin') {
+                            $state.go('home-abstract.hotel-admin');
+                        }
                     } else {
                         console.log('Ovo je poruka o gresci ' + response.data.errorMessage);
                         self.errorMessage = response.data.errorMessage;

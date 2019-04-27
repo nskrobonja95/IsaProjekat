@@ -9,6 +9,9 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,12 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ftn.isa.dto.DestinationsWrapper;
+import edu.ftn.isa.dto.SeatConfigDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
+import edu.ftn.isa.model.FlightSeat;
 import edu.ftn.isa.repositories.AvioRepository;
 import edu.ftn.isa.repositories.DestinationRepository;
 import edu.ftn.isa.repositories.FlightRepository;
+import edu.ftn.isa.repositories.FlightSeatRepository;
+import edu.ftn.isa.security.CustomUserDetails;
 
 @RestController
 @RequestMapping("/avioadmin")
@@ -35,6 +42,8 @@ public class AvioAdminController {
 	
 	@Autowired
 	private AvioRepository avioRepo;
+	
+	@Autowired FlightSeatRepository flightSeatRepo;
 
 	@PostMapping("/addFlight")
 	public ResponseEntity<?> addFlight(@Valid
@@ -92,6 +101,34 @@ public class AvioAdminController {
 		flight.setAvioCompany(avio.get());
 		flightRepo.save(flight);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/createSeats/{flightId}")
+	public ResponseEntity<?> createSeats(@RequestBody SeatConfigDTO configDto, 
+			@PathVariable("flightId") Long flightId) {
+		Flight f = flightRepo.findById(flightId).get();
+		int seatNumber = 0;
+		for(int i=0; i<configDto.getNumOfCols(); ++i) {
+			for(int j=0; j<configDto.getNumOfRows(); ++j) {
+				FlightSeat fs = new FlightSeat();
+				fs.setAvailable(true);
+				fs.setFastReservation(false);
+				fs.setFlight(f);
+				fs.setColNo(j);
+				fs.setRowNo(i);
+				fs.setSeatNumber(++seatNumber);
+				flightSeatRepo.save(fs);
+			}
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/getCompany")
+	public ResponseEntity<?> getAvioCompany() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		AvioCompany retVal = avioRepo.findByAdmin(userDetails.getUser());
+		return new ResponseEntity<AvioCompany>(retVal, HttpStatus.OK);
 	}
 	
 }

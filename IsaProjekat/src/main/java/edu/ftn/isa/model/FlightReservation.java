@@ -5,9 +5,13 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -21,11 +25,10 @@ import lombok.Data;
 @Table(name="flightReservation")
 public @Data class FlightReservation {
 
-	@EmbeddedId
-	private FlightReservationIdentity id;
-	
-	@Column(name="flightclass")
-	private FlightClass flightClass;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="flightReservationId")
+	private Long id;
 	
 	@Column(name="seatnumber")
 	@NotNull
@@ -44,9 +47,6 @@ public @Data class FlightReservation {
 	@Column(name="reserveDate")
 	private Date reserveDate;
 	
-	@Column(name="isCanceled")
-	private boolean isCanceled;
-	
 	@ManyToOne
 	@JoinColumn(name="user_id")
 	private User user;
@@ -54,7 +54,18 @@ public @Data class FlightReservation {
 	@Column(name="status")
 	private ReservationStatus status;
 	
+
 	@OneToMany(mappedBy="flightReservation", cascade = CascadeType.ALL)
 	private List<Flight> flights;
+
+	@Column(name="fastReservation")
+	private boolean fastReservation;
+	
+	@ManyToMany
+	@JoinTable( name = "RESERVATION_SEAT",
+    	joinColumns = @JoinColumn(name = "reservationId"),
+    	inverseJoinColumns = @JoinColumn(name = "seatId") )
+	private List<FlightSeat> flightReservationSeats;
+
 	
 }
