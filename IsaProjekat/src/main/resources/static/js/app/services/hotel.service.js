@@ -141,7 +141,7 @@
         function loadHotelForAdmin() {
             var hotel = $http.get(urls.HOTEL_ADMIN_API+'getHotel')
             .then(function (response) {
-                console.log("Hotel service response:", response.data);
+                console.log("Hotel service response:", response);
                 return response.data;
             }, function (error) {
                 console.log("Error occured while initializing  Hotel!", error);

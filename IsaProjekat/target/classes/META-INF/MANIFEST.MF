@@ -1,15 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: IsaProjekat
 Implementation-Version: 0.0.1-SNAPSHOT
-<<<<<<< HEAD
-Built-By: Korisnik
-Implementation-Vendor-Id: edu.ftn.isa
-Build-Jdk: 1.8.0_161
-=======
 Built-By: Jovan
 Implementation-Vendor-Id: edu.ftn.isa
 Build-Jdk: 1.8.0_111
->>>>>>> 7ec1f0524a8e61df88f7727791185137d47f725d
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
  ot-starter-parent/IsaProjekat
 Created-By: Maven Integration for Eclipse

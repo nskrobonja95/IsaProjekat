@@ -13,6 +13,8 @@
         service.multiCitySearch = multiCitySearch;
         service.loadAllDestiantions = loadAllDestiantions;
         service.loadAvioForAdmin = loadAvioForAdmin;
+        service.updateBasicAvioInfo = updateBasicAvioInfo;
+        service.addDestination = addDestination;
         return service;
         
         function loadAllDestiantions(){
@@ -63,6 +65,7 @@
                 };
             });
         }
+
         function loadDestinationsById(id){
             var dest = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'getAllDestinationsById/'+id)
             .then(function (response) {
@@ -145,6 +148,40 @@
                     .then(function (results) {
                         return {
                             airline: results[0]
+                        };
+                    });
+            }
+            
+            function updateBasicAvioInfo(obj) {
+                var updated = $http.put(urls.AVIO_ADMIN_API+'updateBasicCompanyInfo', obj)
+                .then(function (response) {
+                    console.log("Updated avio:", response);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while updating avio!", error);
+                });
+    
+                return $q.all([updated])
+                    .then(function (results) {
+                        return {
+                            updated: results[0]
+                        };
+                    });
+            }
+
+            function addDestination(obj) {
+                var avio = $http.post(urls.AVIO_ADMIN_API+'addDestination', obj)
+                .then(function (response) {
+                    console.log("Updated avio:", response);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while updating avio!", error);
+                });
+    
+                return $q.all([avio])
+                    .then(function (results) {
+                        return {
+                            avio: results[0]
                         };
                     });
             }

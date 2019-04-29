@@ -4,12 +4,14 @@ import lombok.Data;
 
 public @Data class DestinationDTO {
 
-	private String name;
-	
-	public DestinationDTO() {}
-	
-	public DestinationDTO(String name) {
-		this.name = name;
+	public DestinationDTO(String name2) {
+		// TODO Auto-generated constructor stub
 	}
+
+	public DestinationDTO() {
+		// TODO Auto-generated constructor stub
+	}
+
+	private String name;
 	
 }

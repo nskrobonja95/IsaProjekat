@@ -142,13 +142,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 },
                 resolve: {
                     companyData: ['AvioService', function(AvioService){
-                        return AvioService.loadAvioForAdmin()
-                                .then(function(response) {
-                                    debugger;
-                                    return response;
-                                }, function(errResponse) {
-                                    console.log(errResponse);
-                                });
+                        return AvioService.loadAvioForAdmin();
                     }]
                 }
             })

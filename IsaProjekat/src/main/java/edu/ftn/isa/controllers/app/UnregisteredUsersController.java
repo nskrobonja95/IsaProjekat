@@ -122,10 +122,8 @@ public class UnregisteredUsersController {
 		}
 		
 		return new ResponseEntity<List<DestinationDTO>>(retVal, HttpStatus.OK);
-
-		
-		
 	}
+	
 	@GetMapping("/getAllDestinationsById/{id}")
 	public ResponseEntity<?> getDestinationsOfAvioCompany(
 			@PathVariable("id") Long avioId) {

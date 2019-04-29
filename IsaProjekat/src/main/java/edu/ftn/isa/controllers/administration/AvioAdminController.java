@@ -14,10 +14,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ftn.isa.dto.BasicAvioInfoDTO;
+import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.dto.DestinationsWrapper;
 import edu.ftn.isa.dto.SeatConfigDTO;
 import edu.ftn.isa.model.AvioCompany;
@@ -143,6 +146,31 @@ public class AvioAdminController {
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		AvioCompany retVal = avioRepo.findByAdmin(userDetails.getUser());
 		return new ResponseEntity<AvioCompany>(retVal, HttpStatus.OK);
+	}
+	
+	@PutMapping("/updateBasicCompanyInfo")
+	public ResponseEntity<?> updateBasicCompanyInfo(@RequestBody BasicAvioInfoDTO avioDto) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		AvioCompany avioToModify = avioRepo.findByAdmin(userDetails.getUser());
+		avioToModify.setName(avioDto.getName());
+		avioToModify.setAddress(avioDto.getAddress());
+		avioToModify.setPromo(avioDto.getPromo());
+		avioRepo.save(avioToModify);
+		return new ResponseEntity<AvioCompany>(avioToModify, HttpStatus.OK);
+	}
+	
+	@PostMapping("/addDestination")
+	public ResponseEntity<?> addDest(@RequestBody DestinationDTO destDto) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
+		Destination dest = new Destination();
+		dest.setName(destDto.getName());
+		avio.getDestinations().add(dest);
+		destRepo.save(dest);
+		avioRepo.save(avio);
+		return new ResponseEntity<AvioCompany>(avio, HttpStatus.OK);
 	}
 	
 }

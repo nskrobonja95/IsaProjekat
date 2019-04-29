@@ -61,6 +61,7 @@
 
     <!-- Directives -->
     <script src="js/app/directives/starRating.directive.js"> </script>
+    <script src="js/app/directives/clickToEdit.directive.js"> </script>
 
     <!-- Services -->
     <script src="js/app/services/signup.service.js"> </script>
