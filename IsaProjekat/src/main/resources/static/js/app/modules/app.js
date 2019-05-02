@@ -319,6 +319,21 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                   }
                 }  
             })
+            .state('home-abstract.admin-flights', {
+                url: '/adminflights',
+                resolve: {
+                    initialFlights: ['AvioService',function(AvioService){
+                        return AvioService.loadAllFlightsForAdmin();
+                    }]
+                },
+                views: {
+                    'admin-flights': {
+                      templateUrl: 'partials/admin-flights-list',
+                      controller: 'AdminFlightsController',
+                      controllerAs: 'adminFlightsCtrl'
+                  }
+                }  
+            })
             $urlRouterProvider.otherwise('/avio-companies');
 
     }

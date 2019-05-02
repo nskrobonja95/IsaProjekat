@@ -15,6 +15,8 @@
         service.loadAvioForAdmin = loadAvioForAdmin;
         service.updateBasicAvioInfo = updateBasicAvioInfo;
         service.addDestination = addDestination;
+        service.removeDestinationForAdmin = removeDestinationForAdmin;
+        service.loadAllFlightsForAdmin = loadAllFlightsForAdmin;
         return service;
         
         function loadAllDestiantions(){
@@ -182,6 +184,40 @@
                     .then(function (results) {
                         return {
                             avio: results[0]
+                        };
+                    });
+            }
+
+            function removeDestinationForAdmin(id) {
+                var dests = $http.delete(urls.AVIO_ADMIN_API+'removeDestination/' + id)
+                .then(function (response) {
+                    console.log("Response:", response);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while removing destinations!", error);
+                });
+    
+                return $q.all([dests])
+                    .then(function (results) {
+                        return {
+                            dests: results[0]
+                        };
+                    });
+            }
+
+            function loadAllFlightsForAdmin() {
+                var flights = $http.get(urls.AVIO_ADMIN_API+'getFlights')
+                .then(function (response) {
+                    console.log("Response:", response);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while removing destinations!", error);
+                });
+    
+                return $q.all([flights])
+                    .then(function (results) {
+                        return {
+                            flights: results[0]
                         };
                     });
             }

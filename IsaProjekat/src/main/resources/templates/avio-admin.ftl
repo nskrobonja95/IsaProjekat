@@ -25,6 +25,7 @@
         <div class="card-body" align="left">
           <div ng-repeat="dest in avioAdminCtrl.destinations">
             <span><i class="fas fa-city" style="color:#3485ef"></i> {{dest.name}} </span>
+            <button class="btn btn-warning pull-right" ng-click="avioAdminCtrl.removeDestination(dest.id)">-</button>
           </div>
           <button class="btn btn-info" ng-click="avioAdminCtrl.switchAddDestState()" ng-show="!avioAdminCtrl.addDestState">Add</button>
           <form>

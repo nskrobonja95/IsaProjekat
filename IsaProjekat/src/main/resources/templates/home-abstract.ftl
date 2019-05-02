@@ -23,7 +23,7 @@
         <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Avio-Company <span class="sr-only"></span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Destinations <span class="sr-only"></span></a>
+        <a class="nav-link" ui-sref="home-abstract.admin-flights()" style="color:white" ><i class="fas fa-hotel"></i> Flights <span class="sr-only"></span></a>
       </li>
       <li class="nav-item active">
         <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Discounts <span class="sr-only"></span></a>
@@ -278,6 +278,7 @@
 <div ui-view="hotel-search-results"></div>
 <div ui-view="avio-admin"></div>
 <div ui-view="hotel-admin"></div>
+<div ui-view="admin-flights"></div>
 
 <script>
   $('#loginModal').on('show.bs.modal', function (event) {

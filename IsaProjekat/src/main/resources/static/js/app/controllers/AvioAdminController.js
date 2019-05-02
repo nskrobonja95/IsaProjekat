@@ -17,6 +17,7 @@ angular.module('flightApp').controller('AvioAdminController',
             self.switchAddDestState = switchAddDestState;
             self.saveNewDestination = saveNewDestination
             self.cancelAddingDestination = cancelAddingDestination;
+            self.removeDestination = removeDestination;
 
             function switchToEditState() {
                 var btn = document.getElementById("editButton");
@@ -73,6 +74,16 @@ angular.module('flightApp').controller('AvioAdminController',
 
             function cancelAddingDestination() {
                 self.addDestState = false;
+            }
+
+            function removeDestination(id) {
+                AvioService.removeDestinationForAdmin(id)
+                    .then(function(response) {
+                        console.log(response);
+                        self.destinations = response.dests;
+                    }, function(errResponse) {
+                        console.log(errResponse);
+                    });
             }
         }
     ]);

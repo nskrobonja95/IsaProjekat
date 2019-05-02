@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Temporal;
 import org.springframework.data.repository.query.Param;
 
+import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
 
@@ -24,5 +25,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long>{
 			+ " and f.from = :from and f.toDest = :to")
 	List<Flight> oneWaySearch(@Param("departDate") Date departDate, 
 			@Param("from") Destination from, @Param("to") Destination to);
+	
+	List<Flight> findByAvioCompany(AvioCompany avio);
 	
 }

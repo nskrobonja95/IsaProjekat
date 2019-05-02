@@ -11,8 +11,10 @@ import edu.ftn.isa.model.Destination;
 
 public interface DestinationRepository extends JpaRepository<Destination, Long>{
 
-	Destination findByName(String name);
+	Destination findByNameAndDeleted(String name, boolean deleted);
 	
 	List<Destination> findByAvioCompanies(Collection<AvioCompany> avioCompanies);
+	
+	List<Destination> findByDeleted(Boolean deleted); 
 	
 }

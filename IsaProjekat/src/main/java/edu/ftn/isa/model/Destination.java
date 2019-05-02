@@ -28,6 +28,9 @@ public @Data class Destination implements Serializable {
 	@Column(name="name")
 	private String name;
 	
+	@Column
+	private Boolean deleted;
+	
 	@JsonIgnore
 	@ManyToMany(mappedBy = "destinations")
 	private Collection<AvioCompany> avioCompanies;

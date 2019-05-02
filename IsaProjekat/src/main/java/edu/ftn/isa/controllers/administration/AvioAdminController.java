@@ -1,5 +1,7 @@
 package edu.ftn.isa.controllers.administration;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -87,8 +90,8 @@ public class AvioAdminController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		AvioCompany avio = optionalAvio.get();
 		for(int i=0; i<destsDto.getDestinations().size(); ++i) {
-			avio.getDestinations().add(destRepo.findByName(
-					destsDto.getDestinations().get(i).getName()));
+			avio.getDestinations().add(destRepo.findByNameAndDeleted(
+					destsDto.getDestinations().get(i).getName(), false));
 		}
 		avioRepo.save(avio);
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -171,6 +174,30 @@ public class AvioAdminController {
 		destRepo.save(dest);
 		avioRepo.save(avio);
 		return new ResponseEntity<AvioCompany>(avio, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/removeDestination/{id}")
+	public ResponseEntity<?> removeDestatination(@PathVariable("id") Long id) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
+		for(Destination dest : avio.getDestinations()) {
+			if(dest.getId() == id) {
+				avio.getDestinations().remove(dest);
+				break;
+			}
+		}
+		avioRepo.save(avio);
+		return new ResponseEntity<Collection<Destination>>(avio.getDestinations(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/getFlights")
+	public ResponseEntity<?> getFlights() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
+		List<Flight> flights = flightRepo.findByAvioCompany(avio);
+		return new ResponseEntity<List<Flight>>(flights, HttpStatus.OK);
 	}
 	
 }

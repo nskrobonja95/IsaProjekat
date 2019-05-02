@@ -5,7 +5,7 @@ import lombok.Data;
 public @Data class DestinationDTO {
 
 	public DestinationDTO(String name2) {
-		// TODO Auto-generated constructor stub
+		this.name = name2;
 	}
 
 	public DestinationDTO() {
