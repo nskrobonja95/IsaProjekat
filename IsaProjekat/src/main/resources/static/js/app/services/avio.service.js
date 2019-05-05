@@ -18,6 +18,7 @@
         service.removeDestinationForAdmin = removeDestinationForAdmin;
         service.loadAllFlightsForAdmin = loadAllFlightsForAdmin;
         service.loadDestinationsForAdmin = loadDestinationsForAdmin;
+        service.saveFlight = saveFlight;
         return service;
         
         function loadAllDestiantions(){
@@ -236,6 +237,23 @@
                     .then(function (results) {
                         return {
                             dests: results[0]
+                        };
+                    });
+            }
+
+            function saveFlight(obj) {
+                var flight = $http.post(urls.AVIO_ADMIN_API+'createFlight', obj)
+                .then(function (response) {
+                    console.log("Response:", response);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while removing destinations!", error);
+                });
+    
+                return $q.all([flight])
+                    .then(function (results) {
+                        return {
+                            flight: results[0]
                         };
                     });
             }

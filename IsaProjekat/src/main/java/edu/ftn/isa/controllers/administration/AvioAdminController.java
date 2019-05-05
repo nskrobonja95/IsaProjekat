@@ -1,7 +1,10 @@
 package edu.ftn.isa.controllers.administration;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.ftn.isa.dto.BasicAvioInfoDTO;
 import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.dto.DestinationsWrapper;
+import edu.ftn.isa.dto.FlightDTO;
 import edu.ftn.isa.dto.SeatConfigDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
@@ -210,6 +214,31 @@ public class AvioAdminController {
 		avios.add(avio);
 		List<Destination> dests = destRepo.findByAvioCompanies(avios);
 		return new ResponseEntity<List<Destination>>(dests, HttpStatus.OK);
+	}
+	
+	@PostMapping("/createFlight")
+	public ResponseEntity<?> createFlight(@RequestBody FlightDTO flightData) throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
+		Destination from = destRepo.findByNameAndDeleted(flightData.getFrom(), false);
+		Destination to = destRepo.findByNameAndDeleted(flightData.getTo(), false);
+		Date takeoff = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(flightData.getDepart());
+		Date landing = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(flightData.getLand());
+		Flight flight = new Flight();
+		flight.setAvioCompany(avio);
+		flight.setBaggageOver7Price(flightData.getPriceForBaggageOver7kg());
+		flight.setBaggageOver20Price(flightData.getPriceForBaggageOver14kg());
+		flight.setEconomicClassPrice(flightData.getEconomicPrice());
+		flight.setBussinessClassPrice(flightData.getBusinessPrice());
+		flight.setFrom(from);
+		flight.setToDest(to);
+		flight.setTakeoff(takeoff);
+		flight.setLanding(landing);
+		flight.setConfigurationType(flightData.getConfigType());
+		flight.setNumOfRows(flightData.getNumOfRows());
+		flightRepo.save(flight);
+		return new ResponseEntity<>(HttpStatus.OK); 
 	}
 	
 }

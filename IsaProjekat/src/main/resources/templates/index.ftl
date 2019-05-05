@@ -53,6 +53,7 @@
     <script src="js/app/modules/app.js"></script>
     <script src="js\lib\jquery-ui.js"></script>
     <script src="js\lib\easyResponsiveTabs.js"></script>
+    <script src="js\lib\jsDraw2D.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
     <script src="https://cdn.rawgit.com/BioPhoton/angular1-star-rating/v1.2.4/dist/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.7.8/angular-sanitize.js"></script>
