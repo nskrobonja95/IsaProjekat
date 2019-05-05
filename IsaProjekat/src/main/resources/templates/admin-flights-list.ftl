@@ -36,6 +36,7 @@
 
 						</div>
 					</div>
+					<a ui-sref="home-abstract.create-flight()">Create flight</a>
 			</section>
 			<div class="top-margin-div "></div>
 		</div>

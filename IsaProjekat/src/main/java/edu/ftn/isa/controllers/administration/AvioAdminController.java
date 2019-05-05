@@ -1,5 +1,6 @@
 package edu.ftn.isa.controllers.administration;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -198,6 +199,17 @@ public class AvioAdminController {
 		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
 		List<Flight> flights = flightRepo.findByAvioCompany(avio);
 		return new ResponseEntity<List<Flight>>(flights, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getDestinations")
+	public ResponseEntity<?> getDestinations() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
+		List<AvioCompany> avios = new ArrayList<AvioCompany>();
+		avios.add(avio);
+		List<Destination> dests = destRepo.findByAvioCompanies(avios);
+		return new ResponseEntity<List<Destination>>(dests, HttpStatus.OK);
 	}
 	
 }

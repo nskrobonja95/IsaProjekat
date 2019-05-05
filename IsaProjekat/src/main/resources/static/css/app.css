@@ -447,3 +447,9 @@ margin-top:20px;
     margin: 1px;
     cursor: pointer;
 }
+
+.seatCircle {
+  width: 25px;
+  height: 20px;
+  background-color: yellow;
+}

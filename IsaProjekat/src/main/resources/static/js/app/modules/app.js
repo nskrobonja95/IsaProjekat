@@ -334,6 +334,21 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                   }
                 }  
             })
+            .state('home-abstract.create-flight', {
+                url: '/createflight',
+                resolve: {
+                    initialDestinations: ['AvioService',function(AvioService){
+                        return AvioService.loadDestinationsForAdmin();
+                    }]
+                },
+                views: {
+                    'create-flight': {
+                      templateUrl: 'partials/create-flight',
+                      controller: 'CreateFlightController',
+                      controllerAs: 'createFlightCtrl'
+                  }
+                }  
+            })
             $urlRouterProvider.otherwise('/avio-companies');
 
     }
