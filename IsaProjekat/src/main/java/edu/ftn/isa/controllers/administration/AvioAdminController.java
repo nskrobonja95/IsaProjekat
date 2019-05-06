@@ -31,6 +31,7 @@ import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.dto.DestinationsWrapper;
 import edu.ftn.isa.dto.FlightDTO;
 import edu.ftn.isa.dto.SeatConfigDTO;
+import edu.ftn.isa.dto.SeatDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
@@ -119,16 +120,23 @@ public class AvioAdminController {
 	public ResponseEntity<?> createSeatsAPI(@RequestBody SeatConfigDTO configDto, 
 			@PathVariable("flightId") Long flightId) {
 		Flight f = flightRepo.findById(flightId).get();
-		switch(configDto.getConfigType()) {
-			case "SmallJet": createSeats(configDto.getNumOfRows(), 6, f); break;
-			case "MediumJet": createSeats(configDto.getNumOfRows(), 7, f); break;
-			case "AirBus": createSeats(configDto.getNumOfRows(), 8, f); break;
-			case "JumboJet": createSeats(configDto.getNumOfRows(), 10, f); break;
-		}
+//		switch(configDto.getConfigType()) {
+//			case "SmallJet": createSeats(configDto.getNumOfRows(), 6, f); break;
+//			case "MediumJet": createSeats(configDto.getNumOfRows(), 7, f); break;
+//			case "AirBus": createSeats(configDto.getNumOfRows(), 8, f); break;
+//			case "JumboJet": createSeats(configDto.getNumOfRows(), 10, f); break;
+//		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	private void createSeats(int numOfRows, int numOfCols, Flight f) {
+	private void createSeats(int numOfRows, String configType, Flight f) {
+		int numOfCols = 6;
+		switch(configType) {
+		case "SmallJet":  numOfCols = 6; break;
+		case "MediumJet": numOfCols = 7; break;
+		case "AirBus": numOfCols = 8; break;
+		case "JumboJet": numOfCols = 9; break;
+		}
 		int seatNumber = 0;
 		for(int i=1; i<=numOfRows; ++i) {
 			for(int j=1; j<=numOfCols; ++j) {
@@ -238,7 +246,26 @@ public class AvioAdminController {
 		flight.setConfigurationType(flightData.getConfigType());
 		flight.setNumOfRows(flightData.getNumOfRows());
 		flightRepo.save(flight);
+		saveSeats(flight, flightData.getSeats());
 		return new ResponseEntity<>(HttpStatus.OK); 
+	}
+
+	private void saveSeats(Flight flight, List<SeatDTO> seats) {
+		int seatNumber = 0;
+		for(int i=0; i<seats.size(); ++i) {
+			FlightSeat fs = new FlightSeat();
+			fs.setAvailable(true);
+			fs.setFastReservation(seats.get(i).isFastRes());
+			fs.setFlight(flight);
+			fs.setColNo(seats.get(i).getColNum());
+			fs.setRowNo(seats.get(i).getRowNum());
+			fs.setSeatNumber(++seatNumber);
+			if(seats.get(i).getFlightClass().equals("business"))
+				fs.setFlightClass(FlightClass.Business);
+			else
+				fs.setFlightClass(FlightClass.Economic);
+			flightSeatRepo.save(fs);
+		}
 	}
 	
 }

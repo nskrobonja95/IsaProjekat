@@ -89,13 +89,13 @@
         </div>  -->
     </div>
   </div>
-    <div ng-repeat="x in [].constructor(createFlightCtrl.numOfBussinessSeats) track by $index">
+    <#--  <div ng-repeat="x in [].constructor(createFlightCtrl.numOfBussinessSeats) track by $index">
          <div class="row">
             <div ng-repeat="y in [].constructor(createFlightCtrl.seatColNum) track by $index">
                 <svg width="70" height="70">
                     <circle ng-attr-cx="50" ng-attr-cy="50" ng-attr-r="20" 
-                    stroke="orange" 
-                     stroke-width="2" fill="blue" />
+                    stroke="orange" class="business"
+                     stroke-width="2" fill="blue" ng-click="createFlightCtrl.setToFastRes(this)" />
                 </svg>
             </div>
         </div>
@@ -105,10 +105,35 @@
             <div ng-repeat="y in [].constructor(createFlightCtrl.seatColNum) track by $index">
                 <svg width="70" height="70">
                     <circle ng-attr-cx="50" ng-attr-cy="50" ng-attr-r="20" 
-                    stroke="blue" 
-                     stroke-width="2" fill="orange" />
+                    stroke="blue" class="economic"
+                     stroke-width="2" fill="orange" ng-click="createFlightCtrl.setToFastRes(this)" />
                 </svg>
             </div>
+        </div>
+    </div>  -->
+    <p>Click on seat to set it as fast reservation</p>
+    <div ng-repeat="seatRow in createFlightCtrl.seatConfigObj" class="row">
+        <div ng-repeat="seat in seatRow">
+            <svg width="70" height="70" ng-show="seat.flightClass == 'business' && !seat.fastRes && !(seat.flightClass == 'economic')">
+                <circle ng-attr-cx="50" ng-attr-cy="50" ng-attr-r="20" 
+                stroke="orange" class="business"
+                    stroke-width="2" fill="blue" ng-click="createFlightCtrl.setToFastRes(seat)" />
+            </svg>
+            <svg width="70" height="70" ng-show="seat.flightClass == 'economic' && !seat.fastRes && !(seat.flightClass == 'business')">
+                <circle ng-attr-cx="50" ng-attr-cy="50" ng-attr-r="20" 
+                stroke="blue" class="economic"
+                    stroke-width="2" fill="orange" ng-click="createFlightCtrl.setToFastRes(seat)" />
+            </svg>
+            <svg width="70" height="70" ng-show="seat.flightClass == 'economic' && seat.fastRes && !(seat.flightClass == 'business')">
+                <circle ng-attr-cx="50" ng-attr-cy="50" ng-attr-r="20" 
+                stroke="red" class="business"
+                    stroke-width="2" fill="black" ng-click="createFlightCtrl.setToFastRes(seat)" />
+            </svg>
+            <svg width="70" height="70" ng-show="!(seat.flightClass == 'economic') && seat.fastRes && seat.flightClass == 'business'">
+                <circle ng-attr-cx="50" ng-attr-cy="50" ng-attr-r="20" 
+                stroke="black" class="economic"
+                    stroke-width="2" fill="red" ng-click="createFlightCtrl.setToFastRes(seat)" />
+            </svg>
         </div>
     </div>
   <button ng-click="createFlightCtrl.saveFlight()" class="btn btn-primary">Save</button>

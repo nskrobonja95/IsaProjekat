@@ -9,13 +9,18 @@ angular.module('flightApp').controller('CreateFlightController',
             self.setSelectedConfig = setSelectedConfig;
             self.checkFlightClass = checkFlightClass;
             self.evaluateChange = evaluateChange;
-            self.saveFlight = saveFlight
+            self.saveFlight = saveFlight;
+            self.setToFastRes = setToFastRes;
+            self.createSeats= createSeats;
+
+            self.seatConfigObj = [];
 
             self.seatRowNum = 10;
             self.numOfBussinessSeats = Math.floor(self.seatRowNum/3);
-            console.log(self.numOfBussinessSeats);
             self.numOfEconomicSeats = self.seatRowNum - self.numOfBussinessSeats;
             self.seatColNum = 6;
+            self.createSeats(10, 6);
+            console.log(self.seatConfigObj);
 
             function setSelectedConfig() {
                 console.log(self.selectedType);
@@ -23,18 +28,22 @@ angular.module('flightApp').controller('CreateFlightController',
                     self.seatColNum = 6;
                     self.numOfBussinessSeats = Math.floor(self.seatRowNum/3);
                     self.numOfEconomicSeats = self.seatRowNum - self.numOfBussinessSeats;
+                    self.createSeats(self.seatRowNum, self.seatColNum);
                 } else if(self.selectedType == "mediumjet") {
                     self.seatColNum = 7;
                     self.numOfBussinessSeats = Math.floor(self.seatRowNum/3);
                     self.numOfEconomicSeats = self.seatRowNum - self.numOfBussinessSeats;
+                    self.createSeats(self.seatRowNum, self.seatColNum);
                 }  else if(self.selectedType == "airbus") {
                     self.seatColNum = 9;
                     self.numOfBussinessSeats = Math.floor(self.seatRowNum/3);
                     self.numOfEconomicSeats = self.seatRowNum - self.numOfBussinessSeats;
+                    self.createSeats(self.seatRowNum, self.seatColNum);
                 }  else if(self.selectedType == "jumbojet") {
                     self.seatColNum = 10;
                     self.numOfBussinessSeats = Math.floor(self.seatRowNum/3);
                     self.numOfEconomicSeats = self.seatRowNum - self.numOfBussinessSeats;
+                    self.createSeats(self.seatRowNum, self.seatColNum);
                 }
             }
 
@@ -47,6 +56,7 @@ angular.module('flightApp').controller('CreateFlightController',
             function evaluateChange() {
                 self.numOfBussinessSeats = Math.floor(self.seatRowNum/3);
                 self.numOfEconomicSeats = self.seatRowNum - self.numOfBussinessSeats;
+                self.createSeats(self.seatRowNum, self.seatColNum);
             }
 
             function saveFlight() {
@@ -60,7 +70,20 @@ angular.module('flightApp').controller('CreateFlightController',
                 obj.economicPrice = self.economicPrice;
                 obj.businessPrice = self.businessPrice;
                 obj.numOfRows = self.seatRowNum;
-                obj.configType = self.selectedType
+                obj.configType = self.selectedType;
+                obj.seats = [];
+                for(var i=0; i<self.seatConfigObj.length; ++i) {
+                    console.log(self.seatConfigObj[i]);
+                    for(var j=0; j<self.seatConfigObj[i].length; ++j) {
+                        var seat = {};
+                        seat.flightClass = self.seatConfigObj[i][j].flightClass;
+                        seat.fastRes = self.seatConfigObj[i][j].fastRes;
+                        seat.rowNum = self.seatConfigObj[i][j].rowNum;
+                        seat.colNum = self.seatConfigObj[i][j].colNum;
+                        obj.seats.push(seat);
+                    }
+                }
+                debugger;
                 console.log(obj);
                 AvioService.saveFlight(obj)
                     .then(function(response) {
@@ -68,6 +91,31 @@ angular.module('flightApp').controller('CreateFlightController',
                     }, function(errResponse){
                         console.log(errResponse);
                     });
+            }
+
+            function setToFastRes(seat) {
+                if(seat.fastRes)seat.fastRes = false;
+                else seat.fastRes = true;
+            }
+
+            function createSeats(numOfRows, numOfCols) {
+                self.seatConfigObj = [];
+                for(var i=0; i<numOfRows; ++i) {
+                    var seatRow = [];
+                    for(var j=0; j<numOfCols; ++j) {
+                        var seat = {};
+                        if(i < Math.floor(numOfRows/3)){
+                            seat.flightClass = "business";
+                        } else {
+                            seat.flightClass = "economic";
+                        }
+                        seat.fastRes = false;
+                        seat.colNum = j+1;
+                        seat.rowNum = i+1;
+                        seatRow.push(seat);
+                    }
+                    self.seatConfigObj.push(seatRow);
+                }
             }
 
         }

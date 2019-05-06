@@ -4,8 +4,8 @@ import java.util.List;
 
 import lombok.Data;
 
-public @Data class SeatConfigDTO {
+public @Data class SeatRowDTO {
 
-	private List<SeatRowDTO> seatRow;
+	private List<SeatDTO> seats;
 	
 }

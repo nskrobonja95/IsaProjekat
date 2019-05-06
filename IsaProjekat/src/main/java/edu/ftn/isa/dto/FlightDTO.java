@@ -1,6 +1,7 @@
 package edu.ftn.isa.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -25,5 +26,7 @@ public @Data class FlightDTO {
 	private int numOfRows;
 	
 	private String configType;
+	
+	private List<SeatDTO> seats;
 	
 }
