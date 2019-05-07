@@ -66,4 +66,7 @@ public @Data class Flight {
 	@Column(name="baggageOver20Price")
 	private float baggageOver20Price;
 	
+	@Column(name="discount")
+	private float discount;
+	
 }

@@ -6,7 +6,8 @@
         var service = {};         
         service.Login = Login;        
         service.SetCredentials = SetCredentials;        
-        service.ClearCredentials = ClearCredentials;         
+        service.ClearCredentials = ClearCredentials;
+        service.setCredentialsUsername = setCredentialsUsername;
         return service;         
         function Login(username, password, callback) {             
             
@@ -75,7 +76,15 @@
                 expires: cookieExp
             });
             console.log($cookies.getAll());    
-        }         
+        }
+        
+        function setCredentialsUsername(username) {
+            console.log(Base64.decode($rootScope.globals.currentUser.authdata));
+            var password = Base64.decode($rootScope.globals.currentUser.authdata).split(":")[1];
+            var role = $rootScope.globals.currentUser.userType;
+            SetCredentials(username, password, role);
+        }
+        
         function ClearCredentials() {       
             console.log("Cisti kredencijale");     
             $rootScope.globals = {};            

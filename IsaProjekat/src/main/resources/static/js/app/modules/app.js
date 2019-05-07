@@ -158,6 +158,34 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 resolve: {
                     hotelData: ['HotelService', function(HotelService){
                         return HotelService.loadHotelForAdmin();
+                    }],
+                    initialHotelServices: ['HotelService',function(HotelService){
+                        return HotelService.loadHotelServicesForAdmin();
+                    }]
+                }
+            })
+            .state('home-abstract.add-service',{
+                url:'/add-service',
+                views: {
+                    'add-service': {
+                        templateUrl: "partials/add-service",
+                        controller: "AddServiceController",
+                        controllerAs: "addServiceCtrl"
+                    }
+                }
+            })
+            .state('home-abstract.admin-rooms-list',{
+                url:'/admin-rooms-list',
+                views: {
+                    'admin-rooms-list': {
+                        templateUrl: "partials/admin-rooms-list",
+                        controller: "AdminRoomsController",
+                        controllerAs: "adminRoomsCtrl"
+                    }
+                },
+                resolve: {
+                    initialRooms: ['HotelService', function(HotelService){
+                        return HotelService.loadRoomsForAdmin();
                     }]
                 }
             })

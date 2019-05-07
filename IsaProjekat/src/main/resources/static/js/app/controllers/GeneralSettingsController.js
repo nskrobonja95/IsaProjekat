@@ -31,13 +31,16 @@ angular.module('flightApp').controller('GeneralSettingsController',
                 .then(
                     function (response){
                         console.log('User updated successfully');
-                        console.log(response.username);
+                        console.log("User: ", response);
+                        console.log(response.response.username);
                         self.successMessage='User updated successfully';
                         self.errorMessage='';
                         self.done = true;
                         self.dataLoading = false;
-                        LoginService.SetCredentials(response.username, response.password, response.role);
-                        $state.go('guest-abstract.settings-abstract.general');
+                        debugger;
+                        LoginService.setCredentialsUsername(response.response.username);
+                        //LoginService.ClearCredentials();
+                        $state.go('home-abstract.settings-abstract.general-settings');
                     },
                     function(errResponse){
                         console.error('Error while updating User');

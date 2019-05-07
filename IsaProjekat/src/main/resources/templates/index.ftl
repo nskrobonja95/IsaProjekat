@@ -93,6 +93,8 @@
     <script src="js/app/controllers/HotelAdminController.js"></script>
     <script src="js/app/controllers/AdminFlightsController.js"></script>
     <script src="js/app/controllers/CreateFlightController.js"></script>
+    <script src="js/app/controllers/AddServiceController.js"></script>
+    <script src="js/app/controllers/AdminRoomsController.js"></script>
 
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"

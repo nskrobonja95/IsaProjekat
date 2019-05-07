@@ -245,6 +245,7 @@ public class AvioAdminController {
 		flight.setLanding(landing);
 		flight.setConfigurationType(flightData.getConfigType());
 		flight.setNumOfRows(flightData.getNumOfRows());
+		flight.setDiscount(flightData.getDiscount());
 		flightRepo.save(flight);
 		saveSeats(flight, flightData.getSeats());
 		return new ResponseEntity<>(HttpStatus.OK); 

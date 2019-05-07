@@ -29,4 +29,6 @@ public @Data class FlightDTO {
 	
 	private List<SeatDTO> seats;
 	
+	private float discount;
+	
 }

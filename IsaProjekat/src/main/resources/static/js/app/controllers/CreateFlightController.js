@@ -71,6 +71,7 @@ angular.module('flightApp').controller('CreateFlightController',
                 obj.businessPrice = self.businessPrice;
                 obj.numOfRows = self.seatRowNum;
                 obj.configType = self.selectedType;
+                obj.discount = self.discount;
                 obj.seats = [];
                 for(var i=0; i<self.seatConfigObj.length; ++i) {
                     console.log(self.seatConfigObj[i]);
