@@ -1,5 +1,10 @@
 package edu.ftn.isa.controllers.administration;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.annotations.UpdateTimestamp;
@@ -19,11 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.ftn.isa.dto.AddHotelServiceDTO;
 import edu.ftn.isa.dto.BasicHotelInfoDTO;
+import edu.ftn.isa.dto.CreateRoomDTO;
+import edu.ftn.isa.dto.PriceOfMonthDTO;
+import edu.ftn.isa.dto.RoomPricesDTO;
 import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.HotelService;
+import edu.ftn.isa.model.PriceOfRoom;
 import edu.ftn.isa.model.Room;
 import edu.ftn.isa.repositories.HotelRepository;
 import edu.ftn.isa.repositories.HotelServicesRepository;
+import edu.ftn.isa.repositories.PriceOfRoomRepository;
 import edu.ftn.isa.repositories.RoomRepository;
 import edu.ftn.isa.security.CustomUserDetails;
 
@@ -39,6 +49,9 @@ public class HotelAdminController {
 	
 	@Autowired
 	private RoomRepository roomRepo;
+	
+	@Autowired
+	private PriceOfRoomRepository priceOfRoomRepo;
 
 	@GetMapping("/getHotel")
 	public ResponseEntity<?> getAvioCompany() {
@@ -99,6 +112,45 @@ public class HotelAdminController {
 		Hotel hotel = hotelRepo.findByAdmin(userDetails.getUser());
 		List<Room> rooms = roomRepo.findByHotel(hotel);
 		return new ResponseEntity<List<Room>>(rooms, HttpStatus.OK);
+	}
+	
+	@PostMapping("/saveRoom")
+	public ResponseEntity<?> saveRoom(@RequestBody CreateRoomDTO roomDto) throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		Hotel hotel = hotelRepo.findByAdmin(userDetails.getUser());
+		Room room = new Room();
+		room.setHotel(hotel);
+		room.setBalcony(roomDto.isBalcony());
+		room.setDescription(roomDto.getDescription());
+		room.setNumOfBeds(roomDto.getNumOfBeds());
+		List<HotelService> services = new ArrayList<HotelService>();
+		for(int i=0; i<roomDto.getServices().size(); ++i) {
+			HotelService hs = hotelServicesRepo.
+								retrieveByNameAndHotel(roomDto.getServices().get(i), 
+														hotel.getId());
+			services.add(hs);
+		}
+		roomRepo.save(room);
+		Calendar now = Calendar.getInstance();
+		int year = now.get(Calendar.YEAR);
+		String yearInString = String.valueOf(year);
+		for(int i=0; i<roomDto.getMonthPrices().size(); ++i) {
+			PriceOfMonthDTO p = roomDto.getMonthPrices().get(i);
+			Date from = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm").
+						parse(yearInString + p.getFrom());
+			Date to = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm").
+						parse(yearInString + p.getTo());
+			PriceOfRoom price = new PriceOfRoom();
+			price.setActiveFrom(from);
+			price.setActiveTo(to);
+			price.setPrice(p.getPrice());
+			price.setRoom(room);
+			priceOfRoomRepo.save(price);
+		}
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }

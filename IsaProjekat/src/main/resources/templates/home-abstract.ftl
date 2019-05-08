@@ -282,6 +282,7 @@
 <div ui-view="create-flight"></div>
 <div ui-view="add-service"></div>
 <div ui-view="admin-rooms-list"></div>
+<div ui-view="create-room"></div>
 
 <script>
   $('#loginModal').on('show.bs.modal', function (event) {

@@ -174,6 +174,21 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     }
                 }
             })
+            .state('home-abstract.create-room',{
+                url:'/create-room',
+                views: {
+                    'create-room': {
+                        templateUrl: "partials/create-room",
+                        controller: "CreateRoomController",
+                        controllerAs: "createRoomCtrl"
+                    }
+                },
+                resolve: {
+                    initialHotelServices: ['HotelService',function(HotelService){
+                        return HotelService.loadHotelServicesForAdmin();
+                    }]
+                }
+            })
             .state('home-abstract.admin-rooms-list',{
                 url:'/admin-rooms-list',
                 views: {

@@ -17,6 +17,7 @@
         service.saveService = saveService;
         service.removeService = removeService;
         service.loadRoomsForAdmin = loadRoomsForAdmin;
+        service.saveRoom = saveRoom;
         return service;
 
         function loadAllHotels() {
@@ -241,6 +242,23 @@
                 .then(function (results) {
                     return {
                         hotelRooms: results[0]
+                    };
+                });
+        }
+
+        function saveRoom(obj) {
+            var response = $http.post(urls.HOTEL_ADMIN_API+'saveRoom', obj)
+            .then(function (response) {
+                console.log("Search hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  Hotel!", error);
+            });
+
+            return $q.all([response])
+                .then(function (results) {
+                    return {
+                        response: results[0]
                     };
                 });
         }

@@ -47,7 +47,7 @@
                                                     <ul class="list-unstyled">
                                                         <li>
                                                             <div ng-repeat="price in room.prices">
-                                                                <h3 ng-if="hpCtrl.activePriceCheck(price)">{{price.price}}$</h3>
+                                                                <h3 ng-if="adminRoomsCtrl.activePriceCheck(price)">{{price.price}}$</h3>
                                                             </div>
                                                         </li>
                                                     </ul>
@@ -59,7 +59,7 @@
                             </div>
 						</div>
 					</div>
-					<a ui-sref="home-abstract.create-flight()">Create flight</a>
+					<a ui-sref="home-abstract.create-room()">Create room</a>
 			</section>
 			<div class="top-margin-div "></div>
 		</div>
