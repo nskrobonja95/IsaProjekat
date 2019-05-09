@@ -18,6 +18,7 @@ app.constant('urls', {
     UNREGISTERED_USERS_SERVICE_API: 'http://localhost:8080/app/',
     AVIO_ADMIN_API: 'http://localhost:8080/avioadmin/',
     HOTEL_ADMIN_API: 'http://localhost:8080/hoteladmin/',
+    SYS_ADMIN_API: 'http://localhost:8080/admin/',
     RESERVATION_SERVICE_API: 'http://localhost:8080/reserve/',
     AVIO_SERVICE_API: 'http://localhost:8080/avio/',
     REGISTER_SERVICE_API : 'http://localhost:8080/auth/register',
@@ -143,6 +144,9 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 resolve: {
                     companyData: ['AvioService', function(AvioService){
                         return AvioService.loadAvioForAdmin();
+                    }],
+                    restOfDestinationsList: ['AvioService', function(AvioService){
+                        return AvioService.loadRestOfDestinations();
                     }]
                 }
             })
@@ -204,6 +208,61 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     }]
                 }
             })
+            .state('home-abstract.system-admin-airlines',{
+                url:'/system-admin-airlines',
+                views: {
+                    'system-admin-airlines': {
+                        templateUrl: "partials/system-admin-airlines",
+                        controller: "SystemAdminAirlinesController",
+                        controllerAs: "sysAdminAirlinesCtrl"
+                    }
+                },
+                resolve: {
+                    initialCompaniesList: ['AvioService',function(AvioService){
+                        return AvioService.loadAllAvio();   
+                    }]
+                }
+            })
+            .state('home-abstract.system-admin-hotels',{
+                url:'/system-admin-hotels',
+                views: {
+                    'system-admin-hotels': {
+                        templateUrl: "partials/system-admin-hotels",
+                        controller: "SystemAdminHotelsController",
+                        controllerAs: "sysAdminHotelsCtrl"
+                    }
+                },
+                resolve: {
+                    initialHotelsList: ['$stateParams', 'HotelService',function($stateParams, HotelService){                     
+                        return HotelService.loadAllHotels();   
+                    }]
+                }
+            })
+            .state('home-abstract.add-hotel',{
+                url:'/add-hotel',
+                views: {
+                    'add-hotel': {
+                        templateUrl: "partials/add-hotel",
+                        controller: "AddHotelController",
+                        controllerAs: "ahCtrl"
+                    }
+                },
+                resolve: {
+                    initialDestinationsList: ['AvioService', function(AvioService){
+                        return AvioService.loadAllDestiantions();
+                      }]
+                }
+            })
+            .state('home-abstract.add-airline',{
+                url:'/add-airline',
+                views: {
+                    'add-airline': {
+                        templateUrl: "partials/add-airline",
+                        controller: "AddAirlineController",
+                        controllerAs: "aaCtrl"
+                    }
+                }
+            })
             .state('home-abstract.car-hire-companies-list', {
                 url:'/car-hire-companies',
                 views: {
@@ -215,8 +274,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
 
                 },
                 resolve: {
-                    initialCarHireCompaniesList: ['$stateParams', 'CarHireService',function($stateParams, CarHireService){
-                       
+                    initialCarHireCompaniesList: ['$stateParams', 'CarHireService',function($stateParams, CarHireService){     
                         return CarHireService.loadAllCarHireCompanies();   
                       }]
                 }
@@ -232,8 +290,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
 
                 },
                 resolve: {
-                    initialHotelsList: ['$stateParams', 'HotelService',function($stateParams, HotelService){
-                       
+                    initialHotelsList: ['$stateParams', 'HotelService',function($stateParams, HotelService){                     
                         return HotelService.loadAllHotels();   
                       }],
                       initialDestinationsList: ['AvioService', function(AvioService){

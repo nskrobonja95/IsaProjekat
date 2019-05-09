@@ -29,9 +29,17 @@
           </div>
           <button class="btn btn-info" ng-click="avioAdminCtrl.switchAddDestState()" ng-show="!avioAdminCtrl.addDestState">Add</button>
           <form>
-            <input class="form-control" ng-model="avioAdminCtrl.newDest" ng-show="avioAdminCtrl.addDestState" />
-            <button class="btn btn-info" ng-click="avioAdminCtrl.saveNewDestination()" ng-show="avioAdminCtrl.addDestState">Save</button>
-            <button class="btn btn-info" ng-click="avioAdminCtrl.cancelAddingDestination()" ng-show="avioAdminCtrl.addDestState">Cancel</button>
+            <ui-select class="city1 input-class" ng-model="avioAdminCtrl.newDest"
+              theme="selectize" ng-disabled="ctrl.disabled" style="width: 300px;"
+              title="From">
+              <ui-select-match placeholder="Select or search a location in the list...">
+                {{$select.selected.name}}</ui-select-match>
+              <ui-select-choices
+                repeat="location in avioAdminCtrl.restOfDestinations | filter: $select.search">
+                <span ng-bind-html="location.name | highlight: $select.search"></span>
+              </ui-select-choices>
+            </ui-select>
+            <button class="btn btn-info" ng-click="avioAdminCtrl.saveNewDestination()">Save</button>
           </form>
         </div>
       </div>

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('flightApp').controller('AvioAdminController',
-    ['$scope', '$rootScope', '$state', 'AvioService', 'companyData',
-        function ($scope, $rootScope, $state, AvioService, companyData) {
+    ['$scope', '$rootScope', '$state', 'AvioService', 'companyData', 'restOfDestinationsList',
+        function ($scope, $rootScope, $state, AvioService, companyData, restOfDestinationsList) {
             var self = this;
             debugger;
             self.company = companyData.airline;
@@ -10,6 +10,7 @@ angular.module('flightApp').controller('AvioAdminController',
             self.companyAddress = self.company.address;
             self.companyPromo = self.company.promo;
             self.destinations = self.company.destinations;
+            self.restOfDestinations = restOfDestinationsList.destList;
             self.editState = false;
             self.switchToEditState = switchToEditState;
             self.cancelEditing = cancelEditing;
@@ -60,12 +61,19 @@ angular.module('flightApp').controller('AvioAdminController',
 
             function saveNewDestination() {
                 var obj = {};
-                obj.name = self.newDest;
+                debugger;
+                obj.name = self.newDest.name;
                 AvioService.addDestination(obj)
                     .then(function(response) {
                             console.log(response);
                             self.company = response.avio;
                             self.destinations = self.company.destinations;
+                            AvioService.loadRestOfDestinations()
+                                .then(function(response) {
+                                    self.restOfDestinations = response.destList;
+                                }, function(errResponse) {      
+                                    console.log(errResponse);
+                                })
                         }, function(errResponse) {
                             console.log(errResponse);
                         });
@@ -81,6 +89,12 @@ angular.module('flightApp').controller('AvioAdminController',
                     .then(function(response) {
                         console.log(response);
                         self.destinations = response.dests;
+                        AvioService.loadRestOfDestinations()
+                                .then(function(response) {
+                                    self.restOfDestinations = response.destList;
+                                }, function(errResponse) {      
+                                    console.log(errResponse);
+                                })
                     }, function(errResponse) {
                         console.log(errResponse);
                     });

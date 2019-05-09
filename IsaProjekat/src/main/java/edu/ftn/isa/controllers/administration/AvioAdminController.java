@@ -181,10 +181,8 @@ public class AvioAdminController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
-		Destination dest = new Destination();
-		dest.setName(destDto.getName());
+		Destination dest = destRepo.findByNameAndDeleted(destDto.getName(), false);
 		avio.getDestinations().add(dest);
-		destRepo.save(dest);
 		avioRepo.save(avio);
 		return new ResponseEntity<AvioCompany>(avio, HttpStatus.OK);
 	}
@@ -221,6 +219,17 @@ public class AvioAdminController {
 		List<AvioCompany> avios = new ArrayList<AvioCompany>();
 		avios.add(avio);
 		List<Destination> dests = destRepo.findByAvioCompanies(avios);
+		return new ResponseEntity<List<Destination>>(dests, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getRestOfDestinations")
+	public ResponseEntity<?> getRestOfDestinations() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
+		List<AvioCompany> avios = new ArrayList<AvioCompany>();
+		avios.add(avio);
+		List<Destination> dests = destRepo.findRestOfDestinations(avio.getId());
 		return new ResponseEntity<List<Destination>>(dests, HttpStatus.OK);
 	}
 	
