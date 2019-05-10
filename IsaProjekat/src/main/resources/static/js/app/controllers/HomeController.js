@@ -70,12 +70,19 @@ angular.module('flightApp').controller('HomeController',
                         $("#loginModal").modal("hide");
                         self.userLogin.username = '';
                         self.userLogin.password = '';
+                        debugger;
                         if($rootScope.globals.currentUser.userType == 'User') {
                             $state.go('home-abstract.avio-companies-list');
                         } else if($rootScope.globals.currentUser.userType == 'AvioAdmin') {
-                            $state.go('home-abstract.avio-admin');
+                            if(response.data.passwordChanged)
+                                $state.go('home-abstract.avio-admin');
+                            else
+                                $state.go('home-abstract.change-password');
                         } else if($rootScope.globals.currentUser.userType == 'HotelAdmin') {
-                            $state.go('home-abstract.hotel-admin');
+                            if(response.data.passwordChanged)
+                                $state.go('home-abstract.hotel-admin');
+                            else
+                                $state.go('home-abstract.change-password');
                         }
                     } else {
                         console.log('Ovo je poruka o gresci ' + response.data.errorMessage);

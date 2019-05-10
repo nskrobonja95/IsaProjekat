@@ -18,6 +18,7 @@ app.constant('urls', {
     UNREGISTERED_USERS_SERVICE_API: 'http://localhost:8080/app/',
     AVIO_ADMIN_API: 'http://localhost:8080/avioadmin/',
     HOTEL_ADMIN_API: 'http://localhost:8080/hoteladmin/',
+    ENTITY_ADMIN_API: 'http://localhost:8080/entityadmin/',
     SYS_ADMIN_API: 'http://localhost:8080/admin/',
     RESERVATION_SERVICE_API: 'http://localhost:8080/reserve/',
     AVIO_SERVICE_API: 'http://localhost:8080/avio/',
@@ -260,6 +261,16 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                         templateUrl: "partials/add-airline",
                         controller: "AddAirlineController",
                         controllerAs: "aaCtrl"
+                    }
+                }
+            })
+            .state('home-abstract.change-password',{
+                url:'/change-password',
+                views: {
+                    'change-password': {
+                        templateUrl: "partials/change-password",
+                        controller: "ChangePasswordController",
+                        controllerAs: "cpCtrl"
                     }
                 }
             })

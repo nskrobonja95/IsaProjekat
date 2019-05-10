@@ -299,6 +299,7 @@
 <div ui-view="system-admin-hotels"></div>
 <div ui-view="add-hotel"></div>
 <div ui-view="add-airline"></div>
+<div ui-view="change-password"></div>
 
 <script>
   $('#loginModal').on('show.bs.modal', function (event) {
