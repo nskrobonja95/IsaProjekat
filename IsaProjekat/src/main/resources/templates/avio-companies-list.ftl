@@ -164,7 +164,7 @@
 									<select id="w3_country2" ng-model="avioCtrl.oneWay.flightClass"
 										class="frm-field required">
 										<option value="Economic">Economy</option>
-										<option value="Bussiness">Business</option>
+										<option value="Business">Business</option>
 									</select>
 
 								</div>
@@ -251,7 +251,7 @@
 									<h3>Class</h3>
 									<select id="w3_country3" class="frm-field required">
 										<option value="Economic">Economy</option>
-										<option value="Bussiness">Business</option>
+										<option value="Business">Business</option>
 									</select>
 								</div>
 								<div class="clear"></div>

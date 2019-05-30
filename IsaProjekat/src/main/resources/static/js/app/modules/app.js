@@ -1,4 +1,4 @@
-var app = angular.module('flightApp', ['ui.router', 'ngMaterial', 'ngMessages', 'ngCookies', 'star-rating', 'ui.select', 'ngSanitize']);
+var app = angular.module('flightApp', ['ngAnimate','ui.router', 'ngMaterial', 'ngMessages', 'ngCookies', 'star-rating', 'ui.select', 'ngSanitize']);
 
 app.run(function($rootScope, $http, $cookies) {
 
@@ -72,12 +72,47 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     'flight-search-results': {
                         templateUrl: "partials/flight-search-results",
                         controller: "FlightSearchResultsController",
-                        controllerAs: "fsCtrl"
+                        // controllerAs: "fsCtrl"
                     }
                 },
                 params: {
                     flightSearchData: null 
                 }
+            })
+            .state('home-abstract.flight-reservation',{
+                url: '/reserve-flight',
+                views: {
+                    'flight-reservation': {
+                        templateUrl: "partials/flight-reservation",
+                        controller: "FlightReservationController",
+                        controllerAs: "frCtrl"
+                    }
+                }
+            })
+            .state('form', {
+                url: '/form',
+                templateUrl: 'form.html',
+                controller: 'formController'
+            })
+            
+            // nested states 
+            // each of these sections will have their own view
+            // url will be nested (/form/profile)
+            .state('home-abstract.flight-reservation.profile', {
+                url: '/profile',
+                templateUrl: 'partials/form-profile'
+            })
+            
+            // url will be /form/interests
+            .state('home-abstract.flight-reservation.interests', {
+                url: '/interests',
+                templateUrl: 'partials/form-interests'
+            })
+            
+            // url will be /form/payment
+            .state('home-abstract.flight-reservation.payment', {
+                url: '/payment',
+                templateUrl: 'partials/form-payment'
             })
             .state('home-abstract.hotel-search-results', {
                 url: '/hotel-search-results',

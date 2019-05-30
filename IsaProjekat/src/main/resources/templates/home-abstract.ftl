@@ -278,6 +278,7 @@
 <div ui-view="hotel-search-results"></div>
 <div ui-view="avio-admin"></div>
 <div ui-view="hotel-admin"></div>
+<div ui-view="flight-reservation"></div>
 
 <script>
   $('#loginModal').on('show.bs.modal', function (event) {

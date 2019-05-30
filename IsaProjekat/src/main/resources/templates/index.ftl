@@ -49,9 +49,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-aria.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-messages.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.js"></script>
     <script src="js/app/modules/app.js"></script>
     <script src="js\lib\jquery-ui.js"></script>
+    
     <script src="js\lib\easyResponsiveTabs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
     <script src="https://cdn.rawgit.com/BioPhoton/angular1-star-rating/v1.2.4/dist/index.js"></script>
@@ -89,6 +91,7 @@
     <script src="js/app/controllers/HotelSearchResultsController.js"></script>
     <script src="js/app/controllers/AvioAdminController.js"></script>
     <script src="js/app/controllers/HotelAdminController.js"></script>
+    <script src="js/app/controllers/FlightReservationController.js"></script>
 
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
