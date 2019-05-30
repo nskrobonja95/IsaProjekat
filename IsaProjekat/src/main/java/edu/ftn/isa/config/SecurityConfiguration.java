@@ -48,6 +48,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         		.antMatchers("/auth/**", "/app/**","/partials/**","/js/**","js/**", "/css/**", "/images/**","/assets/**", "/").permitAll()
         		.antMatchers("/admin/**").hasAuthority("ROLE_SysAdmin")
         		.antMatchers("/avioadmin/**").hasAuthority("ROLE_AvioAdmin")
+        		.antMatchers("/user/get", "/user/edit/**").hasAnyAuthority("ROLE_SysAdmin", "ROLE_AvioAdmin", "ROLE_User", "ROLE_HotelAdmin")
+        		.antMatchers("/entityadmin/**").hasAnyAuthority("ROLE_AvioAdmin", "ROLE_HotelAdmin")
         		.antMatchers("/user/**").hasAuthority("ROLE_User")
         	.anyRequest().authenticated().and()
         		.httpBasic()

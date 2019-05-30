@@ -1,13 +1,11 @@
 package edu.ftn.isa.dto;
 
+import java.util.List;
+
 import lombok.Data;
 
 public @Data class SeatConfigDTO {
 
-	private int numOfRows;
-	
-	private int numOfCols;
-	
-	private String configType;
+	private List<SeatRowDTO> seatRow;
 	
 }

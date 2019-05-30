@@ -21,13 +21,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ftn.isa.dto.AddAirlineDTO;
+import edu.ftn.isa.dto.AddHotelDTO;
 import edu.ftn.isa.dto.AdminDTO;
 import edu.ftn.isa.model.AvioCompany;
+import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.RentACarService;
 import edu.ftn.isa.model.Role;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.repositories.AvioRepository;
+import edu.ftn.isa.repositories.DestinationRepository;
 import edu.ftn.isa.repositories.HotelRepository;
 import edu.ftn.isa.repositories.RentACarRepository;
 import edu.ftn.isa.repositories.UserRepository;
@@ -50,6 +54,9 @@ public class AdminController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private DestinationRepository destRepo;
 	
 	@PostMapping("/addAvio")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -270,6 +277,46 @@ public class AdminController {
 		AvioCompany avio = avioRepo.findById(avioId).get();
 		avioRepo.delete(avio);
 		return new ResponseEntity<User>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/saveAirline")
+	public ResponseEntity<?> saveAirline(@RequestBody AddAirlineDTO airlineDto) {
+		AvioCompany avio = new AvioCompany();
+		User user = new User();
+		user.setEmail(airlineDto.getEmail());
+		user.setUsername(airlineDto.getUsername());
+		user.setEnabled(true);
+		user.setRole(Role.AvioAdmin);
+		user.setPassword(passwordEncoder.encode(airlineDto.getPassword()));
+		user.setPasswordChanged(false);
+		userRepo.save(user);
+		avio.setAdmin(user);
+		avio.setName(airlineDto.getName());
+		avio.setPromo(airlineDto.getPromo());
+		avio.setAddress(airlineDto.getAddress());
+		avioRepo.save(avio);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/saveHotel")
+	public ResponseEntity<?> saveAirline(@RequestBody AddHotelDTO HotelDto) {
+		Hotel hotel = new Hotel();
+		User user = new User();
+		user.setEmail(HotelDto.getEmail());
+		user.setUsername(HotelDto.getUsername());
+		user.setEnabled(true);
+		user.setRole(Role.HotelAdmin);
+		user.setPassword(passwordEncoder.encode(HotelDto.getPassword()));
+		user.setPasswordChanged(false);
+		userRepo.save(user);
+		hotel.setAdmin(user);
+		hotel.setName(HotelDto.getName());
+		hotel.setPromo(HotelDto.getPromo());
+		hotel.setAddress(HotelDto.getAddress());
+		Destination dest = destRepo.findByNameAndDeleted(HotelDto.getDestination(), false);
+		hotel.setDestination(dest);
+		hotelRepo.save(hotel);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }

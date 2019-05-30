@@ -92,7 +92,6 @@ angular.module('flightApp').controller('HotelProfileController',
                 HotelService.bookRoom(obj)
                     .then(
                         function (response) {
-                            debugger;
                             var btn = document.getElementById(room.id);
                             btn.disabled = true;
                             btn.style.backgroundColor="green";

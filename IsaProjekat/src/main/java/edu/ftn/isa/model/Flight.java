@@ -54,16 +54,19 @@ public @Data class Flight {
 	@Column(name="bussinessprice")
 	private Double bussinessClassPrice;
 	
-	@Column(name="number_of_business_seats")
-	private int numberOfBusinessSeats;
+	@Column(name="numOfRows")
+	private int numOfRows;
 	
-	@Column(name="number_of_economic_seats")
-	private int numberOfEconomicSeats;
+	@Column(name="configurationType")
+	private String configurationType;
 	
 	@Column(name="baggageOver7Price")
-	private int baggageOver7Price;
+	private float baggageOver7Price;
 	
 	@Column(name="baggageOver20Price")
-	private int baggageOver20Price;
+	private float baggageOver20Price;
+	
+	@Column(name="discount")
+	private float discount;
 	
 }

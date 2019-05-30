@@ -5,6 +5,7 @@ angular.module('flightApp').controller('AvioCompanyController',
         function ($scope, $rootScope, $state, initialCompanyData, initialDestinationsData) {
 
             var self = this;
+            console.log(initialCompanyData);
             self.avioCompany = initialCompanyData.avio;
             self.destinations = initialDestinationsData.dest;
 

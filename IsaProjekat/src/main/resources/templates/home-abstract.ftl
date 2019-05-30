@@ -20,10 +20,10 @@
 
     <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.userType=='AvioAdmin'">
       <li class="nav-item active">
-        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Avio-Company <span class="sr-only"></span></a>
+        <a class="nav-link" ui-sref="home-abstract.avio-admin()" style="color:white" ><i class="fas fa-hotel"></i> Avio-Company <span class="sr-only"></span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Destinations <span class="sr-only"></span></a>
+        <a class="nav-link" ui-sref="home-abstract.admin-flights()" style="color:white" ><i class="fas fa-hotel"></i> Flights <span class="sr-only"></span></a>
       </li>
       <li class="nav-item active">
         <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Discounts <span class="sr-only"></span></a>
@@ -32,10 +32,22 @@
 
     <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.userType=='HotelAdmin'">
       <li class="nav-item active">
-        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Hotel <span class="sr-only"></span></a>
+        <a class="nav-link" ui-sref="home-abstract.hotel-admin()" style="color:white" ><i class="fas fa-hotel"></i> Hotel <span class="sr-only"></span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Rooms <span class="sr-only"></span></a>
+        <a class="nav-link" ui-sref="home-abstract.admin-rooms-list()" style="color:white" ><i class="fas fa-hotel"></i> Rooms <span class="sr-only"></span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Discounts <span class="sr-only"></span></a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.userType=='SysAdmin'">
+      <li class="nav-item active">
+        <a class="nav-link" ui-sref="home-abstract.system-admin-airlines()" style="color:white" ><i class="fas fa-hotel"></i> Airlines <span class="sr-only"></span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" ui-sref="home-abstract.system-admin-hotels()" style="color:white" ><i class="fas fa-hotel"></i> Hotels <span class="sr-only"></span></a>
       </li>
       <li class="nav-item active">
         <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Discounts <span class="sr-only"></span></a>
@@ -278,7 +290,16 @@
 <div ui-view="hotel-search-results"></div>
 <div ui-view="avio-admin"></div>
 <div ui-view="hotel-admin"></div>
-<div ui-view="flight-reservation"></div>
+<div ui-view="admin-flights"></div>
+<div ui-view="create-flight"></div>
+<div ui-view="add-service"></div>
+<div ui-view="admin-rooms-list"></div>
+<div ui-view="create-room"></div>
+<div ui-view="system-admin-airlines"></div>
+<div ui-view="system-admin-hotels"></div>
+<div ui-view="add-hotel"></div>
+<div ui-view="add-airline"></div>
+<div ui-view="change-password"></div>
 
 <script>
   $('#loginModal').on('show.bs.modal', function (event) {

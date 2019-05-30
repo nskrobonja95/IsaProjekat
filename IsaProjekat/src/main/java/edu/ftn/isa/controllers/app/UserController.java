@@ -65,7 +65,7 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		User user = userRepo.findByUsername(oldusername);
 		if(!oldusername.equals(userdto.getUsername())) {
-			if(user != null)
+			if(userRepo.findByUsername(userdto.getUsername()) != null)
 				return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 		user.setName(userdto.getName());
@@ -78,7 +78,7 @@ public class UserController {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		return new ResponseEntity<User>(user, HttpStatus.OK);
 	}
 	
 	@PutMapping("/changePassword/{username}")

@@ -13,4 +13,12 @@ public interface FlightSeatRepository extends JpaRepository<FlightSeat, Long>{
 			+ "and fs.available = true")
 	int countNumOfAvailableSeatsForFlight(@Param("flight")Flight flight);
 	
+	@Query("SELECT COUNT(*) FROM FlightSeat fs where fs.flight = :flight "
+			+ "and fs.available = true and fs.flightClass = 1")
+	int countNumOfAvailableEconomicSeatsForFlight(@Param("flight")Flight flight);
+	
+	@Query("SELECT COUNT(*) FROM FlightSeat fs where fs.flight = :flight "
+			+ "and fs.available = true and fs.flightClass = 0")
+	int countNumOfAvailableBusinessSeatsForFlight(@Param("flight")Flight flight);
+	
 }

@@ -1,12 +1,14 @@
 (function () {    
     'use strict';     
     angular        .module('flightApp')        .factory('LoginService', LoginService);     
-    LoginService.$inject = ['$http', '$cookies', '$rootScope', '$timeout', 'urls'];    
-    function LoginService($http, $cookies, $rootScope, $timeout, urls) {        
+    LoginService.$inject = ['$http', '$cookies', '$rootScope', '$timeout', '$q', 'urls'];    
+    function LoginService($http, $cookies, $rootScope, $timeout, $q, urls) {
         var service = {};         
         service.Login = Login;        
         service.SetCredentials = SetCredentials;        
-        service.ClearCredentials = ClearCredentials;         
+        service.ClearCredentials = ClearCredentials;
+        service.setCredentialsUsername = setCredentialsUsername;
+        service.changePassword = changePassword;
         return service;         
         function Login(username, password, callback) {             
             
@@ -75,7 +77,32 @@
                 expires: cookieExp
             });
             console.log($cookies.getAll());    
-        }         
+        }
+
+        function changePassword(newpassword) {
+            var response = $http.put(urls.ENTITY_ADMIN_API+'changePassword/' + newpassword)
+                .then(function (response) {
+                    console.log("Response:", response);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while updating avio!", error);
+                });
+    
+                return $q.all([response])
+                    .then(function (results) {
+                        return {
+                            response: results[0]
+                        };
+                    });
+        }
+        
+        function setCredentialsUsername(username) {
+            console.log(Base64.decode($rootScope.globals.currentUser.authdata));
+            var password = Base64.decode($rootScope.globals.currentUser.authdata).split(":")[1];
+            var role = $rootScope.globals.currentUser.userType;
+            SetCredentials(username, password, role);
+        }
+        
         function ClearCredentials() {       
             console.log("Cisti kredencijale");     
             $rootScope.globals = {};            

@@ -55,6 +55,7 @@
     <script src="js\lib\jquery-ui.js"></script>
     
     <script src="js\lib\easyResponsiveTabs.js"></script>
+    <script src="js\lib\jsDraw2D.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
     <script src="https://cdn.rawgit.com/BioPhoton/angular1-star-rating/v1.2.4/dist/index.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.7.8/angular-sanitize.js"></script>
@@ -63,6 +64,7 @@
 
     <!-- Directives -->
     <script src="js/app/directives/starRating.directive.js"> </script>
+    <script src="js/app/directives/clickToEdit.directive.js"> </script>
 
     <!-- Services -->
     <script src="js/app/services/signup.service.js"> </script>
@@ -91,8 +93,16 @@
     <script src="js/app/controllers/HotelSearchResultsController.js"></script>
     <script src="js/app/controllers/AvioAdminController.js"></script>
     <script src="js/app/controllers/HotelAdminController.js"></script>
-    <script src="js/app/controllers/FlightReservationController.js"></script>
-
+    <script src="js/app/controllers/AdminFlightsController.js"></script>
+    <script src="js/app/controllers/CreateFlightController.js"></script>
+    <script src="js/app/controllers/AddServiceController.js"></script>
+    <script src="js/app/controllers/AdminRoomsController.js"></script>
+    <script src="js/app/controllers/CreateRoomController.js"></script>
+    <script src="js/app/controllers/SystemAdminAirlinesController.js"></script>
+    <script src="js/app/controllers/SystemAdminHotelsController.js"></script>
+    <script src="js/app/controllers/AddHotelController.js"></script>
+    <script src="js/app/controllers/AddAirlineController.js"></script>
+    <script src="js/app/controllers/ChangePasswordController.js"></script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
         integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">

@@ -415,6 +415,7 @@ margin-top:20px;
   left: 0.2rem;
 }
 
+
 /*reservation css*/
 
 .btnbox-center {
@@ -502,4 +503,42 @@ input.ng-valid {
 @-webkit-keyframes slideInRight {
 	from 	{ -webkit-transform:translateX(200%); }
 	to 		{ -webkit-transform: translateX(0); }
+}
+/* clickToEdit directive */
+.templateRoot{
+    display: inline-block;
+}
+.hover-edit-trigger {
+    padding: 3px;
+}
+.hover-edit-trigger:hover{
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+}
+.edit-pencil{
+    display: none;
+    margin-left: 3px;
+    padding: 3px;
+    border-left: 1px solid #dcdcdc;
+}
+.hover-text-field:hover .edit-pencil{
+    display: inline-block;
+}
+.edit-button-group{
+    border: 1px solid #dcdcdc;
+    border-top: none;
+    border-radius: 4px;
+    padding: 0px 3px 0px 3px;
+}
+.edit-button-group .glyphicon{
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    margin: 1px;
+    cursor: pointer;
+}
+
+.seatCircle {
+  width: 25px;
+  height: 20px;
+  background-color: yellow;
 }

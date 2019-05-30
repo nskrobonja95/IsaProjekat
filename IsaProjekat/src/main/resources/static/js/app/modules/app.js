@@ -18,6 +18,8 @@ app.constant('urls', {
     UNREGISTERED_USERS_SERVICE_API: 'http://localhost:8080/app/',
     AVIO_ADMIN_API: 'http://localhost:8080/avioadmin/',
     HOTEL_ADMIN_API: 'http://localhost:8080/hoteladmin/',
+    ENTITY_ADMIN_API: 'http://localhost:8080/entityadmin/',
+    SYS_ADMIN_API: 'http://localhost:8080/admin/',
     RESERVATION_SERVICE_API: 'http://localhost:8080/reserve/',
     AVIO_SERVICE_API: 'http://localhost:8080/avio/',
     REGISTER_SERVICE_API : 'http://localhost:8080/auth/register',
@@ -177,13 +179,10 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 },
                 resolve: {
                     companyData: ['AvioService', function(AvioService){
-                        return AvioService.loadAvioForAdmin()
-                                .then(function(response) {
-                                    debugger;
-                                    return response;
-                                }, function(errResponse) {
-                                    console.log(errResponse);
-                                });
+                        return AvioService.loadAvioForAdmin();
+                    }],
+                    restOfDestinationsList: ['AvioService', function(AvioService){
+                        return AvioService.loadRestOfDestinations();
                     }]
                 }
             })
@@ -199,7 +198,115 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 resolve: {
                     hotelData: ['HotelService', function(HotelService){
                         return HotelService.loadHotelForAdmin();
+                    }],
+                    initialHotelServices: ['HotelService',function(HotelService){
+                        return HotelService.loadHotelServicesForAdmin();
                     }]
+                }
+            })
+            .state('home-abstract.add-service',{
+                url:'/add-service',
+                views: {
+                    'add-service': {
+                        templateUrl: "partials/add-service",
+                        controller: "AddServiceController",
+                        controllerAs: "addServiceCtrl"
+                    }
+                }
+            })
+            .state('home-abstract.create-room',{
+                url:'/create-room',
+                views: {
+                    'create-room': {
+                        templateUrl: "partials/create-room",
+                        controller: "CreateRoomController",
+                        controllerAs: "createRoomCtrl"
+                    }
+                },
+                resolve: {
+                    initialHotelServices: ['HotelService',function(HotelService){
+                        return HotelService.loadHotelServicesForAdmin();
+                    }]
+                }
+            })
+            .state('home-abstract.admin-rooms-list',{
+                url:'/admin-rooms-list',
+                views: {
+                    'admin-rooms-list': {
+                        templateUrl: "partials/admin-rooms-list",
+                        controller: "AdminRoomsController",
+                        controllerAs: "adminRoomsCtrl"
+                    }
+                },
+                resolve: {
+                    initialRooms: ['HotelService', function(HotelService){
+                        return HotelService.loadRoomsForAdmin();
+                    }]
+                }
+            })
+            .state('home-abstract.system-admin-airlines',{
+                url:'/system-admin-airlines',
+                views: {
+                    'system-admin-airlines': {
+                        templateUrl: "partials/system-admin-airlines",
+                        controller: "SystemAdminAirlinesController",
+                        controllerAs: "sysAdminAirlinesCtrl"
+                    }
+                },
+                resolve: {
+                    initialCompaniesList: ['AvioService',function(AvioService){
+                        return AvioService.loadAllAvio();   
+                    }]
+                }
+            })
+            .state('home-abstract.system-admin-hotels',{
+                url:'/system-admin-hotels',
+                views: {
+                    'system-admin-hotels': {
+                        templateUrl: "partials/system-admin-hotels",
+                        controller: "SystemAdminHotelsController",
+                        controllerAs: "sysAdminHotelsCtrl"
+                    }
+                },
+                resolve: {
+                    initialHotelsList: ['$stateParams', 'HotelService',function($stateParams, HotelService){                     
+                        return HotelService.loadAllHotels();   
+                    }]
+                }
+            })
+            .state('home-abstract.add-hotel',{
+                url:'/add-hotel',
+                views: {
+                    'add-hotel': {
+                        templateUrl: "partials/add-hotel",
+                        controller: "AddHotelController",
+                        controllerAs: "ahCtrl"
+                    }
+                },
+                resolve: {
+                    initialDestinationsList: ['AvioService', function(AvioService){
+                        return AvioService.loadAllDestiantions();
+                      }]
+                }
+            })
+            .state('home-abstract.add-airline',{
+                url:'/add-airline',
+                views: {
+                    'add-airline': {
+                        templateUrl: "partials/add-airline",
+                        controller: "AddAirlineController",
+                        controllerAs: "aaCtrl"
+                    }
+                }
+            })
+            .state('home-abstract.change-password',{
+                url:'/change-password',
+                views: {
+                    'change-password': {
+                        templateUrl: "partials/change-password",
+                        controller: "ChangePasswordController",
+                        controllerAs: "cpCtrl"
+                    }
                 }
             })
             .state('home-abstract.car-hire-companies-list', {
@@ -213,8 +320,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
 
                 },
                 resolve: {
-                    initialCarHireCompaniesList: ['$stateParams', 'CarHireService',function($stateParams, CarHireService){
-                       
+                    initialCarHireCompaniesList: ['$stateParams', 'CarHireService',function($stateParams, CarHireService){     
                         return CarHireService.loadAllCarHireCompanies();   
                       }]
                 }
@@ -230,8 +336,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
 
                 },
                 resolve: {
-                    initialHotelsList: ['$stateParams', 'HotelService',function($stateParams, HotelService){
-                       
+                    initialHotelsList: ['$stateParams', 'HotelService',function($stateParams, HotelService){                     
                         return HotelService.loadAllHotels();   
                       }],
                       initialDestinationsList: ['AvioService', function(AvioService){
@@ -357,6 +462,36 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                       templateUrl: 'partials/security-settings',
                       controller: 'SecuritySettingsController',
                       controllerAs: 'securityCtrl'
+                  }
+                }  
+            })
+            .state('home-abstract.admin-flights', {
+                url: '/adminflights',
+                resolve: {
+                    initialFlights: ['AvioService',function(AvioService){
+                        return AvioService.loadAllFlightsForAdmin();
+                    }]
+                },
+                views: {
+                    'admin-flights': {
+                      templateUrl: 'partials/admin-flights-list',
+                      controller: 'AdminFlightsController',
+                      controllerAs: 'adminFlightsCtrl'
+                  }
+                }  
+            })
+            .state('home-abstract.create-flight', {
+                url: '/createflight',
+                resolve: {
+                    initialDestinations: ['AvioService',function(AvioService){
+                        return AvioService.loadDestinationsForAdmin();
+                    }]
+                },
+                views: {
+                    'create-flight': {
+                      templateUrl: 'partials/create-flight',
+                      controller: 'CreateFlightController',
+                      controllerAs: 'createFlightCtrl'
                   }
                 }  
             })

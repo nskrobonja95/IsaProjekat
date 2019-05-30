@@ -12,6 +12,13 @@
         service.loadHotelServicesById = loadHotelServicesById;
         service.bookRoom = bookRoom;
         service.loadHotelForAdmin = loadHotelForAdmin;
+        service.updateBasicHotelInfo = updateBasicHotelInfo;
+        service.loadHotelServicesForAdmin = loadHotelServicesForAdmin;
+        service.saveService = saveService;
+        service.removeService = removeService;
+        service.loadRoomsForAdmin = loadRoomsForAdmin;
+        service.saveRoom = saveRoom;
+        service.addHotel = addHotel;
         return service;
 
         function loadAllHotels() {
@@ -141,7 +148,7 @@
         function loadHotelForAdmin() {
             var hotel = $http.get(urls.HOTEL_ADMIN_API+'getHotel')
             .then(function (response) {
-                console.log("Hotel service response:", response.data);
+                console.log("Hotel service response:", response);
                 return response.data;
             }, function (error) {
                 console.log("Error occured while initializing  Hotel!", error);
@@ -151,6 +158,125 @@
                 .then(function (results) {
                     return {
                         hotel: results[0]
+                    };
+                });
+        }
+
+        function updateBasicHotelInfo(obj) {
+            var updatedHotel = $http.put(urls.HOTEL_ADMIN_API+'updateBasicHotelInfo', obj)
+            .then(function (response) {
+                console.log("Book room response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while bookung room!", error);
+            });
+
+            return $q.all([updatedHotel])
+                .then(function (results) {
+                    return {
+                        updatedHotel: results[0]
+                    };
+                });
+        }
+
+        function loadHotelServicesForAdmin() {
+            var hotelServices = $http.get(urls.HOTEL_ADMIN_API+'getServices/')
+            .then(function (response) {
+                console.log("Search hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  Hotel!", error);
+            });
+
+            return $q.all([hotelServices])
+                .then(function (results) {
+                    return {
+                        hotelServices: results[0]
+                    };
+                });
+        }
+
+        function saveService(obj) {
+            var service = $http.post(urls.HOTEL_ADMIN_API+'saveService', obj)
+            .then(function (response) {
+                console.log("Add service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while adding hotel service!", error);
+            });
+
+            return $q.all([service])
+                .then(function (results) {
+                    return {
+                        service: results[0]
+                    };
+                });
+        }
+
+        function removeService(id) {
+            var services = $http.delete(urls.HOTEL_ADMIN_API+'removeService/' + id)
+            .then(function (response) {
+                console.log("Add service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while adding hotel service!", error);
+            });
+
+            return $q.all([services])
+                .then(function (results) {
+                    return {
+                        services: results[0]
+                    };
+                });
+        }
+
+        function loadRoomsForAdmin() {
+            var hotelRooms = $http.get(urls.HOTEL_ADMIN_API+'getRooms/')
+            .then(function (response) {
+                console.log("Search hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  Hotel!", error);
+            });
+
+            return $q.all([hotelRooms])
+                .then(function (results) {
+                    return {
+                        hotelRooms: results[0]
+                    };
+                });
+        }
+
+        function saveRoom(obj) {
+            var response = $http.post(urls.HOTEL_ADMIN_API+'saveRoom', obj)
+            .then(function (response) {
+                console.log("Search hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  Hotel!", error);
+            });
+
+            return $q.all([response])
+                .then(function (results) {
+                    return {
+                        response: results[0]
+                    };
+                });
+        }
+
+        function addHotel(obj) {
+            var response = $http.post(urls.SYS_ADMIN_API+'saveHotel', obj)
+            .then(function (response) {
+                console.log("Search hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  Hotel!", error);
+            });
+
+            return $q.all([response])
+                .then(function (results) {
+                    return {
+                        response: results[0]
                     };
                 });
         }

@@ -114,7 +114,7 @@ public class UnregisteredUsersController {
 	}
 	@GetMapping("getAllDestinations")
 	public ResponseEntity<?> getAllDestinations(){
-		List<Destination> allDests = destRepo.findAll();
+		List<Destination> allDests = destRepo.findByDeleted(false);
 		List<DestinationDTO> retVal = new ArrayList<DestinationDTO>();
 		for(Destination d : allDests) {
 			retVal.add(new DestinationDTO(d.getName()));
@@ -122,10 +122,8 @@ public class UnregisteredUsersController {
 		}
 		
 		return new ResponseEntity<List<DestinationDTO>>(retVal, HttpStatus.OK);
-
-		
-		
 	}
+	
 	@GetMapping("/getAllDestinationsById/{id}")
 	public ResponseEntity<?> getDestinationsOfAvioCompany(
 			@PathVariable("id") Long avioId) {
@@ -186,19 +184,31 @@ public class UnregisteredUsersController {
 	public ResponseEntity<?> searchFlights(@RequestBody RoundTripSearchDTO searchDto) throws ParseException {
 		Date departDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getDepartDate());
 		Date returnDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getReturnDate());
-		Destination from = destRepo.findByName(searchDto.getFrom());
-		Destination to = destRepo.findByName(searchDto.getTo());
+		Destination from = destRepo.findByNameAndDeleted(searchDto.getFrom(), false);
+		Destination to = destRepo.findByNameAndDeleted(searchDto.getTo(), false);
 		List<Flight> filteredFlights = flightRepo.roundTripSearch(departDate, from, to);
 		List<Flight> filteredReturnFlights = flightRepo.roundTripSearch(returnDate, to, from);
 		List<Flight> retValFlights = new ArrayList<Flight>();
 		List<Flight> retValReturnFlights = new ArrayList<Flight>();
 		for(Flight f : filteredFlights) {
-			int numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
+			int numOfAvailableSeats = 0;
+			if(searchDto.getFlightClass().name().equals("Economic"))
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableEconomicSeatsForFlight(f);
+			else if(searchDto.getFlightClass().name().equals("Business"))
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableBusinessSeatsForFlight(f);
+			else
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
 			if(numOfAvailableSeats >= searchDto.getNumOfPpl())
 				retValFlights.add(f);
 		}
 		for(Flight f : filteredReturnFlights) {
-			int numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
+			int numOfAvailableSeats = 0;
+			if(searchDto.getFlightClass().name().equals("Economic"))
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableEconomicSeatsForFlight(f);
+			else if(searchDto.getFlightClass().name().equals("Business"))
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableBusinessSeatsForFlight(f);
+			else
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
 			if(numOfAvailableSeats >= searchDto.getNumOfPpl())
 				retValReturnFlights.add(f);
 		}
@@ -211,10 +221,16 @@ public class UnregisteredUsersController {
 	@PostMapping("/oneWaySearch")
 	public ResponseEntity<?> searchFlightsOneWay(@RequestBody RoundTripSearchDTO searchDto) throws ParseException {
 		Date takeoff = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getDepartDate());
-		List<Flight> filteredFlights = flightRepo.oneWaySearch(takeoff, destRepo.findByName(searchDto.getFrom()), destRepo.findByName(searchDto.getTo()));
+		List<Flight> filteredFlights = flightRepo.oneWaySearch(takeoff, destRepo.findByNameAndDeleted(searchDto.getFrom(), false), destRepo.findByNameAndDeleted(searchDto.getTo(), false));
 		List<Flight> retVal = new ArrayList<Flight>();
 		for(Flight f : filteredFlights) {
-			int numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
+			int numOfAvailableSeats = 0;
+			if(searchDto.getFlightClass().name().equals("Economic"))
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableEconomicSeatsForFlight(f);
+			else if(searchDto.getClass().equals("Business"))
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableBusinessSeatsForFlight(f);
+			else
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
 			if(numOfAvailableSeats >= searchDto.getNumOfPpl())
 				retVal.add(f);
 		}
@@ -225,20 +241,32 @@ public class UnregisteredUsersController {
 	public ResponseEntity<?> searchFlightsMultiCity(@RequestBody MultiCitySearchDTO searchDto) throws ParseException {
 		Date takeoff1 = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getDepartDate1());
 		Date takeoff2 = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getDepartDate2());
-		Destination from = destRepo.findByName(searchDto.getFrom());
-		Destination midDest = destRepo.findByName(searchDto.getMidDest());
-		Destination to = destRepo.findByName(searchDto.getTo());
+		Destination from = destRepo.findByNameAndDeleted(searchDto.getFrom(), false);
+		Destination midDest = destRepo.findByNameAndDeleted(searchDto.getMidDest(), false);
+		Destination to = destRepo.findByNameAndDeleted(searchDto.getTo(), false);
 		List<Flight> filteredFlights = flightRepo.oneWaySearch(takeoff1, from, midDest);
 		List<Flight> filteredFlights2 = flightRepo.oneWaySearch(takeoff2, midDest, to);
 		List<Flight> retValFlights = new ArrayList<Flight>();
 		List<Flight> retValFlights2 = new ArrayList<Flight>();
 		for(Flight f : filteredFlights) {
-			int numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
+			int numOfAvailableSeats = 0;
+			if(searchDto.getFlightClass().name().equals("Economic"))
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableEconomicSeatsForFlight(f);
+			else if(searchDto.getFlightClass().name().equals("Business"))
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableBusinessSeatsForFlight(f);
+			else
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
 			if(numOfAvailableSeats >= searchDto.getNumOfPpl())
 				retValFlights.add(f);
 		}
 		for(Flight f : filteredFlights2) {
-			int numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
+			int numOfAvailableSeats = 0;
+			if(searchDto.getFlightClass().name().equals("Economic"))
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableEconomicSeatsForFlight(f);
+			else if(searchDto.getFlightClass().name().equals("Business"))
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableBusinessSeatsForFlight(f);
+			else
+				numOfAvailableSeats = flightSeatRepo.countNumOfAvailableSeatsForFlight(f);
 			if(numOfAvailableSeats >= searchDto.getNumOfPpl())
 				retValFlights2.add(f);
 		}
@@ -253,7 +281,7 @@ public class UnregisteredUsersController {
 	public ResponseEntity<?> searchRooms(@RequestBody SearchHotelRequestDTO searchDto) throws ParseException {
 		Date checkInDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckIn());
 		Date checkOutDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckOut());
-		List<Room> availableRooms = roomRepo.searchAvailableRooms(checkInDate, checkOutDate, destRepo.findByName(searchDto.getDest()));
+		List<Room> availableRooms = roomRepo.searchAvailableRooms(checkInDate, checkOutDate, destRepo.findByNameAndDeleted(searchDto.getDest(), false));
 		return new ResponseEntity<List<Room>>(availableRooms, HttpStatus.OK);
 	}
 	
@@ -261,7 +289,7 @@ public class UnregisteredUsersController {
 	public ResponseEntity<?> searchHotels(@RequestBody SearchHotelRequestDTO searchDto) throws ParseException {
 		Date checkInDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckIn());
 		Date checkOutDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckOut());
-		List<Hotel> availableHotels = hotelRepo.searchAvailableHotels(checkInDate, checkOutDate, destRepo.findByName(searchDto.getDest()));
+		List<Hotel> availableHotels = hotelRepo.searchAvailableHotels(checkInDate, checkOutDate, destRepo.findByNameAndDeleted(searchDto.getDest(), false));
 		SearchHotelResponseDTO response = new SearchHotelResponseDTO();
 		response.setCheckIn(searchDto.getCheckIn());
 		response.setCheckOut(searchDto.getCheckOut());
