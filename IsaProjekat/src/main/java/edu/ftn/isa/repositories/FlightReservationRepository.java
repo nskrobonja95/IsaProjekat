@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import edu.ftn.isa.dto.HotelFlightReservationDTO;
+import edu.ftn.isa.model.AvioCompany;
+import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.User;
 
@@ -15,6 +17,13 @@ public interface FlightReservationRepository extends JpaRepository<FlightReserva
 	@Query("select count(*) from FlightReservation fr join fr.flightReservationSeats frs"
 			+ " where frs.flight.id = :flightId")
 	int countNumOfReservationsForFlight(@Param("flightId") Long flightId);
+	
+	@Query("select fr from FlightReservation fr join fr.flightReservationSeats frs"
+			+ " on frs.flight.avioCompany = :avio where "
+			+ "(frs.flight.toDest = :dest or frs.flight.from = :dest) and "
+			+ "frs.flight.takeoff > CURDATE()")
+	List<FlightReservation> findAvioCompanyAndDestination(@Param("avio") AvioCompany avio, 
+			@Param("dest") Destination dest);
 
 //	@Query("select fr from FlightReservation fr left join Flight f on f.id = fr.id.flightId where "
 //			+ "fr.user = :user and date(f.takeoff) > date(current_date())")

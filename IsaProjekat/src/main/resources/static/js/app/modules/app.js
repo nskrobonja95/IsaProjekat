@@ -74,7 +74,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     'flight-search-results': {
                         templateUrl: "partials/flight-search-results",
                         controller: "FlightSearchResultsController",
-                        // controllerAs: "fsCtrl"
+                        controllerAs: "fsCtrl"
                     }
                 },
                 params: {
@@ -256,7 +256,10 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 resolve: {
                     initialCompaniesList: ['AvioService',function(AvioService){
                         return AvioService.loadAllAvio();   
-                    }]
+                    }],
+                    initialDestinationsList: ['AvioService', function(AvioService){
+                        return AvioService.loadAllDestiantions();
+                      }]
                 }
             })
             .state('home-abstract.system-admin-hotels',{

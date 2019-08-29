@@ -26,8 +26,15 @@
 								</div>
 								
 								<div class="media-body pl-3" style="text-align: left; padding:10px;">
-									<div class="price" ng-repeat="flight in flights.flight" ><a class="price"
-											ui-sref="home-abstract.avio-company({companyId:avioCompany.id})">{{flight.avioCompany.name}}</a><small>{{flight.from.name}} {{flight.takeoff}} <i class="fas fa-arrow-right"></i> {{flight.toDest.name}} {{flight.landing}}</small>
+									<div class="price" ng-repeat="flight in flights.flight" >
+										<a class="price" ui-sref="home-abstract.avio-company({companyId:avioCompany.id})">
+											{{flight.avioCompany.name}}
+										</a>
+										<small>
+											{{flight.from.name}} {{flight.takeoff}} 
+											<i class="fas fa-arrow-right"></i> 
+											{{flight.toDest.name}} {{flight.landing}}
+										</small>
 									<hr>
                                     </div>
                                     

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.ftn.isa.dto.AddAirlineDTO;
 import edu.ftn.isa.dto.AddHotelDTO;
 import edu.ftn.isa.dto.AdminDTO;
+import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Hotel;
@@ -316,6 +317,14 @@ public class AdminController {
 		Destination dest = destRepo.findByNameAndDeleted(HotelDto.getDestination(), false);
 		hotel.setDestination(dest);
 		hotelRepo.save(hotel);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/saveDestination")
+	public ResponseEntity<?> saveDestination(@RequestBody DestinationDTO destDto) {
+		Destination dest = new Destination();
+		dest.setName(destDto.getName());
+		destRepo.save(dest);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

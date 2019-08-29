@@ -10,6 +10,7 @@ angular.module('flightApp').controller('FlightSearchResultsController', [
         self.durationFilterCheck = durationFilterCheck;
         self.priceFilterCheck = priceFilterCheck;
         self.flightsList = [];
+        debugger;
         if(self.searchRes.dest.data.directFlights){
             console.log("Uslo u round", self.searchRes.dest.data);
             for(var i=0; i < self.searchRes.dest.data.directFlights.length; i++){
@@ -25,6 +26,10 @@ angular.module('flightApp').controller('FlightSearchResultsController', [
                     console.log("Ovo su cene:",self.searchRes.dest.data.directFlights[i].bussinessClassPrice,self.searchRes.dest.data.returnFlights[j].bussinessClassPrice);
                     console.log("Ovo je ono sto saberemo:", flightData.price);
                     self.flightsList.push(flightData);
+                    var flightData = {
+                        flight:{},
+                        price:0
+                    };
                 }
                 console.log(self.flightsList);
                 

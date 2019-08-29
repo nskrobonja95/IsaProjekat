@@ -34,6 +34,37 @@
 						</div>
 					</div>
 			</section>
+			<section class="search-box list-box-div">
+				<div class="accordion accordion-div" id="seeOurDest">
+					<div class="card">
+					<div class="card-header " id="headingOne">
+						<h5 class="mb-0">
+						<button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseOne"
+							aria-expanded="false" aria-controls="collapseOne">
+							<p class="airline-title">Destinations</p>
+						</button>
+						</h5>
+					</div>
+
+					<div id="collapseOne" class="collapse " aria-labelledby="headingOne" data-parent="#seeOurDest">
+						<div class="card-body" align="left">
+						<div ng-repeat="dest in sysAdminAirlinesCtrl.destinationList">
+							<span><i class="fas fa-city" style="color:#3485ef"></i> {{dest.name}} </span>
+						</div>
+
+						</div>
+					</div>
+					</div>
+
+				</div>
+				<button class="btn btn-info" ng-click="sysAdminAirlinesCtrl.showAddDestForm()">+</button>
+				<form ng-show="sysAdminAirlinesCtrl.addDestFormFlag">
+					<label class="pull-left">City: </label><input class="form-control" ng-model="sysAdminAirlinesCtrl.cityName" />
+					<br>  
+					<label class="pull-left">Country: </label><input class="form-control" ng-model="sysAdminAirlinesCtrl.countryName" />
+					<button class="btn btn-info" ng-click="sysAdminAirlinesCtrl.addNewDestination()">Save</button>
+				</form>
+			</section>
 			<div class="top-margin-div "></div>
 		</div>
 	</div>

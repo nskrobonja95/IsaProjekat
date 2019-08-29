@@ -36,10 +36,12 @@ import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
 import edu.ftn.isa.model.FlightClass;
+import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.FlightSeat;
 import edu.ftn.isa.repositories.AvioRepository;
 import edu.ftn.isa.repositories.DestinationRepository;
 import edu.ftn.isa.repositories.FlightRepository;
+import edu.ftn.isa.repositories.FlightReservationRepository;
 import edu.ftn.isa.repositories.FlightSeatRepository;
 import edu.ftn.isa.security.CustomUserDetails;
 
@@ -56,7 +58,11 @@ public class AvioAdminController {
 	@Autowired
 	private AvioRepository avioRepo;
 	
-	@Autowired FlightSeatRepository flightSeatRepo;
+	@Autowired
+	private FlightSeatRepository flightSeatRepo;
+	
+	@Autowired
+	private FlightReservationRepository flightResRepo;
 
 	@PostMapping("/addFlight")
 	public ResponseEntity<?> addFlight(@Valid
@@ -192,10 +198,14 @@ public class AvioAdminController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
-		for(Destination dest : avio.getDestinations()) {
-			if(dest.getId() == id) {
-				avio.getDestinations().remove(dest);
-				break;
+		Destination theDest = destRepo.findById(id).get();
+		List<FlightReservation> reservations = flightResRepo.findAvioCompanyAndDestination(avio, theDest);
+		if(reservations.isEmpty()) {
+			for(Destination dest : avio.getDestinations()) {
+				if(dest == theDest) {
+					avio.getDestinations().remove(dest);
+					break;
+				}
 			}
 		}
 		avioRepo.save(avio);

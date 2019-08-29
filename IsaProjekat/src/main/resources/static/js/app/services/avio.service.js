@@ -21,6 +21,7 @@
         service.saveFlight = saveFlight;
         service.addAirline = addAirline;
         service.loadRestOfDestinations = loadRestOfDestinations;
+        service.saveDestination = saveDestination;
         return service;
         
         function loadAllDestiantions(){
@@ -195,6 +196,23 @@
 
             function addDestination(obj) {
                 var avio = $http.post(urls.AVIO_ADMIN_API+'addDestination', obj)
+                .then(function (response) {
+                    console.log("Updated avio:", response);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while updating avio!", error);
+                });
+    
+                return $q.all([avio])
+                    .then(function (results) {
+                        return {
+                            avio: results[0]
+                        };
+                    });
+            }
+
+            function saveDestination(obj) {
+                var avio = $http.post(urls.SYS_ADMIN_API+'saveDestination', obj)
                 .then(function (response) {
                     console.log("Updated avio:", response);
                     return response.data;
