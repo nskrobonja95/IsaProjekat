@@ -1,5 +1,7 @@
 package edu.ftn.isa.repositories;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,5 +22,7 @@ public interface FlightSeatRepository extends JpaRepository<FlightSeat, Long>{
 	@Query("SELECT COUNT(*) FROM FlightSeat fs where fs.flight = :flight "
 			+ "and fs.available = true and fs.flightClass = 0")
 	int countNumOfAvailableBusinessSeatsForFlight(@Param("flight")Flight flight);
+	
+	List<FlightSeat> findByFlight(Flight f);
 	
 }

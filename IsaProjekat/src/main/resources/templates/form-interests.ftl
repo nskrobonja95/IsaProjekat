@@ -1,4 +1,4 @@
-<label>What's Your Console of Choice?</label>
+<label>Select seats</label>
 <div class="form-group">
     <div class="radio">
         <label>

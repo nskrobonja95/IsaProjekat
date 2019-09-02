@@ -292,6 +292,7 @@
 <div ui-view="hotel-admin"></div>
 <div ui-view="admin-flights"></div>
 <div ui-view="create-flight"></div>
+<div ui-view="flight-reservation"></div>
 <div ui-view="add-service"></div>
 <div ui-view="admin-rooms-list"></div>
 <div ui-view="create-room"></div>

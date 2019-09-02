@@ -30,6 +30,7 @@ import edu.ftn.isa.dto.SearchHotelResponseDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
+import edu.ftn.isa.model.FlightSeat;
 import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.HotelService;
 import edu.ftn.isa.model.RentACarService;
@@ -316,6 +317,25 @@ public class UnregisteredUsersController {
 		Hotel h = hotelRepo.findById(hotelId).get();
 		List<HotelService> services = hsRepo.findByHotel(h);
 		return new ResponseEntity<List<HotelService>>(services, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getFlight/{flightId}")
+	public ResponseEntity<?> loadFlight(@PathVariable("flightId") Long flightId) {
+		Optional<Flight> optionalFlight = flightRepo.findById(flightId);
+		if(optionalFlight.isPresent())
+			return new ResponseEntity<Flight>(optionalFlight.get(), HttpStatus.OK);
+		else
+			return new ResponseEntity<Long>(-1L, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getSeats/{flightId}")
+	public ResponseEntity<?> loadSeats(@PathVariable("flightId") Long flightId) {
+		Optional<Flight> optionalFlight = flightRepo.findById(flightId);
+		if(!optionalFlight.isPresent()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		List<FlightSeat> seats = flightSeatRepo.findByFlight(optionalFlight.get());
+		return new ResponseEntity<List<FlightSeat>>(seats, HttpStatus.OK);
 	}
 	
 }

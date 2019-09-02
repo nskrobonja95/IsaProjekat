@@ -22,6 +22,8 @@
         service.addAirline = addAirline;
         service.loadRestOfDestinations = loadRestOfDestinations;
         service.saveDestination = saveDestination;
+        service.loadFlight = loadFlight;
+        service.loadSeatsForFlight = loadSeatsForFlight;
         return service;
         
         function loadAllDestiantions(){
@@ -309,6 +311,40 @@
                     .then(function (results) {
                         return {
                             response: results[0]
+                        };
+                    });
+            }
+
+            function loadFlight(id) {
+                var flight = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'getFlight/'+id)
+                .then(function (response) {
+                    console.log("Avio service response(get flight):", response.data);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while initializing  avio company destinations!", error);
+                });
+
+                return $q.all([flight])
+                    .then(function (results) {
+                        return {
+                            flight: results[0]
+                        };
+                    });
+            }
+
+            function loadSeatsForFlight(id) {
+                var seats = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'getSeats/'+id)
+                .then(function (response) {
+                    console.log("Avio service response(get seats):", response.data);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while initializing  avio company destinations!", error);
+                });
+
+                return $q.all([seats])
+                    .then(function (results) {
+                        return {
+                            seats: results[0]
                         };
                     });
             }

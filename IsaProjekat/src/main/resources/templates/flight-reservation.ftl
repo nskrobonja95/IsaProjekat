@@ -11,8 +11,8 @@
           <!-- the links to our nested states using relative paths -->
           <!-- add the active class if the state matches our ui-sref -->
           <div id="status-buttons" class="text-center">
-              <a ui-sref-active="active" ui-sref=".profile"><span>1</span> Profile</a>
-              <a ui-sref-active="active" ui-sref=".interests"><span>2</span> Interests</a>
+              <a ui-sref-active="active" ui-sref=".interests"><span>1</span> Seats</a>
+              <a ui-sref-active="active" ui-sref=".profile"><span>2</span> Information</a>
               <a ui-sref-active="active" ui-sref=".payment"><span>3</span> Payment</a>
           </div>
       </div>

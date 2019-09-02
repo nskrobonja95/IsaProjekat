@@ -82,13 +82,27 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 }
             })
             .state('home-abstract.flight-reservation',{
-                url: '/reserve-flight',
+                url: '/reserve-flight/:direct_id/:return_id',
                 views: {
                     'flight-reservation': {
                         templateUrl: "partials/flight-reservation",
                         controller: "FlightReservationController",
                         controllerAs: "frCtrl"
                     }
+                },
+                resolve: {
+                    direct_flight: ['$stateParams', 'AvioService',function($stateParams,AvioService){
+                        return AvioService.loadFlight($stateParams.direct_id);
+                    }],
+                    return_flight: ['$stateParams', 'AvioService', function($stateParams,AvioService){
+                        return AvioService.loadFlight($stateParams.return_id);
+                    }],
+                    dir_seats: ['$stateParams', 'AvioService',function($stateParams,AvioService){
+                        return AvioService.loadSeatsForFlight($stateParams.direct_id);
+                    }],
+                    ret_seats:['$stateParams', 'AvioService',function($stateParams,AvioService){
+                        return AvioService.loadSeatsForFlight($stateParams.return_id);
+                    }]
                 }
             })
             .state('form', {
