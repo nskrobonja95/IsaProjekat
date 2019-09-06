@@ -1,22 +1,21 @@
 package edu.ftn.isa.dto;
 
+import java.util.List;
+
 import edu.ftn.isa.model.Flight;
 import edu.ftn.isa.model.FlightReservation;
+import edu.ftn.isa.model.FlightSeat;
 import lombok.Data;
 
 public @Data class FlightReservationDTO {
-	
-	private Long flightId;
-	
-	private int seatNumber;
 	
 	private String name;
 	
 	private String lastname;
 	
-	private String flightClass;
+	private String passportNumber;
 	
-	private Flight flight;
+	private List<SeatDTO> seats;
 	
 	public FlightReservationDTO transformFromModel(FlightReservation fr) {
 		FlightReservationDTO retVal = new FlightReservationDTO();

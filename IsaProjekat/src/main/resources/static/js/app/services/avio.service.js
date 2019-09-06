@@ -24,6 +24,8 @@
         service.saveDestination = saveDestination;
         service.loadFlight = loadFlight;
         service.loadSeatsForFlight = loadSeatsForFlight;
+        service.makeReservation = makeReservation;
+        service.sendInvitation = sendInvitation;
         return service;
         
         function loadAllDestiantions(){
@@ -316,7 +318,7 @@
             }
 
             function loadFlight(id) {
-                var flight = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'getFlight/'+id)
+                var flight = $http.get(urls.USERS_SERVICE_API+'getFlight/'+id)
                 .then(function (response) {
                     console.log("Avio service response(get flight):", response.data);
                     return response.data;
@@ -333,18 +335,53 @@
             }
 
             function loadSeatsForFlight(id) {
-                var seats = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'getSeats/'+id)
+                var seats = $http.get(urls.USERS_SERVICE_API+'getSeats/'+id)
                 .then(function (response) {
-                    console.log("Avio service response(get seats):", response.data);
+                    //console.log("Avio service response(get seats):", response.data);
                     return response.data;
                 }, function (error) {
-                    console.log("Error occured while initializing  avio company destinations!", error);
+                    //console.log("Error occured while initializing  avio company destinations!", error);
+                    return error.data;
                 });
 
                 return $q.all([seats])
                     .then(function (results) {
                         return {
                             seats: results[0]
+                        };
+                    });
+            }
+
+            function makeReservation(obj) {
+                var response = $http.post(urls.USERS_SERVICE_API+'reserve', obj)
+                .then(function (response) {
+                    console.log("Response:", response);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while removing destinations!", error);
+                });
+    
+                return $q.all([response])
+                    .then(function (results) {
+                        return {
+                            response: results[0]
+                        };
+                    });
+            }
+
+            function sendInvitation(obj) {
+                var response = $http.post(urls.USERS_SERVICE_API+'sendInvitation', obj)
+                .then(function (response) {
+                    console.log("Response:", response);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while removing destinations!", error);
+                });
+    
+                return $q.all([response])
+                    .then(function (results) {
+                        return {
+                            response: results[0]
                         };
                     });
             }

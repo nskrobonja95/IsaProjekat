@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,7 @@ import edu.ftn.isa.model.Role;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.payload.LoginPayload;
 import edu.ftn.isa.payload.SignupPayload;
+import edu.ftn.isa.repositories.FlightSeatRepository;
 import edu.ftn.isa.repositories.UserRepository;
 import edu.ftn.isa.services.EmailService;
 
@@ -42,6 +44,9 @@ public class AuthenticationController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private FlightSeatRepository flightSeatRepo;
 	
 	@Autowired
 	private EmailService emailService;

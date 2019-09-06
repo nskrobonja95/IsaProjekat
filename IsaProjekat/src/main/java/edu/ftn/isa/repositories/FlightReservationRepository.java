@@ -10,6 +10,7 @@ import edu.ftn.isa.dto.HotelFlightReservationDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.FlightReservation;
+import edu.ftn.isa.model.FlightSeat;
 import edu.ftn.isa.model.User;
 
 public interface FlightReservationRepository extends JpaRepository<FlightReservation, Long> {
@@ -24,6 +25,8 @@ public interface FlightReservationRepository extends JpaRepository<FlightReserva
 			+ "frs.flight.takeoff > CURDATE()")
 	List<FlightReservation> findAvioCompanyAndDestination(@Param("avio") AvioCompany avio, 
 			@Param("dest") Destination dest);
+	
+	FlightReservation findByFlightReservationSeatsIn(List<FlightSeat> flightReservationSeats);
 
 //	@Query("select fr from FlightReservation fr left join Flight f on f.id = fr.id.flightId where "
 //			+ "fr.user = :user and date(f.takeoff) > date(current_date())")

@@ -10,16 +10,23 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ftn.isa.dto.AvioCompanyDTO;
 import edu.ftn.isa.dto.DestinationDTO;
+import edu.ftn.isa.dto.FlightReservationDTO;
 import edu.ftn.isa.dto.HotelDTO;
+import edu.ftn.isa.dto.InviteFriendFlightReservationDTO;
 import edu.ftn.isa.dto.MultiCitySearchDTO;
 import edu.ftn.isa.dto.RentACarServiceDTO;
 import edu.ftn.isa.dto.RoundTripFlights;
@@ -27,14 +34,19 @@ import edu.ftn.isa.dto.RoundTripSearchDTO;
 import edu.ftn.isa.dto.SearchAvailableRoomsForHotelDTO;
 import edu.ftn.isa.dto.SearchHotelRequestDTO;
 import edu.ftn.isa.dto.SearchHotelResponseDTO;
+import edu.ftn.isa.dto.SeatDTO;
+import edu.ftn.isa.dto.SeatRowDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
+import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.FlightSeat;
 import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.HotelService;
 import edu.ftn.isa.model.RentACarService;
+import edu.ftn.isa.model.ReservationStatus;
 import edu.ftn.isa.model.Room;
+import edu.ftn.isa.model.User;
 import edu.ftn.isa.repositories.AvioRepository;
 import edu.ftn.isa.repositories.DestinationRepository;
 import edu.ftn.isa.repositories.FlightRepository;
@@ -44,6 +56,9 @@ import edu.ftn.isa.repositories.HotelRepository;
 import edu.ftn.isa.repositories.HotelServicesRepository;
 import edu.ftn.isa.repositories.RentACarRepository;
 import edu.ftn.isa.repositories.RoomRepository;
+import edu.ftn.isa.repositories.UserRepository;
+import edu.ftn.isa.security.CustomUserDetails;
+import edu.ftn.isa.services.EmailService;
 
 @RestController
 @RequestMapping("/app")
@@ -75,6 +90,12 @@ public class UnregisteredUsersController {
 	
 	@Autowired
 	private FlightSeatRepository flightSeatRepo;
+	
+	@Autowired
+	private EmailService emailService;
+	
+	@Autowired
+	private UserRepository userRepo;
 	
 	@GetMapping("/airlines")
 	public ResponseEntity<?> getAllAirlines() {
@@ -334,8 +355,159 @@ public class UnregisteredUsersController {
 		if(!optionalFlight.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
+		Flight f = optionalFlight.get();
 		List<FlightSeat> seats = flightSeatRepo.findByFlight(optionalFlight.get());
-		return new ResponseEntity<List<FlightSeat>>(seats, HttpStatus.OK);
+		int numOfCols = seats.size()/f.getNumOfRows();
+		List<SeatRowDTO> seatRows = new ArrayList<SeatRowDTO>();
+		SeatRowDTO seatRow = new SeatRowDTO();
+		for(int j=0; j<seats.size(); ++j) {
+			SeatDTO seatDto = new SeatDTO();
+			seatDto.setId(seats.get(j).getId());
+			seatDto.setColNum(seats.get(j).getColNo());
+			seatDto.setFastRes(seats.get(j).isFastReservation());
+			seatDto.setFlightClass(seats.get(j).getFlightClass().toString());
+			seatDto.setRowNum(seats.get(j).getRowNo());
+			seatDto.setSeatNumber(seats.get(j).getSeatNumber());
+			seatDto.setAvailable(seats.get(j).isAvailable());
+			seatDto.setReserved(false);
+			seatDto.setFlight(f);
+			seatRow.getSeats().add(seatDto);
+			if(seats.get(j).getSeatNumber()%numOfCols == 0) {
+				seatRows.add(seatRow);
+				seatRow = new SeatRowDTO();
+			}
+		}
+		return new ResponseEntity<List<SeatRowDTO>>(seatRows, HttpStatus.OK);
+	}
+	
+	@PostMapping("/reserve")
+	public ResponseEntity<?> reserve(@RequestBody FlightReservationDTO flightDto) throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		User user = userDetails.getUser();
+		FlightReservation reservation = new FlightReservation();
+		reservation.setUser(user);
+		reservation.setName(flightDto.getName());
+		reservation.setLastname(flightDto.getLastname());
+		reservation.setPassportNumber(flightDto.getPassportNumber());
+		reservation.setStatus(ReservationStatus.APPROVED);
+		List<FlightSeat> seats = new ArrayList<FlightSeat>();
+		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date todayDate = new Date();
+		Date reserveDate = formatter.parse(formatter.format(todayDate));
+		reservation.setReserveDate(reserveDate);
+		for(int i=0; i<flightDto.getSeats().size(); ++i) {
+			Optional<FlightSeat> optionalSeat = flightSeatRepo.findById(flightDto.getSeats().get(i).getId());
+			if(!optionalSeat.isPresent())
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			FlightSeat seat = optionalSeat.get();
+			seat.setAvailable(false);
+			seats.add(optionalSeat.get());
+		}
+		reservation.setFlightReservationSeats(seats);
+		flightResRepo.save(reservation);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/sendInvitation")
+	public ResponseEntity<?> sendInvitation(@RequestBody InviteFriendFlightReservationDTO reservationDto) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		User user = userDetails.getUser();
+		User userRecipient = userRepo.findByUsername(reservationDto.getUsername());
+		SimpleMailMessage registrationEmail = new SimpleMailMessage();
+		registrationEmail.setTo(userRecipient.getEmail());
+		registrationEmail.setSubject("Flight App - Flight Invitation");
+		String confirm = "http://localhost:8080/app/acceptInvitation/";
+		String refuse = "http://localhost:8080/app/refuseInvitation/";
+		String flightInfo = "";
+		for(int i=0; i<reservationDto.getSeats().size(); ++i) {
+			confirm += reservationDto.getSeats().get(i).getId() + "/";
+			refuse += reservationDto.getSeats().get(i).getId() + "/";
+			flightInfo += "Flight" + i+1 + "Seat number " + 
+					reservationDto.getSeats().get(i).getSeatNumber() + " from " + 
+					reservationDto.getSeats().get(i).getFlight().getFrom().getName()
+					+ " to " + 
+					reservationDto.getSeats().get(i).getFlight().getToDest().getName() + 
+					" with " + 
+					reservationDto.getSeats().get(i).getFlight().getAvioCompany().getName() +
+					"\n\n";
+		}
+		if(reservationDto.getSeats().size() == 1) {
+			confirm += "0/";
+			refuse += "0/";
+		}
+		confirm += reservationDto.getName() + "/" + reservationDto.getLastname() + "/" +
+					reservationDto.getPassportNumber() + "/" + reservationDto.getUsername();
+		refuse += "terminal";
+		String invitationEmail = "Hello %s, \n\nYou have received an invitation from %s "
+				+ "for a flight reservation using info:\n\tName: %s\n\tLastname: %s"
+				+ "\n\tPassport: %s\n\n"
+				+ "Flight(s) info:\n" + flightInfo + "\n\n"
+				+ "Confirm: %s\nRefuse: %s\n"
+				+ "";
+		String email = String.format(invitationEmail, userRecipient.getName(), user.getName(), reservationDto.getName(), reservationDto.getLastname(), reservationDto.getPassportNumber(), confirm, refuse);
+		registrationEmail.setText(email);
+		registrationEmail.setFrom("noreply@domain.com");
+		
+		emailService.sendEmail(registrationEmail);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/acceptInvitation/{dirFlightSeatId}/{retFlightSeatId}",  produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String acceptInvitation(@PathVariable("dirFlightSeatId") Long dirSeatId,
+			@PathVariable("retFlightSeatId") Long retSeatId) throws ParseException {
+		List<FlightSeat> flightSeats = new ArrayList<FlightSeat>();
+		Optional<FlightSeat> optionalDirSeat = flightSeatRepo.findById(dirSeatId);
+		flightSeats.add(optionalDirSeat.get());
+		Optional<FlightSeat> optionalRetSeat = flightSeatRepo.findById(retSeatId);
+		if(optionalRetSeat.isPresent())
+			flightSeats.add(optionalRetSeat.get());
+		FlightReservation reservation = flightResRepo.findByFlightReservationSeatsIn(flightSeats);
+		if(reservation.getStatus() == ReservationStatus.APPROVED ) {
+			return "<div>You have already confirmed this invitation.</div>";
+		}
+		
+		if(reservation.getStatus() == ReservationStatus.CANCELED) {
+			return "<div>You have already declined this invitation.</div>";
+		}
+		reservation.setStatus(ReservationStatus.APPROVED);
+		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date todayDate = new Date();
+		Date reserveDate = formatter.parse(formatter.format(todayDate));
+		reservation.setReserveDate(reserveDate);
+		flightResRepo.save(reservation);
+		return "<div>RESERVATION SUCCESSFUL</div>";
+	}
+	
+	@GetMapping(value="/refuseInvitation/{dirFlightSeatId}/{retFlightSeatId}",  produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String refuseInvitation(@PathVariable("dirFlightSeatId") Long dirSeatId,
+			@PathVariable("retFlightSeatId") Long retSeatId) {
+		List<FlightSeat> flightSeats = new ArrayList<FlightSeat>();
+		Optional<FlightSeat> optionalDirSeat = flightSeatRepo.findById(dirSeatId);
+		FlightSeat dirSeat = optionalDirSeat.get();
+		flightSeats.add(dirSeat);
+		Optional<FlightSeat> optionalRetSeat = flightSeatRepo.findById(retSeatId);
+		if(optionalRetSeat.isPresent()) {
+			flightSeats.add(optionalRetSeat.get());
+		}
+		FlightReservation reservation = flightResRepo.findByFlightReservationSeatsIn(flightSeats);
+		if(reservation.getStatus() == ReservationStatus.APPROVED ) {
+			return "<div>You have already confirmed this invitation.</div>";
+		}
+		
+		if(reservation.getStatus() == ReservationStatus.CANCELED) {
+			return "<div>You have already declined this invitation."
+					+ " You can cancel it through Flight App.</div>";
+		}
+		reservation.setStatus(ReservationStatus.CANCELED);
+		for(int i=0; i<reservation.getFlightReservationSeats().size(); ++i) {
+			reservation.getFlightReservationSeats().get(i).setAvailable(true);
+		}
+		flightResRepo.save(reservation);
+		return "<div>RESERVATION CANCELED</div>";
 	}
 	
 }

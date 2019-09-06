@@ -26,9 +26,9 @@
   </div>
   
   <!-- show our formData as it is being typed -->
-  <pre>
+  <#--  <pre>
     {{ formData }}
-  </pre>
+  </pre>  -->
 
 </div>
 </div>
