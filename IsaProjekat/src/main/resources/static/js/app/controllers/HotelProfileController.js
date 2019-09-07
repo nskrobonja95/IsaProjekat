@@ -7,6 +7,9 @@ angular.module('flightApp').controller('HotelProfileController',
             initialHotelServices, initialHotel, availableRooms) {
 
             var self = this;
+            self.user = $rootScope.globals.currentUser;
+            console.log("Current user:");
+            console.log(self.user);
             self.hotel = initialHotel.hotel;
             self.availableRooms = availableRooms.availableRooms;
             for(var i=0; i<availableRooms.lenght; ++i) {

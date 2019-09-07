@@ -5,6 +5,7 @@ angular.module('flightApp').controller('FlightSearchResultsController', [
     function ($scope, $rootScope, $state, $stateParams) {
         var self = this;
         self.searchRes = JSON.parse($stateParams.flightSearchData);
+        self.user = $rootScope.globals.currentUser;
         self.filterFlights = filterFlights;
         self.airlineFilterCheck = airlineFilterCheck;
         self.durationFilterCheck = durationFilterCheck;

@@ -3,6 +3,7 @@ package edu.ftn.isa.controllers.app;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ftn.isa.dto.AvailableRoomDTO;
 import edu.ftn.isa.dto.AvioCompanyDTO;
 import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.dto.FlightReservationDTO;
@@ -131,7 +133,9 @@ public class UnregisteredUsersController {
 		if(!optionalHotel.isPresent())
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		return new ResponseEntity<Hotel>(optionalHotel.get(), HttpStatus.OK);
+		HotelDTO hotelDto = HotelDTO.parseHotel(optionalHotel.get());
+		
+		return new ResponseEntity<HotelDTO>(hotelDto, HttpStatus.OK);
 		
 	}
 	@GetMapping("getAllDestinations")
@@ -310,12 +314,29 @@ public class UnregisteredUsersController {
 	@PostMapping("/searchHotels")
 	public ResponseEntity<?> searchHotels(@RequestBody SearchHotelRequestDTO searchDto) throws ParseException {
 		Date checkInDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckIn());
-		Date checkOutDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckOut());
+		Date checkOutDate;
+		if(searchDto.getCheckOut() != null)
+			checkOutDate = new SimpleDateFormat("yyyy-MM-dd").parse(searchDto.getCheckOut());
+		else {
+			Calendar c = Calendar.getInstance();
+			c.setTime(checkInDate);
+			c.add(Calendar.DATE, 5);
+			checkOutDate = c.getTime();
+		}
 		List<Hotel> availableHotels = hotelRepo.searchAvailableHotels(checkInDate, checkOutDate, destRepo.findByNameAndDeleted(searchDto.getDest(), false));
 		SearchHotelResponseDTO response = new SearchHotelResponseDTO();
 		response.setCheckIn(searchDto.getCheckIn());
 		response.setCheckOut(searchDto.getCheckOut());
-		response.setHotels(availableHotels);
+		List<HotelDTO> availableHotelsDto = new ArrayList<HotelDTO>();
+		for(int i=0; i<availableHotels.size(); ++i) {
+			HotelDTO hotelDto = new HotelDTO();
+			hotelDto.setName(availableHotels.get(i).getName());
+			hotelDto.setAddress(availableHotels.get(i).getAddress());
+			hotelDto.setId(availableHotels.get(i).getId());
+			hotelDto.setPromo(availableHotels.get(i).getPromo());
+			availableHotelsDto.add(hotelDto);
+		}
+		response.setHotels(availableHotelsDto);
 		return new ResponseEntity<SearchHotelResponseDTO>(response, HttpStatus.OK);
 	}
 	
@@ -330,7 +351,18 @@ public class UnregisteredUsersController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		List<Room> availableRooms = roomRepo.searchAvailableRoomsForHotel(checkInDate, checkOutDate, searchDto.getHotel());
-		return new ResponseEntity<List<Room>>(availableRooms, HttpStatus.OK);
+		List<AvailableRoomDTO> availableRoomsDto = new ArrayList<AvailableRoomDTO>();
+		for(int i=0; i<availableRooms.size(); ++i) {
+			AvailableRoomDTO room = new AvailableRoomDTO();
+			room.setId(availableRooms.get(i).getId());
+			room.setBalcony(availableRooms.get(i).isBalcony());
+			room.setHotelServices(availableRooms.get(i).getHotelServices());
+			room.setDescription(availableRooms.get(i).getDescription());
+			room.setNumOfBeds(availableRooms.get(i).getNumOfBeds());
+			room.setPrices(availableRooms.get(i).getPrices());
+			availableRoomsDto.add(room);
+		}
+		return new ResponseEntity<List<AvailableRoomDTO>>(availableRoomsDto, HttpStatus.OK);
 	}
 	
 	@GetMapping("/loadHotelServices/{hotelId}")

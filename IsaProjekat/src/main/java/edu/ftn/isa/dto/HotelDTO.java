@@ -17,7 +17,6 @@ public @Data class HotelDTO {
 		temp.setAddress(hotel.getAddress());
 		temp.setName(hotel.getName());
 		temp.setPromo(hotel.getPromo());
-		//temp.setAdmin(hotel.getAdmin().getId());
 		return temp;
 	}
 }

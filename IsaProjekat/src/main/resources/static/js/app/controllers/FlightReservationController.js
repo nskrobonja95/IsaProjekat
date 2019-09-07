@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('flightApp').controller('FlightReservationController', [
-    '$scope', '$rootScope', 'AvioService', 'FriendService', '$state','$stateParams', 'direct_flight', 'return_flight', 'dir_seats', 'ret_seats',
-    function ($scope, $rootScope, AvioService, FriendService,$state, $stateParams, direct_flight, return_flight, dir_seats, ret_seats) {
+    '$scope', '$rootScope', 'AvioService', 'HotelService', 'FriendService', '$state','$stateParams', 'direct_flight', 'return_flight', 'dir_seats', 'ret_seats',
+    function ($scope, $rootScope, AvioService, HotelService, FriendService,$state, $stateParams, direct_flight, return_flight, dir_seats, ret_seats) {
         var self = this;
         self.dir_flight = direct_flight.flight;
         self.ret_flight = return_flight.flight;
@@ -22,6 +22,8 @@ angular.module('flightApp').controller('FlightReservationController', [
         $scope.oneWayObj = [];
         $scope.searchValue = "";
         $scope.friendsList = [];
+        $scope.recommendation = false;
+        $scope.numOfReservationsMade = 0;
         // console.log(direct_flight);
         // console.log(return_flight);
         // console.log(dir_seats);
@@ -109,6 +111,8 @@ angular.module('flightApp').controller('FlightReservationController', [
                 .then(
                     function (response) {
                         seat.successfullyReserved = true;
+                        $scope.recommendation = true;
+                        ++$scope.numOfReservationsMade;
                     },
                     function (errResponse) {
                         alert("RESPONSE ERROR");
@@ -179,6 +183,25 @@ angular.module('flightApp').controller('FlightReservationController', [
                         alert("RESPONSE ERROR");
                     }
                 );
+        }
+
+        $scope.findRecommendations = function() {
+            var obj = {};
+            console.log($scope.direct_flight);
+            obj.checkIn = $scope.direct_flight.landing.split(" ")[0];
+            if($scope.return_flight != -1){
+                obj.checkOut = $scope.return_flight.landing.split(" ")[0];
+            } else {
+                obj.checkOut = null;
+            }
+            obj.dest = $scope.direct_flight.toDest.name;
+            HotelService.search(obj)
+                .then(function(response) {
+                    console.log("Response of the search:", response);
+                    $state.go('home-abstract.hotel-search-results', {hotelSearchData:JSON.stringify(response)});
+                }, function (errResponse) {
+                    console.log("Error response of the search:", errResponse);
+                });
         }
     }
 ]);

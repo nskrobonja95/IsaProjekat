@@ -41,7 +41,7 @@
 									<div class="address">Price: {{flights.price}}</div>
 								</div>
                                 <div style="margin: auto; height:100%" >
-                                    <a ui-sref="home-abstract.flight-reservation({direct_id:flights.direct_id, return_id:flights.return_id})"  class="btn btn-outlined btn-theme btn-lg d-flex align-self-start"  data-wow-delay="0.7s">Select</a>
+                                    <a ng-show="fsCtrl.user != undefined" ui-sref="home-abstract.flight-reservation({direct_id:flights.direct_id, return_id:flights.return_id})" class="btn btn-outlined btn-theme btn-lg d-flex align-self-start"  data-wow-delay="0.7s">Select</a>
                                 </div>
                         
                                 <#--  <img class="d-flex align-self-start" style="border-radius:25px 0px 0px 25px;"
