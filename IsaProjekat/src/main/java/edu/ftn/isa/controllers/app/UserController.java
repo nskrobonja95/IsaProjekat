@@ -324,4 +324,32 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@PostMapping("/makeFastReservation/{seatId}")
+	public ResponseEntity<?> makeFastReservation(@PathVariable("seatId") Long seatId) throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		User user = userDetails.getUser();
+		Optional<FlightSeat> optionalSeat = flightSeatRepo.findById(seatId);
+		if(!optionalSeat.isPresent())
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		FlightSeat seat = optionalSeat.get();
+		FlightReservation res = new FlightReservation();
+		res.setFastReservation(true);
+		seat.setAvailable(false);
+		List<FlightSeat> seats = new ArrayList<FlightSeat>();
+		seats.add(seat);
+		res.setFlightReservationSeats(seats);
+		res.setName(user.getName());
+		res.setLastname(user.getLastname());
+		res.setPassportNumber("090909");
+		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date todayDate = new Date();
+		Date reserveDate = formatter.parse(formatter.format(todayDate));
+		res.setReserveDate(reserveDate);
+		res.setUser(user);
+		res.setStatus(ReservationStatus.APPROVED);
+		flightResRepo.save(res);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
 }

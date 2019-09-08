@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Flight;
 import edu.ftn.isa.model.FlightSeat;
 
@@ -24,5 +25,9 @@ public interface FlightSeatRepository extends JpaRepository<FlightSeat, Long>{
 	int countNumOfAvailableBusinessSeatsForFlight(@Param("flight")Flight flight);
 	
 	List<FlightSeat> findByFlight(Flight f);
+	
+	@Query("SELECT fs FROM FlightSeat fs where fs.flight.avioCompany = :avio "
+			+ "and fs.available = true and fs.fastReservation = true")
+	List<FlightSeat> findFastReservationsForAvio(@Param("avio")AvioCompany avio);
 	
 }

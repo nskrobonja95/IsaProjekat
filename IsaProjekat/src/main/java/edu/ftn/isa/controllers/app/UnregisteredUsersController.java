@@ -542,4 +542,10 @@ public class UnregisteredUsersController {
 		return "<div>RESERVATION CANCELED</div>";
 	}
 	
+	@GetMapping("/retrieveFastResAvioComp/{avioId}")
+	public ResponseEntity<?>  retrieveFastResAvioComp(@PathVariable("avioId") Long avioId) {
+		AvioCompany avio = avioRepo.findById(avioId).get();
+		List<FlightSeat> seats = flightSeatRepo.findFastReservationsForAvio(avio);
+		return new ResponseEntity<List<FlightSeat>>(seats, HttpStatus.OK);
+	}
 }

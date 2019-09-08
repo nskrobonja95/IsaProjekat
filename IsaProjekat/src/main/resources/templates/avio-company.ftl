@@ -3,6 +3,7 @@
   <h1 class="display-1 airline-title">{{acCtrl.avioCompany.name}}</h1>
   <p>Address: <a href="#">{{acCtrl.avioCompany.address}}</a></p>
   <p>Promo: {{acCtrl.avioCompany.promo}}</p>
+  <button ng-click="acCtrl.showFlightsWithDiscount()">Tickets with discount</button>
   <br>
   <div class="accordion accordion-div" id="accordionExample">
     <div class="card">

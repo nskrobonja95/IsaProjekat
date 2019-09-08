@@ -26,6 +26,8 @@
         service.loadSeatsForFlight = loadSeatsForFlight;
         service.makeReservation = makeReservation;
         service.sendInvitation = sendInvitation;
+        service.retrieveFastReservationsForAvioCompany = retrieveFastReservationsForAvioCompany;
+        service.makeFastReservation = makeFastReservation;
         return service;
         
         function loadAllDestiantions(){
@@ -382,6 +384,40 @@
                     .then(function (results) {
                         return {
                             response: results[0]
+                        };
+                    });
+            }
+
+            function retrieveFastReservationsForAvioCompany(id) {
+                var fastReservations = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'retrieveFastResAvioComp/'+id)
+                .then(function (response) {
+                    console.log("Avio service response:", response.data);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while initializing  avio company destinations!", error);
+                });
+
+                return $q.all([fastReservations])
+                    .then(function (results) {
+                        return {
+                            fastReservations: results[0]
+                        };
+                    });
+            }
+
+            function makeFastReservation(id) {
+                var fastReservation = $http.post(urls.USERS_SERVICE_API+'makeFastReservation/'+id)
+                .then(function (response) {
+                    console.log("Avio service response:", response.data);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while initializing  avio company destinations!", error);
+                });
+
+                return $q.all([fastReservation])
+                    .then(function (results) {
+                        return {
+                            fastReservation: results[0]
                         };
                     });
             }
