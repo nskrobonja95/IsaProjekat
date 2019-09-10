@@ -182,6 +182,21 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                       }]
                 }
             })
+            .state('home-abstract.avio-fast-reservations',{
+                url:'/avio-fast-reservations/:companyId',
+                views: {
+                    'avio-fast-reservations': {
+                        templateUrl: "partials/avio-fast-reservations",
+                        controller: "AvioFastReservationsController",
+                        controllerAs: "afrCtrl"
+                    }
+                },
+                resolve: {
+                    initialFastReservationSeats: ['$stateParams', 'AvioService',function($stateParams, AvioService){
+                        return AvioService.retrieveFastReservationsForAvioCompany($stateParams.companyId);   
+                      }]
+                }
+            })
             .state('home-abstract.avio-admin',{
                 url:'/avio-admin',
                 views: {

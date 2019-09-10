@@ -18,5 +18,7 @@ public interface HotelReservationRepository extends JpaRepository<HotelReservati
 	@Query("SELECT hr FROM HotelReservation hr where "
 			+ "hr.user = :user and hr.flightResId = NULL")
 	List<HotelReservation> findSoleReservationsByUser(@Param("user") User user);
+	
+	List<HotelReservation> findByUser(User user);
 
 }

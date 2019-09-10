@@ -67,5 +67,8 @@ public @Data class HotelReservation {
 	@Column(name="status")
 	private ReservationStatus status;
 	
+	@Column(name="rating")
+	private Integer rating;
+	
 	
 }

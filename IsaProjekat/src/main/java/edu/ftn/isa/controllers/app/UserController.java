@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ftn.isa.dto.FlightRatingDTO;
 import edu.ftn.isa.dto.FlightReservationDTO;
 import edu.ftn.isa.dto.FriendsDTO;
 import edu.ftn.isa.dto.InviteFriendFlightReservationDTO;
@@ -49,6 +50,7 @@ import edu.ftn.isa.repositories.UserRepository;
 import edu.ftn.isa.security.CustomUserDetails;
 import edu.ftn.isa.services.AuthService;
 import edu.ftn.isa.services.EmailService;
+import edu.ftn.isa.services.ReservationService;
 
 @RequestMapping("/user")
 @RestController
@@ -75,6 +77,9 @@ public class UserController {
 	
 	@Autowired
 	private EmailService emailService;
+	
+	@Autowired
+	private ReservationService resService;
 	
 	@PutMapping("/edit/{oldusername}")
 	public ResponseEntity<?> editUser(
@@ -324,6 +329,75 @@ public class UserController {
 		
 		emailService.sendEmail(registrationEmail);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PostMapping("/makeFastReservation/{seatId}")
+	public ResponseEntity<?> makeFastReservation(@PathVariable("seatId") Long seatId) throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		User user = userDetails.getUser();
+		Optional<FlightSeat> optionalSeat = flightSeatRepo.findById(seatId);
+		if(!optionalSeat.isPresent())
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		FlightSeat seat = optionalSeat.get();
+		FlightReservation res = new FlightReservation();
+		res.setFastReservation(true);
+		seat.setAvailable(false);
+		List<FlightSeat> seats = new ArrayList<FlightSeat>();
+		seats.add(seat);
+		res.setFlightReservationSeats(seats);
+		res.setName(user.getName());
+		res.setLastname(user.getLastname());
+		res.setPassportNumber("090909");
+		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date todayDate = new Date();
+		Date reserveDate = formatter.parse(formatter.format(todayDate));
+		res.setReserveDate(reserveDate);
+		res.setUser(user);
+		res.setStatus(ReservationStatus.APPROVED);
+		flightResRepo.save(res);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PutMapping("/cancelFlight/{resId}")
+	public ResponseEntity<?> cancelFlightReservation(@PathVariable("resId") Long resId) {
+		if(!resService.cancelReservation(resId))
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PutMapping("/rateFlight")
+	public ResponseEntity<?> rateFlight(@RequestBody FlightRatingDTO ratingDto) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		User user = userDetails.getUser();
+		if(resService.rateFlight(ratingDto, user))
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PutMapping("/rateAccomodation/{resId}/{rating}")
+	public ResponseEntity<?> rateAcc(@PathVariable("resId") Long resId,
+			@PathVariable("rating") Integer rating) {
+		if(!resService.rateAcc(resId, rating))
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PutMapping("/cancelAccomodation/{resId}")
+	public ResponseEntity<?> cancelAcc(@PathVariable("resId") Long resId) {
+		if(!resService.cancelAccReservation(resId))
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping("retrieveUserAccReservations")
+	public ResponseEntity<?> retrieveuserAccReservations() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		User user = userDetails.getUser();
+		List<HotelReservation> reservations = resService.retrieveUserHotelReservations(user);
+		return new ResponseEntity<List<HotelReservation>>(reservations, HttpStatus.OK);
 	}
 	
 }
