@@ -10,13 +10,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ftn.isa.dto.FlightReservationDTO;
+import edu.ftn.isa.dto.HotelDTO;
 import edu.ftn.isa.dto.HotelReservationDTO;
+import edu.ftn.isa.dto.UserFlightReservationDTO;
 import edu.ftn.isa.model.FlightClass;
 import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.HotelReservation;
@@ -82,7 +85,26 @@ public class ReservationController {
 		hotelResRepo.save(reservation);
 		return new ResponseEntity<Long>(355L, HttpStatus.OK);
 	}
-	
+	@GetMapping("/flightUserReservationsList")
+	public ResponseEntity<?> getUserFlightReservations(){
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+		User user = userDetails.getUser();
+		
+		List<FlightReservation> reservationsList = flightResRepo.getUserReservationsList(user.getId());
+		List<UserFlightReservationDTO> retVal = new ArrayList<UserFlightReservationDTO>();
+		for(FlightReservation reservation : reservationsList) {
+			retVal.add(new UserFlightReservationDTO(reservation.getId(),
+					reservation.getFlightReservationSeats(),
+					reservation.getRate(),
+					reservation.getName(),
+					reservation.getLastname(),
+					reservation.getStatus().toString()));
+		}
+		
+		return new ResponseEntity<List<UserFlightReservationDTO>>(retVal, HttpStatus.OK);
+	}
 	@PostMapping("/flight")
 	public ResponseEntity<?> reserveFlight(
 			@RequestBody List<FlightReservationDTO> reservationsDto) {

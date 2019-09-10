@@ -19,8 +19,12 @@
         service.loadRoomsForAdmin = loadRoomsForAdmin;
         service.saveRoom = saveRoom;
         service.addHotel = addHotel;
+        service.getAllUserHotelReservations = getAllUserHotelReservations;
         return service;
 
+        function getAllUserHotelReservations(){
+            
+        }
         function loadAllHotels() {
             var hotelsList = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'hotels')
                 .then(function (response) {

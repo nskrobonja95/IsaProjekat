@@ -394,6 +394,28 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                   }
                 }  
             })
+            .state('home-abstract.profile-abstract.reservations-list', {
+                url: '/reservationsList',                
+                views: {
+                    'reservations-list': {
+                      templateUrl: 'partials/reservations-list',
+                      controller: 'ReservationListController',
+                      controllerAs: 'resListCtrl'
+                     
+                  }
+                },
+                resolve: {
+                    initialFlightReservationsData: ['$stateParams', 'AvioService',function($stateParams, AvioService){
+                       
+                        return AvioService.getAllUserFlightReservations();   
+                      }],
+                    InitialHotelReservationsData:  ['HotelService',function(HotelService){
+                       
+                        //return HotelService.getAllUserHotelReservations();  
+                        return "blablabla" 
+                      }]
+                }
+            })
             .state('home-abstract.profile-abstract.friends-abstract', {
                 url: '/friends',
                 abstract: true,

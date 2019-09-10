@@ -250,6 +250,7 @@ public class UserController {
 		reservation.setName(flightDto.getName());
 		reservation.setLastname(flightDto.getLastname());
 		reservation.setPassportNumber(flightDto.getPassportNumber());
+		reservation.setRate(0);
 		reservation.setStatus(ReservationStatus.APPROVED);
 		List<FlightSeat> seats = new ArrayList<FlightSeat>();
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -305,6 +306,7 @@ public class UserController {
 		res.setStatus(ReservationStatus.PENDING);
 		res.setUser(userRecipient);
 		res.setFastReservation(false);
+		res.setRate(0);
 		flightResRepo.save(res);
 		if(reservationDto.getSeats().size() == 1) {
 			confirm += "0";

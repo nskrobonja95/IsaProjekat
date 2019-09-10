@@ -303,7 +303,20 @@ body {
   margin-top: 5px;
   color: white;
 }
-
+.name_lastname {
+  float: left;
+  width: 100%;
+  font-size: 14px;
+  margin-top: 5px;
+  color: black;
+}
+.reservation_status {
+  float: left;
+  width: 100%;
+  font-size: 16px;
+  margin-top: 5px;
+  color: black;
+}
 .media .fav-box {
   position: absolute;
   right: 10px;
