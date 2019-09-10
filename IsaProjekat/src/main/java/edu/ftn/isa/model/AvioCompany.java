@@ -48,4 +48,7 @@ public @Data class AvioCompany implements Serializable {
 	@JoinColumn(name = "admin", nullable=true)
 	private User admin;
 	
+	@Column(name="averagerate")
+	private float averageRate; 
+	
 }
