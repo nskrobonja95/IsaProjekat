@@ -69,7 +69,7 @@ private MockMvc mockMvc;
 		Integer rate = 2;
 		MvcResult result = 
 				mockMvc.perform(
-						MockMvcRequestBuilders.get("/user/cancelAccomodation/1")
+						MockMvcRequestBuilders.put("/user/cancelAccomodation/1")
 							.contentType(MediaType.APPLICATION_JSON)).andReturn();
 		
 		assertEquals(200, result.getResponse().getStatus());
@@ -81,7 +81,7 @@ private MockMvc mockMvc;
 	public void testCancelFlight() throws JsonProcessingException, Exception {
 		MvcResult result = 
 				mockMvc.perform(
-						MockMvcRequestBuilders.get("/user/cancelFlight/1")
+						MockMvcRequestBuilders.put("/user/cancelFlight/18")
 							.contentType(MediaType.APPLICATION_JSON)).andReturn();
 		
 		assertEquals(200, result.getResponse().getStatus());

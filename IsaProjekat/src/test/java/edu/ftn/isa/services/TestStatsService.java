@@ -75,10 +75,10 @@ public class TestStatsService {
 	public void testLogin() throws JsonProcessingException, Exception {
 		AvioStatisticsDTO statsRes = new AvioStatisticsDTO();
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		statsRes.setAvgAvioRate(0);
+		statsRes.setAvgAvioRate(3);
 		statsRes.setDailySoldTickets(0L);
-		statsRes.setMonthlySoldTickets(0L);
-		statsRes.setWeeklySoldTickets(0L);
+		statsRes.setMonthlySoldTickets(28L);
+		statsRes.setWeeklySoldTickets(28L);
 		List<Flight> flightList = flightRepo.findByAvioCompany(avio);
 		List<FlightForStatsDTO> flights = new ArrayList<FlightForStatsDTO>();
 		for(int i=0; i<flightList.size(); ++i) {
