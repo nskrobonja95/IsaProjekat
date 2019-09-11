@@ -20,10 +20,41 @@
         service.saveRoom = saveRoom;
         service.addHotel = addHotel;
         service.getAllUserHotelReservations = getAllUserHotelReservations;
+        service.cancelReservation = cancelReservation;
         return service;
 
+        function cancelReservation(reservationId){
+            var canceled = $http.put(urls.USERS_SERVICE_API+'cancelAccomodation/'+reservationId)
+            .then(function (response) {
+                console.log("Hotel reservation canceled:", response);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while canceling reservations!", error);
+            });
+
+            return $q.all([canceled])
+                .then(function (results) {
+                    return {
+                        canceled: results[0]
+                    };
+                });
+        }
+
         function getAllUserHotelReservations(){
-            
+            var hotelReservationsList = $http.get(urls.USERS_SERVICE_API+'retrieveUserAccReservations')
+            .then(function (response) {
+                console.log("Hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing list of all user hotel reservations!", error);
+            });
+
+        return $q.all([hotelReservationsList])
+            .then(function (results) {
+                return {
+                    hotelReservationsList: results[0]
+                };
+            });
         }
         function loadAllHotels() {
             var hotelsList = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'hotels')

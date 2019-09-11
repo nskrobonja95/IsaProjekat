@@ -1,5 +1,4 @@
-
-	<div class="reservation-list-box-div">
+<div class="reservation-list-box-div">
 		<div class="">
 			<section class="head">
 
@@ -36,6 +35,18 @@
 									<div class="address">Flight class: {{seat.flightClass}}</div>
 									<div class="address">Row number: {{seat.rowNum}}</div>
 									<div class="address">Seat number: {{seat.seatNumber}}</div>
+									*************{{resListCtrl.rate}}tttttttttttttttttttttttt
+									<div class="btn-group" ng-show="resListCtrl.rateEnabled(reservation.reservationId, seat.id)">
+										<button type="button" ng-click="resListCtrl.rateRes(reservation.reservationId, seat.flight.id)" class="btn btn-primary">Rate</button>
+										
+										<select class="form-control" id="exampleFormControlSelect1" ng-model="resListCtrl.rate">
+											<option>1</option>
+											<option>2</option>
+											<option>3</option>
+											<option>4</option>
+											<option>5</option>
+										</select>
+									</div>
                                     </div>
                                     
 									

@@ -4,7 +4,7 @@
     <h2>Edit your profile</h2>
     <form name="registerForm" ng-submit="gsCtrl.submit()" role="form">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="firstName" placeholder="First name" ng-pattern="gsCtrl.firstNamePattern" ng-model="gsCtrl.userData.name" ng-minlength="2" ng-maxlength="20" ng-required="true"></input>
+                            <input type="text" class="form-control" name="firstName" placeholder="First name" ng-pattern="gsCtrl.firstNamePattern" ng-model="gsCtrl.userData.name" ng-minlength="2" ng-maxlength="20" ng-required="true" />
                             <div ng-show="registerForm.firstName.$touched && registerForm.firstName.$error.minlength">
                                 <small style="color:red;display:block;text-align:center;">Name you have entered is too small!</small>
                             </div>
@@ -20,7 +20,7 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="lastName" placeholder="Last name" ng-pattern="gsCtrl.lastNamePattern" ng-model="gsCtrl.userData.lastname" ng-minlength="2" ng-maxlength="20" ng-required="true"></input>
+                            <input type="text" class="form-control" name="lastName" placeholder="Last name" ng-pattern="gsCtrl.lastNamePattern" ng-model="gsCtrl.userData.lastname" ng-minlength="2" ng-maxlength="20" ng-required="true" />
                             <div ng-show="registerForm.lastName.$touched && registerForm.lastName.$error.minlength">
                                 <small style="color:red;display:block;text-align:center;">Last name you have entered is too small!</small>
                             </div>
@@ -36,7 +36,7 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="phoneNumber" placeholder="Phone number" ng-pattern="gsCtrl.phonePattern" ng-model="gsCtrl.userData.phoneNumber" ng-minlength="10" ng-maxlength="10" ng-required="true"></input>
+                            <input type="text" class="form-control" name="phoneNumber" placeholder="Phone number" ng-pattern="gsCtrl.phonePattern" ng-model="gsCtrl.userData.phoneNumber" ng-minlength="10" ng-maxlength="10" ng-required="true" />
                             <div ng-show="registerForm.phoneNumber.$touched && (registerForm.phoneNumber.$error.minlength || registerForm.phoneNumber.$error.maxlength) && !registerForm.phoneNumber.$error.pattern ">
                                 <small style="color:red;display:block;text-align:center;">Enter a valid phone number!</small>
                             </div>
@@ -49,14 +49,14 @@
                         </div>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" name="city" placeholder="City" ng-model="gsCtrl.userData.city" ng-required="true"></input>
+                            <input type="text" class="form-control" name="city" placeholder="City" ng-model="gsCtrl.userData.city" ng-required="true" />
                             <div ng-show="registerForm.city.$touched && registerForm.city.$invalid"></div>
                             <div ng-show="registerForm.city.$touched && registerForm.city.$error.required">
                                 <small style="color:red;display:block;text-align:center;">Required!</small>
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" name="username" placeholder="Username" ng-pattern="gsCtrl.usernamePattern" ng-model="gsCtrl.userData.username" ng-minlength="3" ng-maxlength="10" ng-required="true"></input>
+                            <input type="text" class="form-control" name="username" placeholder="Username" ng-pattern="gsCtrl.usernamePattern" ng-model="gsCtrl.userData.username" ng-minlength="3" ng-maxlength="30" ng-required="true" />
                             <div ng-show="registerForm.username.$touched && (registerForm.username.$error.minlength || registerForm.username.$error.maxlength)">
                                 <small style="color:red;display:block;text-align:center;">Username must have anywhere between 3 and 10 characters!</small>
                             </div>
@@ -69,7 +69,7 @@
 
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" name="email" placeholder="Email" ng-pattern="gsCtrl.emailPattern" ng-model="gsCtrl.userData.email" ng-minlength="3" ng-maxlength="128" ng-required="true"></input>
+                            <input type="text" class="form-control" name="email" placeholder="Email" ng-pattern="gsCtrl.emailPattern" ng-model="gsCtrl.userData.email" ng-minlength="3" ng-maxlength="128" ng-required="true" />
                             <div ng-show="registerForm.email.$touched && (registerForm.email.$error.minlength || registerForm.email.$error.maxlength)">
                                 <small style="color:red;display:block;text-align:center;">Username must have anywhere between 3 and 128 characters!</small>
                             </div>
@@ -86,3 +86,6 @@
         </div>
     </form>
 </div>
+
+
+{{gsCtrl.userData}}

@@ -24,6 +24,7 @@ import edu.ftn.isa.model.FlightClass;
 import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.HotelReservation;
 import edu.ftn.isa.model.HotelService;
+import edu.ftn.isa.model.ReservationStatus;
 import edu.ftn.isa.model.Room;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.repositories.FlightRepository;
@@ -75,6 +76,7 @@ public class ReservationController {
 //		reservation.setFlightResId(reservationDto.getFlightResId());
 		reservation.setArrivalDate(reservationDto.getArrivalDate());
 		reservation.setDepartingDate(reservationDto.getDepartingDate());
+		reservation.setStatus(ReservationStatus.APPROVED);
 		List<HotelService> services = new ArrayList<HotelService>();
 		for(HotelService service : room.getHotelServices()) {
 			if(reservationDto.getHotelServices().contains(service.getName()))

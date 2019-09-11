@@ -53,7 +53,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.js"></script>
     <script src="js/app/modules/app.js"></script>
     <script src="js\lib\jquery-ui.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.js"></script>
+
+
     <script src="js\lib\easyResponsiveTabs.js"></script>
     <script src="js\lib\jsDraw2D.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
@@ -105,7 +107,7 @@
     <script src="js/app/controllers/ChangePasswordController.js"></script>
     <script src="js/app/controllers/FlightReservationController.js"></script>
     <script src="js/app/controllers/ReservationListController.js"></script>
-    
+    <script src="js/app/controllers/HotelReservationListController.js"></script>
     <script src="js/app/controllers/AvioFastReservationsController.js"></script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"

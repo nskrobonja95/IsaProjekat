@@ -32,6 +32,7 @@
 
         service.retrieveFastReservationsForAvioCompany = retrieveFastReservationsForAvioCompany;
         service.makeFastReservation = makeFastReservation;
+        service.rateReservation = rateReservation;
         return service;
         
         function cancelReservation(reservationId){
@@ -50,7 +51,22 @@
                     };
                 });
         }
+        function rateReservation(ratingObj){
+            var rating = $http.put(urls.USERS_SERVICE_API+'rateFlight', ratingObj)
+            .then(function (response) {
+                console.log("Avio service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while rating reservations!", error);
+            });
 
+        return $q.all([rating])
+            .then(function (results) {
+                return {
+                    rating: results[0]
+                };
+            });
+        }
         function getAllUserFlightReservations(){
             var flightReservationsList = $http.get(urls.RESERVATION_SERVICE_API+'flightUserReservationsList')
             .then(function (response) {
