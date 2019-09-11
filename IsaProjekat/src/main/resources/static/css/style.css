@@ -54,6 +54,14 @@ body {
 	background-position: center;
 	text-align: center;
 }
+.reservation-list-box-div{
+	margin: 0px;
+	
+	background-size: cover; 
+	background-attachment: fixed;
+	background-position: center;
+	text-align: center;
+}
 .container { 
     width: 100%; 
     height: 50%; 

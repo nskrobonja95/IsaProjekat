@@ -27,7 +27,10 @@ public interface FlightReservationRepository extends JpaRepository<FlightReserva
 			@Param("dest") Destination dest);
 	
 	FlightReservation findByFlightReservationSeatsIn(List<FlightSeat> flightReservationSeats);
-
+	
+	@Query("select fr from FlightReservation fr where fr.user.id = :userId")
+	List<FlightReservation> getUserReservationsList(@Param("userId") Long userId);
+	
 //	@Query("select fr from FlightReservation fr left join Flight f on f.id = fr.id.flightId where "
 //			+ "fr.user = :user and date(f.takeoff) > date(current_date())")
 //	List<FlightReservation> findByUser(@Param("user") User user);

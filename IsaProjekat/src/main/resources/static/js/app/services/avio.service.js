@@ -26,10 +26,50 @@
         service.loadSeatsForFlight = loadSeatsForFlight;
         service.makeReservation = makeReservation;
         service.sendInvitation = sendInvitation;
+
+        service.getAllUserFlightReservations = getAllUserFlightReservations;
+        service.cancelReservation = cancelReservation;
+
         service.retrieveFastReservationsForAvioCompany = retrieveFastReservationsForAvioCompany;
         service.makeFastReservation = makeFastReservation;
         return service;
         
+        function cancelReservation(reservationId){
+            var canceled = $http.put(urls.USERS_SERVICE_API+'cancelFlight/'+reservationId)
+            .then(function (response) {
+                console.log("Flight canceled:", response);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while canceling reservations!", error);
+            });
+
+            return $q.all([canceled])
+                .then(function (results) {
+                    return {
+                        canceled: results[0]
+                    };
+                });
+        }
+
+        function getAllUserFlightReservations(){
+            var flightReservationsList = $http.get(urls.RESERVATION_SERVICE_API+'flightUserReservationsList')
+            .then(function (response) {
+                console.log("Avio service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing list of all user reservations!", error);
+            });
+
+        return $q.all([flightReservationsList])
+            .then(function (results) {
+                return {
+                    flightReservationsList: results[0]
+                };
+            });
+        }
+
+        
+
         function loadAllDestiantions(){
             var destList = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'getAllDestinations')
             .then(function (response) {

@@ -14,6 +14,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.lang.Nullable;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
@@ -49,6 +51,10 @@ public @Data class FlightReservation {
 	
 	@Column(name="passportNumber")
 	private String passportNumber;
+	
+	@Nullable
+	@Column(name="rate")
+	private Integer  rate;
 	
 	@ManyToMany
 	@JoinTable( name = "RESERVATION_SEAT",
