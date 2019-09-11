@@ -389,7 +389,7 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@GetMapping("retrieveUserAccReservations")
+	@GetMapping("/retrieveUserAccReservations")
 	public ResponseEntity<?> retrieveuserAccReservations() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();

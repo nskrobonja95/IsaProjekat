@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.ftn.isa.dto.AvioStatisticsDTO;
 import edu.ftn.isa.dto.BasicAvioInfoDTO;
 import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.dto.DestinationsWrapper;
@@ -44,6 +45,7 @@ import edu.ftn.isa.repositories.FlightRepository;
 import edu.ftn.isa.repositories.FlightReservationRepository;
 import edu.ftn.isa.repositories.FlightSeatRepository;
 import edu.ftn.isa.security.CustomUserDetails;
+import edu.ftn.isa.services.StatsService;
 
 @RestController
 @RequestMapping("/avioadmin")
@@ -63,6 +65,9 @@ public class AvioAdminController {
 	
 	@Autowired
 	private FlightReservationRepository flightResRepo;
+	
+	@Autowired
+	private StatsService statsService;
 
 	@PostMapping("/addFlight")
 	public ResponseEntity<?> addFlight(@Valid
@@ -268,6 +273,17 @@ public class AvioAdminController {
 		flightRepo.save(flight);
 		saveSeats(flight, flightData.getSeats());
 		return new ResponseEntity<>(HttpStatus.OK); 
+	}
+	
+	@GetMapping("/avioStatistics")
+	public ResponseEntity<?> avioStatistics() throws ParseException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
+		
+		AvioStatisticsDTO stats = statsService.getAvioStats(avio);
+		
+		return new ResponseEntity<AvioStatisticsDTO>(stats, HttpStatus.OK);
 	}
 
 	private void saveSeats(Flight flight, List<SeatDTO> seats) {
