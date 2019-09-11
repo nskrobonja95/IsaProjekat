@@ -372,7 +372,7 @@ public class UserController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		User user = userDetails.getUser();
-		if(resService.rateFlight(ratingDto, user))
+		if(!resService.rateFlight(ratingDto, user))
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

@@ -21,6 +21,7 @@
         service.addHotel = addHotel;
         service.getAllUserHotelReservations = getAllUserHotelReservations;
         service.cancelReservation = cancelReservation;
+        service.rateReservation = rateReservation;
         return service;
 
         function cancelReservation(reservationId){
@@ -39,7 +40,22 @@
                     };
                 });
         }
+        function rateReservation(resId, rate){
+            var rating = $http.put(urls.USERS_SERVICE_API+'rateAccomodation/'+resId+"/"+rate)
+            .then(function (response) {
+                console.log("Avio service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while rating reservations!", error);
+            });
 
+        return $q.all([rating])
+            .then(function (results) {
+                return {
+                    rating: results[0]
+                };
+            });
+        }
         function getAllUserHotelReservations(){
             var hotelReservationsList = $http.get(urls.USERS_SERVICE_API+'retrieveUserAccReservations')
             .then(function (response) {

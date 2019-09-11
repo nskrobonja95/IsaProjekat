@@ -33,7 +33,17 @@
 										</small>
 									
 									<div class="address">Number of beds: {{reservation.room.numOfBeds}}</div>
-									
+									<div class="btn-group" ng-show="hotelResListCtrl.rateEnabled(reservation.id)">
+										<button type="button" ng-click="hotelResListCtrl.rateRes(reservation.id)" class="btn btn-primary">Rate</button>
+										
+										<select class="form-control" id="exampleFormControlSelect1" ng-model="hotelResListCtrl.rate">
+											<option>1</option>
+											<option>2</option>
+											<option>3</option>
+											<option>4</option>
+											<option>5</option>
+										</select>
+									</div>
                                     </div>
                                     
 									

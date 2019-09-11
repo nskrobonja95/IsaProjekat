@@ -62,9 +62,14 @@ public class ReservationService {
 		Optional<Flight> optFlight = flightRepo.findById(data.getFlightId());
 		if(!optRes.isPresent() || !optFlight.isPresent())
 			return false;
+		
 		FlightReservation res = optRes.get();
 		Flight flight = optFlight.get();
+		Optional<FlightRate> optRate = flightRateRepo.findByFlightAndFlightReservation(flight, res);
 		FlightRate rate = new FlightRate();
+		if(optRate.isPresent()) {
+			rate = optRate.get();
+		}
 		rate.setFlight(flight);
 		rate.setFlightReservation(res);
 		rate.setUser(user);

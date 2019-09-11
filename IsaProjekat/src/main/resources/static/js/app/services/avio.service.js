@@ -33,8 +33,26 @@
         service.retrieveFastReservationsForAvioCompany = retrieveFastReservationsForAvioCompany;
         service.makeFastReservation = makeFastReservation;
         service.rateReservation = rateReservation;
+        service.loadAvioStatistics = loadAvioStatistics;
         return service;
         
+        function loadAvioStatistics(){
+            var stats = $http.get(urls.AVIO_ADMIN_API+'avioStatistics')
+            .then(function (response) {
+                console.log("Avio service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing list of all avio stats!", error);
+            });
+
+        return $q.all([stats])
+            .then(function (results) {
+                return {
+                    stats: results[0]
+                };
+            });
+        }
+
         function cancelReservation(reservationId){
             var canceled = $http.put(urls.USERS_SERVICE_API+'cancelFlight/'+reservationId)
             .then(function (response) {

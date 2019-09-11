@@ -20,5 +20,6 @@ public @Data class AvioCompanyDTO {
 	
 	private List<String> destinations;
 	private User admin;
+	private float rate;
 	
 }

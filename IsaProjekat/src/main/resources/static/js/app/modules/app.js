@@ -197,6 +197,21 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                       }]
                 }
             })
+            .state('home-abstract.avio-statistics',{
+                url:'/avio-statistics',
+                views: {
+                    'avio-statistics': {
+                        templateUrl: "partials/avio-statistics",
+                        controller: "AvioStatsController",
+                        controllerAs: "avioStatsCtrl"
+                    }
+                },
+                resolve: {
+                    avioStatisticData: ['AvioService', function(AvioService){
+                        return AvioService.loadAvioStatistics();
+                    }]
+                }
+            })
             .state('home-abstract.avio-admin',{
                 url:'/avio-admin',
                 views: {

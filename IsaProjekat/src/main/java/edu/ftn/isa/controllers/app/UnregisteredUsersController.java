@@ -112,6 +112,7 @@ public class UnregisteredUsersController {
 			temp.setName(avio.getName());
 			temp.setPromo(avio.getPromo());
 			temp.setAdmin(avio.getAdmin());
+			temp.setRate(avio.getAverageRate());
 			retVal.add(temp);
 		}
 		return new ResponseEntity<List<AvioCompanyDTO>>(retVal, HttpStatus.OK);

@@ -12,7 +12,7 @@ angular.module('flightApp').controller('AvioCompanyController',
 
             $scope.rating = 0;
             $scope.rating = {
-                current: 3.7,
+                current: self.avioCompany.averageRate,
                 max: 5,
                 editable: false
             }
