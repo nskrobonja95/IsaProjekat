@@ -28,7 +28,7 @@ public @Data class FlightForStatsDTO {
 	
 	private List<SeatDTO> seats;
 	
-	private float avgRate;
+	private Float avgRate;
 
 	
 }

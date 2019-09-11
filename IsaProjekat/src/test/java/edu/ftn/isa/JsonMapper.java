@@ -11,6 +11,10 @@ public class JsonMapper {
 
 	private ObjectMapper mapper;
 	
+	public ObjectMapper getMapper() {
+		return mapper;
+	}
+	
 	public JsonMapper() {
 		mapper = new ObjectMapper();
 	}
