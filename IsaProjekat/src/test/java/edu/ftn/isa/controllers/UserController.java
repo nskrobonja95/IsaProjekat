@@ -110,10 +110,10 @@ public class UserController {
 	public void testGetSeats() throws JsonProcessingException, Exception {
 		MvcResult result = 
 				mockMvc.perform(
-						MockMvcRequestBuilders.get("/app/getSeats/1")
+						MockMvcRequestBuilders.get("/app/getSeats/17")
 							.contentType(MediaType.APPLICATION_JSON)).andReturn();
 		List<SeatRowDTO> retVal = mapper.getMapper().readValue(result.getResponse().getContentAsString(), mapper.getMapper().getTypeFactory().constructCollectionType(List.class, SeatRowDTO.class));
-		assertEquals(retVal.size(), flightRepo.findById(1L).get().getNumOfRows());
+		assertEquals(retVal.size(), flightRepo.findById(17L).get().getNumOfRows());
 	}
 	
 }

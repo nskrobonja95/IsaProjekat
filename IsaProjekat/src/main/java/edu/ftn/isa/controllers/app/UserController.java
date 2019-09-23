@@ -36,6 +36,7 @@ import edu.ftn.isa.dto.ReservationsDTO;
 import edu.ftn.isa.dto.SeatDTO;
 import edu.ftn.isa.dto.SeatRowDTO;
 import edu.ftn.isa.dto.UserDTO;
+import edu.ftn.isa.dto.UserHotelReservationDTO;
 import edu.ftn.isa.model.Flight;
 import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.FlightSeat;
@@ -410,7 +411,7 @@ public class UserController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		User user = userDetails.getUser();
-		if(resService.rateFlight(ratingDto, user))
+		if(!resService.rateFlight(ratingDto, user))
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -436,7 +437,19 @@ public class UserController {
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		User user = userDetails.getUser();
 		List<HotelReservation> reservations = resService.retrieveUserHotelReservations(user);
-		return new ResponseEntity<List<HotelReservation>>(reservations, HttpStatus.OK);
+		List<UserHotelReservationDTO> retVal = new ArrayList<UserHotelReservationDTO>();
+		for(HotelReservation reservation : reservations) {
+			
+			retVal.add(new UserHotelReservationDTO(reservation.getId(),
+					reservation.getRoom(),
+					reservation.getArrivalDate(),
+					reservation.getDepartingDate(),
+					reservation.getStatus().toString(),
+					reservation.getRating(),
+					reservation.getServices()
+					));
+		}
+		return new ResponseEntity<List<UserHotelReservationDTO>>(retVal, HttpStatus.OK);
 	}
 	
 }

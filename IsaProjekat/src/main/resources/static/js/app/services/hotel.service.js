@@ -24,10 +24,57 @@
         service.loadHotelServicesByRoomId = loadHotelServicesByRoomId;
         service.editRoom = editRoom;
         service.deleteRoom = deleteRoom;
+        service.cancelReservation = cancelReservation;
+        service.rateReservation = rateReservation;
         return service;
 
+        function cancelReservation(reservationId){
+            var canceled = $http.put(urls.USERS_SERVICE_API+'cancelAccomodation/'+reservationId)
+            .then(function (response) {
+                console.log("Hotel reservation canceled:", response);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while canceling reservations!", error);
+            });
+
+            return $q.all([canceled])
+                .then(function (results) {
+                    return {
+                        canceled: results[0]
+                    };
+                });
+        }
+        function rateReservation(resId, rate){
+            var rating = $http.put(urls.USERS_SERVICE_API+'rateAccomodation/'+resId+"/"+rate)
+            .then(function (response) {
+                console.log("Avio service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while rating reservations!", error);
+            });
+
+        return $q.all([rating])
+            .then(function (results) {
+                return {
+                    rating: results[0]
+                };
+            });
+        }
         function getAllUserHotelReservations(){
-            
+            var hotelReservationsList = $http.get(urls.USERS_SERVICE_API+'retrieveUserAccReservations')
+            .then(function (response) {
+                console.log("Hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing list of all user hotel reservations!", error);
+            });
+
+        return $q.all([hotelReservationsList])
+            .then(function (results) {
+                return {
+                    hotelReservationsList: results[0]
+                };
+            });
         }
         function loadAllHotels() {
             var hotelsList = $http.get(urls.UNREGISTERED_USERS_SERVICE_API+'hotels')

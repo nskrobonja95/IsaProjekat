@@ -45,11 +45,11 @@ public class TestAuthentication {
 	@Test
 	public void testLogin() throws JsonProcessingException, Exception {
 		LoginPayload payload = new LoginPayload();
-		payload.setUsername("nikola95");
-		payload.setPassword("nikola95");
+		payload.setUsername("nikolaUser");
+		payload.setPassword("klasikaK1");
 		MvcResult result = 
 				mockMvc.perform(
-						MockMvcRequestBuilders.post("/api/auth/login")
+						MockMvcRequestBuilders.post("/auth/login")
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(mapper.mapToJson(payload))).andReturn();
 		assertEquals(200, result.getResponse().getStatus());
@@ -62,10 +62,10 @@ public class TestAuthentication {
 		payload.setPassword(null);
 		MvcResult result = 
 				mockMvc.perform(
-						MockMvcRequestBuilders.post("/api/auth/login")
+						MockMvcRequestBuilders.post("/auth/login")
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(mapper.mapToJson(payload))).andReturn();
-		assertEquals(200, result.getResponse().getStatus());
+		assertEquals(400, result.getResponse().getStatus());
 	}
 	
 	@Test
@@ -75,10 +75,10 @@ public class TestAuthentication {
 		payload.setPassword("");
 		MvcResult result = 
 				mockMvc.perform(
-						MockMvcRequestBuilders.post("/api/auth/login")
+						MockMvcRequestBuilders.post("/auth/login")
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(mapper.mapToJson(payload))).andReturn();
-		assertEquals(200, result.getResponse().getStatus());
+		assertEquals(400, result.getResponse().getStatus());
 	}
 	
 	@Test
@@ -88,10 +88,10 @@ public class TestAuthentication {
 		payload.setPassword("nikola");
 		MvcResult result = 
 				mockMvc.perform(
-						MockMvcRequestBuilders.post("/api/auth/login")
+						MockMvcRequestBuilders.post("/auth/login")
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(mapper.mapToJson(payload))).andReturn();
-		assertEquals(200, result.getResponse().getStatus());
+		assertEquals(400, result.getResponse().getStatus());
 	}
 	
 }

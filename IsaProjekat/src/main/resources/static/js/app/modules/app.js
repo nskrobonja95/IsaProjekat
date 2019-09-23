@@ -197,6 +197,21 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                       }]
                 }
             })
+            .state('home-abstract.avio-statistics',{
+                url:'/avio-statistics',
+                views: {
+                    'avio-statistics': {
+                        templateUrl: "partials/avio-statistics",
+                        controller: "AvioStatsController",
+                        controllerAs: "avioStatsCtrl"
+                    }
+                },
+                resolve: {
+                    avioStatisticData: ['AvioService', function(AvioService){
+                        return AvioService.loadAvioStatistics();
+                    }]
+                }
+            })
             .state('home-abstract.avio-admin',{
                 url:'/avio-admin',
                 views: {
@@ -441,12 +456,26 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     initialFlightReservationsData: ['$stateParams', 'AvioService',function($stateParams, AvioService){
                        
                         return AvioService.getAllUserFlightReservations();   
-                      }],
-                    InitialHotelReservationsData:  ['HotelService',function(HotelService){
-                       
-                        //return HotelService.getAllUserHotelReservations();  
-                        return "blablabla" 
                       }]
+                    
+                }
+            })
+            .state('home-abstract.profile-abstract.hotel-reservations-list', {
+                url: '/hotelReservationsList',                
+                views: {
+                    'hotel-reservations-list': {
+                      templateUrl: 'partials/hotel-reservations-list',
+                      controller: 'HotelReservationListController',
+                      controllerAs: 'hotelResListCtrl'
+                     
+                  }
+                },
+                resolve: {
+                    initialHotelReservationsData: ['$stateParams', 'HotelService',function($stateParams, HotelService){
+                       
+                        return HotelService.getAllUserHotelReservations();   
+                      }]
+                    
                 }
             })
             .state('home-abstract.profile-abstract.friends-abstract', {

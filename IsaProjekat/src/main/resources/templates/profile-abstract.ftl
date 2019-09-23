@@ -9,24 +9,16 @@
                 <a ng-show="globals.currentUser.userType == 'User' " class="nav-link" ui-sref="home-abstract.profile-abstract.friends-abstract.friends-list({username:globals.currentUser.username})">
                 <i class="fas fa-users"></i> Friends
                 </a>
-                <#--  <a ng-show="globals.currentUser.userType == 'User' " class="nav-link" ui-sref="guest-abstract.profile-abstract.theatres-list({username:globals.currentUser.username})">
-                <i class="fas fa-theater-masks"></i> Theatres
-                </a>
-                <a ng-show="globals.currentUser.userType == 'User' " class="nav-link" ui-sref="guest-abstract.profile-abstract.cinemas-list({username:globals.currentUser.username})">
-                <i class="fas fa-film"></i> Cinemas
-                </a>  -->
                 <a ng-show="globals.currentUser.userType == 'User' " class="nav-link" ui-sref="home-abstract.profile-abstract.reservations-list({username:globals.currentUser.username})">
-                <i class="fab fa-rendact"></i> Reservations
+                <i class="fab fa-rendact"></i> Flight Reservations
+                </a>
+                <a ng-show="globals.currentUser.userType == 'User' " class="nav-link" ui-sref="home-abstract.profile-abstract.hotel-reservations-list({username:globals.currentUser.username})">
+                <i class="fab fa-rendact"></i> Hotel Reservations
                 </a>
                 <a ng-show="globals.currentUser.userType == 1" class="nav-link" ui-sref="guest-abstract.profile-abstract.profile-usersList">
                 <i class="fas fa-users"></i> Users
                 </a>
-                <#--  <a ng-show="globals.currentUser.userType == 1" class="nav-link" ui-sref="guest-abstract.cinemas">
-                <i class="fas fa-users"></i> Cinemas
-                </a>
-                <a ng-show="globals.currentUser.userType == 1" class="nav-link" ui-sref="guest-abstract.profile-abstract.profile-usersList">
-                <i class="fas fa-users"></i> Theatres
-                </a>  -->
+                
                 <a ng-show="globals.currentUser.userType == 1" class="nav-link" ui-sref="guest-abstract.profile-abstract.profile-usersList">
                 <i class="fas fa-users"></i> Statistics
                 </a>
@@ -36,6 +28,7 @@
             <div ui-view='profile-overview'></div>
             <div ui-view='friends-abstract'></div>  
             <div ui-view='reservations-list'></div> 
+            <div ui-view='hotel-reservations-list'></div>
             
         </div>
     </div>

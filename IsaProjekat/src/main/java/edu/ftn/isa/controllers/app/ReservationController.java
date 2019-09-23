@@ -1,12 +1,7 @@
 package edu.ftn.isa.controllers.app;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.ftn.isa.dto.FlightReservationDTO;
 import edu.ftn.isa.dto.HotelDTO;
 import edu.ftn.isa.dto.HotelReservationDTO;
 import edu.ftn.isa.dto.UserFlightReservationDTO;
@@ -28,6 +22,7 @@ import edu.ftn.isa.model.FlightClass;
 import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.HotelReservation;
 import edu.ftn.isa.model.HotelServiceModel;
+import edu.ftn.isa.model.ReservationStatus;
 import edu.ftn.isa.model.Room;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.repositories.FlightRepository;
@@ -50,7 +45,6 @@ public class ReservationController {
 	
 	@Autowired
 	private ReservationService resService;
-	
 	
 	@GetMapping("/flightUserReservationsList")
 	public ResponseEntity<?> getUserFlightReservations(){
