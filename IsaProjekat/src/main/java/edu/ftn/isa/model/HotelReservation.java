@@ -59,7 +59,7 @@ public @Data class HotelReservation {
 			name = "PERSISTING_RESERVATION_SERVICE", 
 			joinColumns = @JoinColumn(name = "reservation_id", referencedColumnName = "hotelreservationID"),
 			inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "hotelserviceID"))
-	private Collection<HotelService> services;
+	private Collection<HotelServiceModel> services;
 	
 	@Column(name="canceled")
 	private boolean canceled;

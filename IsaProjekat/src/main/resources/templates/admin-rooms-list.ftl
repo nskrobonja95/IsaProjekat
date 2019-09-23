@@ -51,6 +51,8 @@
                                                             </div>
                                                         </li>
                                                     </ul>
+                                                    <button ng-click="adminRoomsCtrl.goToEditPage(room)">Edit</button>
+                                                    <button ng-click="adminRoomsCtrl.removeRoom(room)">Delete</button>
                                                 </div>
                                             </div>
                                         </div>

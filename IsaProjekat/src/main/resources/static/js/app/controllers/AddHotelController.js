@@ -11,7 +11,6 @@ angular.module('flightApp').controller('AddHotelController',
 
             function addHotel() {
                 self.obj.destination = self.selectedDest.name;
-                debugger;
                 console.log(self.obj);
                 HotelService.addHotel(self.obj)
                     .then(function(response) {

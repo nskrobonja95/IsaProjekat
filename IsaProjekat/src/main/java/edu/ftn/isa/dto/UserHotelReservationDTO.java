@@ -3,8 +3,7 @@ package edu.ftn.isa.dto;
 import java.util.Collection;
 import java.util.Date;
 
-import edu.ftn.isa.model.HotelService;
-import edu.ftn.isa.model.ReservationStatus;
+import edu.ftn.isa.model.HotelServiceModel;
 import edu.ftn.isa.model.Room;
 import lombok.Data;
 
@@ -15,10 +14,10 @@ public @Data class UserHotelReservationDTO {
 	private Date departingDate;
 	private String status;
 	private Integer rating;
-	private Collection<HotelService> services;
+	private Collection<HotelServiceModel> services;
 	
 	public UserHotelReservationDTO(Long id, Room room, Date arrivalDate, Date departingDate, String status,
-			Integer rating, Collection<HotelService> services) {
+			Integer rating, Collection<HotelServiceModel> services) {
 		super();
 		this.id = id;
 		this.room = room;

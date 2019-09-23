@@ -15,6 +15,7 @@ import edu.ftn.isa.dto.AvioStatisticsDTO;
 import edu.ftn.isa.dto.FlightForStatsDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Flight;
+import edu.ftn.isa.model.User;
 import edu.ftn.isa.repositories.AvioRepository;
 import edu.ftn.isa.repositories.FlightRepository;
 
@@ -28,7 +29,8 @@ public class StatsService {
 	private FlightRepository flightRepo;
 	
 	@Transactional
-	public AvioStatisticsDTO getAvioStats(AvioCompany avio) throws ParseException {
+	public AvioStatisticsDTO getAvioStats(User admin) throws ParseException {
+		AvioCompany avio = avioRepo.findByAdmin(admin);
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date todayDate = new Date();
 		todayDate = formatter.parse(formatter.format(todayDate));

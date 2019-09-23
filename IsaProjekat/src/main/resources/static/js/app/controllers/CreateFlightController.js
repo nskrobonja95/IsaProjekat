@@ -84,7 +84,6 @@ angular.module('flightApp').controller('CreateFlightController',
                         obj.seats.push(seat);
                     }
                 }
-                debugger;
                 console.log(obj);
                 AvioService.saveFlight(obj)
                     .then(function(response) {

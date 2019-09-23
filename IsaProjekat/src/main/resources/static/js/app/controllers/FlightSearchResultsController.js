@@ -11,7 +11,6 @@ angular.module('flightApp').controller('FlightSearchResultsController', [
         self.durationFilterCheck = durationFilterCheck;
         self.priceFilterCheck = priceFilterCheck;
         self.flightsList = [];
-        debugger;
         if(self.searchRes.dest.data.directFlights){
             console.log("Uslo u round", self.searchRes.dest.data);
             for(var i=0; i < self.searchRes.dest.data.directFlights.length; i++){
@@ -63,7 +62,6 @@ angular.module('flightApp').controller('FlightSearchResultsController', [
 
         function filterFlights(flightObj) {
             console.log("FILTERING...");
-            debugger;
             console.log(self.airlineFilterCheck(flightObj.flight));
             console.log(self.priceFilterCheck(flightObj));
             return self.airlineFilterCheck(flightObj.flight) && self.priceFilterCheck(flightObj);

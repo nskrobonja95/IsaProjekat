@@ -8,7 +8,7 @@ import javax.persistence.Column;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import edu.ftn.isa.model.Hotel;
-import edu.ftn.isa.model.HotelService;
+import edu.ftn.isa.model.HotelServiceModel;
 import edu.ftn.isa.model.Room;
 import lombok.Data;
 

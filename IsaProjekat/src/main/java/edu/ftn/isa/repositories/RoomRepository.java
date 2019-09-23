@@ -3,12 +3,16 @@ package edu.ftn.isa.repositories;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Hotel;
+import edu.ftn.isa.model.HotelReservation;
 import edu.ftn.isa.model.Room;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
@@ -33,5 +37,9 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 			+ " hr.departingDate BETWEEN :checkIn and :checkOut) "
 			+ "and hr.canceled = false)")
 	List<Room> searchAvailableRoomsForHotel(@Param("checkIn") Date checkIn, @Param("checkOut") Date checkOut, @Param("hotelId") Long hotelId);
+	
+	@Modifying
+	@Transactional
+	void delete(Room r);
 	
 }

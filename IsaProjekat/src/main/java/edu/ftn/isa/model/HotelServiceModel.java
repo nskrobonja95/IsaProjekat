@@ -19,7 +19,7 @@ import lombok.Data;
 
 @Entity
 @Table(name="hotelService")
-public @Data class HotelService {
+public @Data class HotelServiceModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
