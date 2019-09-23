@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -68,5 +69,9 @@ public @Data class Flight {
 	
 	@Column(name="discount")
 	private float discount;
+	
+	@Version
+	@Column(name = "VERSION")
+	private Integer version;
 	
 }

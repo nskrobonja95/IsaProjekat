@@ -302,6 +302,7 @@
 <div ui-view="add-airline"></div>
 <div ui-view="change-password"></div>
 <div ui-view="avio-fast-reservations"></div>
+<div ui-view="edit-room"></div>
 
 <script>
   $('#loginModal').on('show.bs.modal', function (event) {

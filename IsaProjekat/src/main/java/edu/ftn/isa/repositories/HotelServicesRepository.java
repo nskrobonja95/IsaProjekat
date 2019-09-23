@@ -7,16 +7,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import edu.ftn.isa.model.Hotel;
-import edu.ftn.isa.model.HotelService;
+import edu.ftn.isa.model.HotelServiceModel;
 
-public interface HotelServicesRepository extends JpaRepository<HotelService, Long> {
+public interface HotelServicesRepository extends JpaRepository<HotelServiceModel, Long> {
 
-	List<HotelService> findByName(String name);
+	List<HotelServiceModel> findByName(String name);
 	
-	@Query("SELECT hs from HotelService hs where hs.hotel.id = :hotel"
+	@Query("SELECT hs from HotelServiceModel hs where hs.hotel.id = :hotel"
 			+ " and hs.name = :name")
-	HotelService retrieveByNameAndHotel(@Param("name") String name, @Param("hotel") Long hotel);
+	HotelServiceModel retrieveByNameAndHotel(@Param("name") String name, @Param("hotel") Long hotel);
 	
-	List<HotelService> findByHotel(Hotel hotel);
+	List<HotelServiceModel> findByHotel(Hotel hotel);
 	
 }

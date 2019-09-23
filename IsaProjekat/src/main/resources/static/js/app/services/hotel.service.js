@@ -20,6 +20,10 @@
         service.saveRoom = saveRoom;
         service.addHotel = addHotel;
         service.getAllUserHotelReservations = getAllUserHotelReservations;
+        service.getRoomById = getRoomById;
+        service.loadHotelServicesByRoomId = loadHotelServicesByRoomId;
+        service.editRoom = editRoom;
+        service.deleteRoom = deleteRoom;
         return service;
 
         function getAllUserHotelReservations(){
@@ -95,7 +99,6 @@
 
         function getAvailableRoomsForHotel(hotelId, checkIn, checkOut) {
             var searchObj = {};
-            // debugger;
             searchObj.hotel= hotelId;
             searchObj.checkIn = checkIn;
             searchObj.checkOut = checkOut;
@@ -132,8 +135,25 @@
                 });
         }
 
+        function loadHotelServicesByRoomId(roomId) {
+            var hotelServices = $http.get(urls.HOTEL_ADMIN_API+'loadHotelServicesByRoomId/' + roomId)
+            .then(function (response) {
+                console.log("Search hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  Hotel!", error);
+            });
+
+            return $q.all([hotelServices])
+                .then(function (results) {
+                    return {
+                        hotelServices: results[0]
+                    };
+                });
+        }
+
         function bookRoom(obj) {
-            var bookingRoomResponse = $http.post(urls.RESERVATION_SERVICE_API+'room', obj)
+            var bookingRoomResponse = $http.post(urls.USERS_SERVICE_API+'reserveRoom', obj)
             .then(function (response) {
                 console.log("Book room response:", response.data);
                 return response.data;
@@ -268,6 +288,42 @@
                 });
         }
 
+        function editRoom(obj) {
+            var response = $http.put(urls.HOTEL_ADMIN_API+'editRoom', obj)
+            .then(function (response) {
+                console.log("Search hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  Hotel!", error);
+                return error;
+            });
+
+            return $q.all([response])
+                .then(function (results) {
+                    return {
+                        response: results[0]
+                    };
+                });
+        }
+
+        function deleteRoom(id) {
+            var response = $http.delete(urls.HOTEL_ADMIN_API+'deleteRoom/' + id)
+            .then(function (response) {
+                console.log("Search hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  Hotel!", error);
+                return error;
+            });
+
+            return $q.all([response])
+                .then(function (results) {
+                    return {
+                        response: results[0]
+                    };
+                });
+        }
+
         function addHotel(obj) {
             var response = $http.post(urls.SYS_ADMIN_API+'saveHotel', obj)
             .then(function (response) {
@@ -281,6 +337,23 @@
                 .then(function (results) {
                     return {
                         response: results[0]
+                    };
+                });
+        }
+
+        function getRoomById(id) {
+            var room = $http.get(urls.HOTEL_ADMIN_API+'getRoom/' + id)
+            .then(function (response) {
+                console.log("Search hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  Hotel!", error);
+            });
+
+            return $q.all([room])
+                .then(function (results) {
+                    return {
+                        room: results[0]
                     };
                 });
         }

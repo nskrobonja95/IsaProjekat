@@ -11,7 +11,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import edu.ftn.isa.model.HotelService;
+import edu.ftn.isa.model.HotelServiceModel;
 import edu.ftn.isa.model.PriceOfRoom;
 import lombok.Data;
 
@@ -25,7 +25,7 @@ private Long id;
 	
 	private boolean balcony;
 	
-	private Collection<HotelService> hotelServices;
+	private Collection<HotelServiceModel> hotelServices;
 	
 	private List<PriceOfRoom> prices;
 	

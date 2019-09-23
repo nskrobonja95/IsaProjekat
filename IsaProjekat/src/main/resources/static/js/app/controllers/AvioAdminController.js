@@ -4,7 +4,6 @@ angular.module('flightApp').controller('AvioAdminController',
     ['$scope', '$rootScope', '$state', 'AvioService', 'companyData', 'restOfDestinationsList',
         function ($scope, $rootScope, $state, AvioService, companyData, restOfDestinationsList) {
             var self = this;
-            debugger;
             self.company = companyData.airline;
             self.companyName = self.company.name;
             self.companyAddress = self.company.address;
@@ -61,7 +60,6 @@ angular.module('flightApp').controller('AvioAdminController',
 
             function saveNewDestination() {
                 var obj = {};
-                debugger;
                 obj.name = self.newDest.name;
                 AvioService.addDestination(obj)
                     .then(function(response) {

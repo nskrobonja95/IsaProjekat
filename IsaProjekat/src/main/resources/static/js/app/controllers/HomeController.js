@@ -65,12 +65,10 @@ angular.module('flightApp').controller('HomeController',
                         LoginService.SetCredentials(self.userLogin.username, self.userLogin.password, response.data.role);
 
                         console.log($rootScope.globals);
-                        debugger;
                         self.dataLoading = false;
                         $("#loginModal").modal("hide");
                         self.userLogin.username = '';
                         self.userLogin.password = '';
-                        debugger;
                         if($rootScope.globals.currentUser.userType == 'User') {
                             $state.go('home-abstract.avio-companies-list');
                         } else if($rootScope.globals.currentUser.userType == 'AvioAdmin') {

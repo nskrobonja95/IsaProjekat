@@ -24,6 +24,8 @@ public @Data class SeatDTO {
 	
 	private Flight flight;
 	
+//	private Integer version;
+	
 	public static SeatDTO parseToSeatDTO(FlightSeat seat) {
 		return new SeatDTO(seat.getId(), 
 				seat.getFlightClass().toString(), 

@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -47,9 +48,13 @@ public @Data class Room {
 			name = "ROOM_SERVICE", 
 			joinColumns = @JoinColumn(name = "room_id", referencedColumnName = "roomID"),
 			inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "hotelserviceID"))
-	private Collection<HotelService> hotelServices;
+	private Collection<HotelServiceModel> hotelServices;
 	
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
 	private List<PriceOfRoom> prices;
+	
+	@Version
+	@Column(name = "VERSION")
+	private Integer version;
 	
 }

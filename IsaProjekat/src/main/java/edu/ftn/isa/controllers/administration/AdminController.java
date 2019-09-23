@@ -26,16 +26,15 @@ import edu.ftn.isa.dto.AddHotelDTO;
 import edu.ftn.isa.dto.AdminDTO;
 import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.model.AvioCompany;
-import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Hotel;
-import edu.ftn.isa.model.RentACarService;
 import edu.ftn.isa.model.Role;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.repositories.AvioRepository;
-import edu.ftn.isa.repositories.DestinationRepository;
 import edu.ftn.isa.repositories.HotelRepository;
-import edu.ftn.isa.repositories.RentACarRepository;
 import edu.ftn.isa.repositories.UserRepository;
+import edu.ftn.isa.services.AvioService;
+import edu.ftn.isa.services.DestinationService;
+import edu.ftn.isa.services.HotelService;
 
 @RestController
 @RequestMapping("/admin")
@@ -45,39 +44,34 @@ public class AdminController {
 	private AvioRepository avioRepo;
 	
 	@Autowired
+	private AvioService avioService;
+	
+	@Autowired
 	private HotelRepository hotelRepo;
+	
+	@Autowired
+	private HotelService hotelService;
 	
 	@Autowired
 	private UserRepository userRepo;
 	
 	@Autowired
-	private RentACarRepository rentACarRepo;
-	
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private DestinationRepository destRepo;
+	private DestinationService destService;
 	
 	@PostMapping("/addAvio")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseEntity<?> addAvio(@RequestBody AvioCompany aviocomp) {
-		avioRepo.save(aviocomp);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		avioService.saveAvio(aviocomp);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PostMapping("/addHotel")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseEntity<?> addHotel(@Valid @RequestBody Hotel hotel) {
-		hotelRepo.save(hotel);
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
-	
-	@PostMapping("/addRentACarService")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseEntity<?> addRentACar(
-			@Valid @RequestBody RentACarService rentACar) {
-		rentACarRepo.save(rentACar);
+		hotelService.saveHotel(hotel);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
@@ -105,20 +99,20 @@ public class AdminController {
 		}
 	}
 	
-	@DeleteMapping("/deleteUser/{username}")
-	public ResponseEntity<?> deleteUser(
-			@PathVariable("username") String username) {
-		User user = userRepo.findByUsername(username);
-		if(user == null)
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		try{
-			userRepo.delete(user);
-		} catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+//	@DeleteMapping("/deleteUser/{username}")
+//	public ResponseEntity<?> deleteUser(
+//			@PathVariable("username") String username) {
+//		User user = userRepo.findByUsername(username);
+//		if(user == null)
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		try{
+//			userRepo.delete(user);
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+//		}
+//		return new ResponseEntity<>(HttpStatus.OK);
+//	}
 	
 	@GetMapping("/getUser/{username}")
 	public ResponseEntity<?> getUser(
@@ -211,47 +205,6 @@ public class AdminController {
 		
 	}
 	
-	@PostMapping("/setRASAdmin/{RASId}")
-	public ResponseEntity<?> setRASAdminForm(
-			@RequestBody AdminDTO adminDto, 
-			@PathVariable("RASId") Long RASId) {
-		
-		if(userRepo.findByUsernameOrEmail(adminDto.getUsername(), adminDto.getEmail()) != null) {
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
-		}
-		
-		User user = new User();
-		user.setEmail(adminDto.getEmail());
-		user.setUsername(adminDto.getUsername());
-		user.setPassword(passwordEncoder.encode(adminDto.getPassword()));
-		user.setPasswordChanged(false);
-		user.setRole(Role.RentACarAdmin);
-		userRepo.save(user);
-		
-		RentACarService ras = rentACarRepo.findById(RASId).get();
-		ras.setAdmin(user);
-		rentACarRepo.save(ras);
-		
-		return new ResponseEntity<>(HttpStatus.OK);
-		
-	}
-	
-	@PutMapping("/setRASAdmin")
-	public ResponseEntity<?> setRASAdmin(
-			@QueryParam("username") String username, 
-			@QueryParam("rasid") Long rasId) {
-		User user = userRepo.findByUsername(username);
-		if(user == null)
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		Optional<RentACarService> rasOp = rentACarRepo.findById(rasId);
-		if(!rasOp.isPresent())
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		RentACarService ras = rasOp.get();
-		ras.setAdmin(user);
-		rentACarRepo.save(ras);
-		return new ResponseEntity<User>(HttpStatus.OK);
-	}
-	
 	@GetMapping("/getUsers")
 	public ResponseEntity<?> getAllUsers() {
 		return new ResponseEntity<List<User>>(userRepo.findAll(), HttpStatus.OK);
@@ -267,11 +220,6 @@ public class AdminController {
 		return new ResponseEntity<List<User>>(userRepo.findByRole(Role.HotelAdmin), HttpStatus.OK);
 	}
 	
-	@GetMapping("/getRASAdminUsers")
-	public ResponseEntity<?> getAllRASAdminUsers() {
-		return new ResponseEntity<List<User>>(userRepo.findByRole(Role.RentACarAdmin), HttpStatus.OK);
-	}
-	
 	@DeleteMapping("/deleteAvio/{id}")
 	public ResponseEntity<?> deleteAvio(
 			@PathVariable("id") Long avioId) {
@@ -282,49 +230,21 @@ public class AdminController {
 	
 	@PostMapping("/saveAirline")
 	public ResponseEntity<?> saveAirline(@RequestBody AddAirlineDTO airlineDto) {
-		AvioCompany avio = new AvioCompany();
-		User user = new User();
-		user.setEmail(airlineDto.getEmail());
-		user.setUsername(airlineDto.getUsername());
-		user.setEnabled(true);
-		user.setRole(Role.AvioAdmin);
-		user.setPassword(passwordEncoder.encode(airlineDto.getPassword()));
-		user.setPasswordChanged(false);
-		userRepo.save(user);
-		avio.setAdmin(user);
-		avio.setName(airlineDto.getName());
-		avio.setPromo(airlineDto.getPromo());
-		avio.setAddress(airlineDto.getAddress());
-		avioRepo.save(avio);
+		AvioCompany avio = avioService.addAvio(airlineDto);
+		if(avio == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PostMapping("/saveHotel")
-	public ResponseEntity<?> saveAirline(@RequestBody AddHotelDTO HotelDto) {
-		Hotel hotel = new Hotel();
-		User user = new User();
-		user.setEmail(HotelDto.getEmail());
-		user.setUsername(HotelDto.getUsername());
-		user.setEnabled(true);
-		user.setRole(Role.HotelAdmin);
-		user.setPassword(passwordEncoder.encode(HotelDto.getPassword()));
-		user.setPasswordChanged(false);
-		userRepo.save(user);
-		hotel.setAdmin(user);
-		hotel.setName(HotelDto.getName());
-		hotel.setPromo(HotelDto.getPromo());
-		hotel.setAddress(HotelDto.getAddress());
-		Destination dest = destRepo.findByNameAndDeleted(HotelDto.getDestination(), false);
-		hotel.setDestination(dest);
-		hotelRepo.save(hotel);
+	public ResponseEntity<?> saveHotel(@RequestBody AddHotelDTO HotelDto) {
+		Hotel retVal = hotelService.addHotel(HotelDto);
+		if(retVal == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PostMapping("/saveDestination")
-	public ResponseEntity<?> saveDestination(@RequestBody DestinationDTO destDto) {
-		Destination dest = new Destination();
-		dest.setName(destDto.getName());
-		destRepo.save(dest);
+	public ResponseEntity<?> saveDestination(DestinationDTO destDto) {
+		destService.addDestination(destDto);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

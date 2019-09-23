@@ -2,7 +2,10 @@ package edu.ftn.isa.repositories;
 
 import java.util.List;
 
+import javax.persistence.LockModeType;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,6 +27,7 @@ public interface FlightSeatRepository extends JpaRepository<FlightSeat, Long>{
 			+ "and fs.available = true and fs.flightClass = 0")
 	int countNumOfAvailableBusinessSeatsForFlight(@Param("flight")Flight flight);
 	
+	@Lock(LockModeType.PESSIMISTIC_READ)
 	List<FlightSeat> findByFlight(Flight f);
 	
 	@Query("SELECT fs FROM FlightSeat fs where fs.flight.avioCompany = :avio "

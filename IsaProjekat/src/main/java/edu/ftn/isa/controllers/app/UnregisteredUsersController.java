@@ -44,7 +44,7 @@ import edu.ftn.isa.model.Flight;
 import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.FlightSeat;
 import edu.ftn.isa.model.Hotel;
-import edu.ftn.isa.model.HotelService;
+import edu.ftn.isa.model.HotelServiceModel;
 import edu.ftn.isa.model.RentACarService;
 import edu.ftn.isa.model.ReservationStatus;
 import edu.ftn.isa.model.Room;
@@ -368,8 +368,8 @@ public class UnregisteredUsersController {
 	@GetMapping("/loadHotelServices/{hotelId}")
 	public ResponseEntity<?> loadHotelServices(@PathVariable("hotelId") Long hotelId) {
 		Hotel h = hotelRepo.findById(hotelId).get();
-		List<HotelService> services = hsRepo.findByHotel(h);
-		return new ResponseEntity<List<HotelService>>(services, HttpStatus.OK);
+		List<HotelServiceModel> services = hsRepo.findByHotel(h);
+		return new ResponseEntity<List<HotelServiceModel>>(services, HttpStatus.OK);
 	}
 	
 	@GetMapping("/getFlight/{flightId}")

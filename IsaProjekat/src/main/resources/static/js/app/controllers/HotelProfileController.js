@@ -39,12 +39,10 @@ angular.module('flightApp').controller('HotelProfileController',
                 var checkOut = SearchService.formatDateString(self.checkOutDate);
                 HotelService.getAvailableRoomsForHotel(this.hotel.id, checkIn, checkOut)
                     .then(function(response){
-                        debugger;
                         self.availableRooms = response.availableRooms;        
                     }, function(errResponse){
                         console.log(errResponse);
                     });
-                // debugger;
                 
             }
 
@@ -55,7 +53,6 @@ angular.module('flightApp').controller('HotelProfileController',
             }
 
             function filterServices(room) {
-                // debugger;
                 var flag = false;
                 for(var i=0; i<self.hotelServices.length; ++i) {
                     flag = false;
@@ -76,7 +73,6 @@ angular.module('flightApp').controller('HotelProfileController',
             }
 
             function bookRoom(room) {
-                debugger;
                 room.dataLoading = true;
                 var obj = {};
                 obj.roomId = room.id;

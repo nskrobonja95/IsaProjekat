@@ -63,8 +63,8 @@ angular.module('flightApp').controller('CreateRoomController',
 
                 temp = {};
                 temp.price = self.prices.september;
-                temp.from = '-08-01 00:00:00';
-                temp.to = '-08-31 00:00:00';
+                temp.from = '-09-01 00:00:00';
+                temp.to = '-09-30 00:00:00';
                 obj.monthPrices.push(temp);
 
                 temp = {};

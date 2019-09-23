@@ -10,10 +10,8 @@ angular.module('flightApp').controller('ChangePasswordController',
             function changePassword() {
                 LoginService.changePassword(self.password)
                     .then(function() {
-                        debugger;
                         LoginService.SetCredentials( $rootScope.globals.currentUser.username, 
                                 self.password, $rootScope.globals.currentUser.userType);
-                        debugger;
                         if($rootScope.globals.currentUser.userType == 'AvioAdmin') {
                             $state.go('home-abstract.avio-admin');
                         } else {

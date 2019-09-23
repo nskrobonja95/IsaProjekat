@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import org.hibernate.StaleObjectStateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.ftn.isa.dto.FlightRatingDTO;
 import edu.ftn.isa.dto.FlightReservationDTO;
 import edu.ftn.isa.dto.FriendsDTO;
+import edu.ftn.isa.dto.HotelReservationDTO;
 import edu.ftn.isa.dto.InviteFriendFlightReservationDTO;
 import edu.ftn.isa.dto.ReservationsDTO;
 import edu.ftn.isa.dto.SeatDTO;
@@ -216,33 +218,62 @@ public class UserController {
 	
 	@GetMapping("/getSeats/{flightId}")
 	public ResponseEntity<?> loadSeats(@PathVariable("flightId") Long flightId) {
-		Optional<Flight> optionalFlight = flightRepo.findById(flightId);
-		if(!optionalFlight.isPresent()) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		Flight f = optionalFlight.get();
-		List<FlightSeat> seats = flightSeatRepo.findByFlight(optionalFlight.get());
-		int numOfCols = seats.size()/f.getNumOfRows();
-		List<SeatRowDTO> seatRows = new ArrayList<SeatRowDTO>();
-		SeatRowDTO seatRow = new SeatRowDTO();
-		for(int j=0; j<seats.size(); ++j) {
-			SeatDTO seatDto = new SeatDTO();
-			seatDto.setId(seats.get(j).getId());
-			seatDto.setColNum(seats.get(j).getColNo());
-			seatDto.setFastRes(seats.get(j).isFastReservation());
-			seatDto.setFlightClass(seats.get(j).getFlightClass().toString());
-			seatDto.setRowNum(seats.get(j).getRowNo());
-			seatDto.setSeatNumber(seats.get(j).getSeatNumber());
-			seatDto.setAvailable(seats.get(j).isAvailable());
-			seatDto.setReserved(false);
-			seatDto.setFlight(f);
-			seatRow.getSeats().add(seatDto);
-			if(seats.get(j).getSeatNumber()%numOfCols == 0) {
-				seatRows.add(seatRow);
-				seatRow = new SeatRowDTO();
-			}
-		}
+//		Optional<Flight> optionalFlight = flightRepo.findById(flightId);
+//		if(!optionalFlight.isPresent()) {
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		}
+//		Flight f = optionalFlight.get();
+//		List<FlightSeat> seats = flightSeatRepo.findByFlight(optionalFlight.get());
+//		int numOfCols = seats.size()/f.getNumOfRows();
+//		List<SeatRowDTO> seatRows = new ArrayList<SeatRowDTO>();
+//		SeatRowDTO seatRow = new SeatRowDTO();
+//		for(int j=0; j<seats.size(); ++j) {
+//			SeatDTO seatDto = new SeatDTO();
+//			seatDto.setId(seats.get(j).getId());
+//			seatDto.setColNum(seats.get(j).getColNo());
+//			seatDto.setFastRes(seats.get(j).isFastReservation());
+//			seatDto.setFlightClass(seats.get(j).getFlightClass().toString());
+//			seatDto.setRowNum(seats.get(j).getRowNo());
+//			seatDto.setSeatNumber(seats.get(j).getSeatNumber());
+//			seatDto.setAvailable(seats.get(j).isAvailable());
+//			seatDto.setReserved(false);
+//			seatDto.setFlight(f);
+//			seatRow.getSeats().add(seatDto);
+//			if(seats.get(j).getSeatNumber()%numOfCols == 0) {
+//				seatRows.add(seatRow);
+//				seatRow = new SeatRowDTO();
+//			}
+//		}
+		List<SeatRowDTO> seatRows = resService.loadSeats(flightId);
 		return new ResponseEntity<List<SeatRowDTO>>(seatRows, HttpStatus.OK);
+	}
+	
+	@PostMapping("/reserveRoom")
+	public ResponseEntity<?> reserveRoom(@RequestBody HotelReservationDTO reservationDto) {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		
+//		Room room = roomRepo.findById(reservationDto.getRoomId()).get();
+//		
+//		HotelReservation reservation = new HotelReservation();
+//		reservation.setCanceled(false);
+//		reservation.setUser(userDetails.getUser());
+//		reservation.setRoom(room);
+//		reservation.setArrivalDate(reservationDto.getArrivalDate());
+//		reservation.setDepartingDate(reservationDto.getDepartingDate());
+//		List<HotelService> services = new ArrayList<HotelService>();
+//		for(HotelService service : room.getHotelServices()) {
+//			if(reservationDto.getHotelServices().contains(service.getName()))
+//				services.add(service);
+//		}
+//		reservation.setServices(services);
+//		
+//		hotelResRepo.save(reservation);
+		if(!resService.reserveRoom(reservationDto, userDetails.getUser())) {
+			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<Long>(HttpStatus.OK);
 	}
 	
 	@PostMapping("/reserve")
@@ -250,28 +281,36 @@ public class UserController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		User user = userDetails.getUser();
-		FlightReservation reservation = new FlightReservation();
-		reservation.setUser(user);
-		reservation.setName(flightDto.getName());
-		reservation.setLastname(flightDto.getLastname());
-		reservation.setPassportNumber(flightDto.getPassportNumber());
-		reservation.setRate(0);
-		reservation.setStatus(ReservationStatus.APPROVED);
-		List<FlightSeat> seats = new ArrayList<FlightSeat>();
-		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		Date todayDate = new Date();
-		Date reserveDate = formatter.parse(formatter.format(todayDate));
-		reservation.setReserveDate(reserveDate);
-		for(int i=0; i<flightDto.getSeats().size(); ++i) {
-			Optional<FlightSeat> optionalSeat = flightSeatRepo.findById(flightDto.getSeats().get(i).getId());
-			if(!optionalSeat.isPresent())
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-			FlightSeat seat = optionalSeat.get();
-			seat.setAvailable(false);
-			seats.add(optionalSeat.get());
+//		FlightReservation reservation = new FlightReservation();
+//		reservation.setUser(user);
+//		reservation.setName(flightDto.getName());
+//		reservation.setLastname(flightDto.getLastname());
+//		reservation.setPassportNumber(flightDto.getPassportNumber());
+//		reservation.setRate(0);
+//		reservation.setStatus(ReservationStatus.APPROVED);
+//		List<FlightSeat> seats = new ArrayList<FlightSeat>();
+//		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//		Date todayDate = new Date();
+//		Date reserveDate = formatter.parse(formatter.format(todayDate));
+//		reservation.setReserveDate(reserveDate);
+//		for(int i=0; i<flightDto.getSeats().size(); ++i) {
+//			Optional<FlightSeat> optionalSeat = flightSeatRepo.findById(flightDto.getSeats().get(i).getId());
+//			if(!optionalSeat.isPresent())
+//				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//			FlightSeat seat = optionalSeat.get();
+//			seat.setAvailable(false);
+//			seats.add(optionalSeat.get());
+//		}
+//		reservation.setFlightReservationSeats(seats);
+//		flightResRepo.save(reservation);
+		boolean flag = false;
+		try {
+			flag = resService.reserveFlightSeat(flightDto, user);
+		} catch(StaleObjectStateException exp) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		reservation.setFlightReservationSeats(seats);
-		flightResRepo.save(reservation);
+		if(!flag)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

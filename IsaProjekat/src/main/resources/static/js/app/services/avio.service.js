@@ -206,7 +206,6 @@
             }
 
             function loadAvioForAdmin(){
-                debugger;
                 var airline = $http.get(urls.AVIO_ADMIN_API+'getCompany')
                 .then(function (response) {
                     console.log("Avio response for admin:", response);
@@ -398,9 +397,10 @@
                 var response = $http.post(urls.USERS_SERVICE_API+'reserve', obj)
                 .then(function (response) {
                     console.log("Response:", response);
-                    return response.data;
+                    return response;
                 }, function (error) {
                     console.log("Error occured while removing destinations!", error);
+                    return error;
                 });
     
                 return $q.all([response])

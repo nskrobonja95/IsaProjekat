@@ -38,7 +38,6 @@ angular.module('flightApp').controller('FlightReservationController', [
         // };
 
         $scope.selectSeatForDirectFlight = function(seat) {
-            debugger;
             if(!seat.available){
                 alert("SEAT NOT AVAILABLE");
                 return;
@@ -94,7 +93,6 @@ angular.module('flightApp').controller('FlightReservationController', [
         }
 
         $scope.reserve = function(seat) {
-            debugger;
             var obj = {};
             obj.name = seat.name;
             obj.lastname = seat.lastname;
@@ -110,6 +108,15 @@ angular.module('flightApp').controller('FlightReservationController', [
             AvioService.makeReservation(obj)
                 .then(
                     function (response) {
+                    	if(response.response.status == 500 || response.response.status == 400) {
+                    		alert("Seat has been taken! Please select other!");
+                    		for(var i=0; i<$scope.roundTripObj.length; ++i) {
+                    			if($scope.roundTripObj[i] == seat) {
+                    				$scope.roundTripObj.splice(i, 1);
+                    			}
+                    		}
+                    		return;
+                    	}
                         seat.successfullyReserved = true;
                         $scope.recommendation = true;
                         ++$scope.numOfReservationsMade;
@@ -121,7 +128,6 @@ angular.module('flightApp').controller('FlightReservationController', [
         }
 
         $scope.search = function(seat) {
-            debugger;
             var searchOutput = [];
             FriendService.loadAllFriends()
                 .then(
@@ -148,7 +154,6 @@ angular.module('flightApp').controller('FlightReservationController', [
         }
 
         $scope.hideSearchFriendForm = function(seat) {
-            debugger;
             seat.inviteFriend = false;
             seat.filterFriends = [];
         }
@@ -159,7 +164,6 @@ angular.module('flightApp').controller('FlightReservationController', [
         }
 
         $scope.invite = function(seat) {
-            debugger;
             var obj = {};
             obj.name = seat.name;
             obj.lastname = seat.lastname;

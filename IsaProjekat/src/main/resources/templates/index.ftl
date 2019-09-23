@@ -105,6 +105,7 @@
     <script src="js/app/controllers/ChangePasswordController.js"></script>
     <script src="js/app/controllers/FlightReservationController.js"></script>
     <script src="js/app/controllers/ReservationListController.js"></script>
+    <script src="js/app/controllers/EditRoomController.js"></script>
     
     <script src="js/app/controllers/AvioFastReservationsController.js"></script>
 

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.ftn.isa.converters.HotelServicesConverter;
 import edu.ftn.isa.model.Hotel;
-import edu.ftn.isa.model.HotelService;
+import edu.ftn.isa.model.HotelServiceModel;
 import edu.ftn.isa.model.Room;
 import edu.ftn.isa.repositories.HotelRepository;
 import edu.ftn.isa.repositories.HotelServicesRepository;
@@ -62,8 +62,8 @@ public class HotelController {
 	public ResponseEntity<?> getHotelService(
 			@PathVariable("id") Long hotelid) {
 		Optional<Hotel> hotel = hotelRepo.findById(hotelid);
-		List<HotelService> services = hotelServRepo.findByHotel(hotel.get());
-		return new ResponseEntity<List<HotelService>>(services, HttpStatus.OK);
+		List<HotelServiceModel> services = hotelServRepo.findByHotel(hotel.get());
+		return new ResponseEntity<List<HotelServiceModel>>(services, HttpStatus.OK);
 		
 	}
 	

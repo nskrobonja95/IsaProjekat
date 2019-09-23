@@ -34,9 +34,11 @@ import edu.ftn.isa.dto.AvioStatisticsDTO;
 import edu.ftn.isa.dto.FlightForStatsDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Flight;
+import edu.ftn.isa.model.User;
 import edu.ftn.isa.payload.LoginPayload;
 import edu.ftn.isa.repositories.AvioRepository;
 import edu.ftn.isa.repositories.FlightRepository;
+import edu.ftn.isa.repositories.UserRepository;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -54,6 +56,9 @@ public class TestStatsService {
 	
 	@Autowired
 	private AvioRepository avioRepo;
+	
+	@Autowired
+	private UserRepository userRepo;
 	
 	@Autowired
 	private FlightRepository flightRepo;
@@ -92,8 +97,8 @@ public class TestStatsService {
 		}
 		statsRes.setFlights(flights);
 		
-		avio = avioRepo.findById(1L).get();
-		AvioStatisticsDTO statsDto = statsService.getAvioStats(avio);
+		User user = userRepo.findByUsername("nikolaUser");
+		AvioStatisticsDTO statsDto = statsService.getAvioStats(user);
 		statsDto.getAvgAvioRate();
 		
 		assertTrue(statsDto.equals(statsRes));

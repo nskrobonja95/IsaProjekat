@@ -20,7 +20,7 @@ app.constant('urls', {
     HOTEL_ADMIN_API: 'http://localhost:8080/hoteladmin/',
     ENTITY_ADMIN_API: 'http://localhost:8080/entityadmin/',
     SYS_ADMIN_API: 'http://localhost:8080/admin/',
-    RESERVATION_SERVICE_API: 'http://localhost:8080/reserve/',
+    RESERVATION_SERVICE_API: 'localhost://localhost:8080/reserve/',
     AVIO_SERVICE_API: 'http://localhost:8080/avio/',
     REGISTER_SERVICE_API : 'http://localhost:8080/auth/register',
     LOGIN_SERVICE_API : 'http://localhost:8080/auth/login',
@@ -270,6 +270,24 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 resolve: {
                     initialRooms: ['HotelService', function(HotelService){
                         return HotelService.loadRoomsForAdmin();
+                    }]
+                }
+            })
+            .state('home-abstract.edit-room',{
+                url:'/edit-room/:roomId',
+                views: {
+                    'edit-room': {
+                        templateUrl: "partials/edit-room",
+                        controller: "EditRoomController",
+                        controllerAs: "editRoomsCtrl"
+                    }
+                },
+                resolve: {
+                    initialRoom: ['$stateParams', 'HotelService',function($stateParams, HotelService){
+                        return HotelService.getRoomById($stateParams.roomId);
+                    }],
+                    initialHotelServices: ['$stateParams', 'HotelService',function($stateParams, HotelService){
+                        return HotelService.loadHotelServicesByRoomId($stateParams.roomId);
                     }]
                 }
             })

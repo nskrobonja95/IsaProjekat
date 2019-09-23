@@ -37,7 +37,6 @@ angular.module('flightApp').controller('GeneralSettingsController',
                         self.errorMessage='';
                         self.done = true;
                         self.dataLoading = false;
-                        debugger;
                         LoginService.setCredentialsUsername(response.response.username);
                         //LoginService.ClearCredentials();
                         $state.go('home-abstract.settings-abstract.general-settings');

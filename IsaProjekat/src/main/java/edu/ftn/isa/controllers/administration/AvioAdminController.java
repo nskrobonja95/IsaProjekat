@@ -1,16 +1,10 @@
 package edu.ftn.isa.controllers.administration;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,22 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.ftn.isa.dto.AvioStatisticsDTO;
 import edu.ftn.isa.dto.BasicAvioInfoDTO;
 import edu.ftn.isa.dto.DestinationDTO;
-import edu.ftn.isa.dto.DestinationsWrapper;
 import edu.ftn.isa.dto.FlightDTO;
-import edu.ftn.isa.dto.SeatConfigDTO;
-import edu.ftn.isa.dto.SeatDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
-import edu.ftn.isa.model.FlightClass;
-import edu.ftn.isa.model.FlightReservation;
-import edu.ftn.isa.model.FlightSeat;
-import edu.ftn.isa.repositories.AvioRepository;
-import edu.ftn.isa.repositories.DestinationRepository;
-import edu.ftn.isa.repositories.FlightRepository;
-import edu.ftn.isa.repositories.FlightReservationRepository;
-import edu.ftn.isa.repositories.FlightSeatRepository;
 import edu.ftn.isa.security.CustomUserDetails;
+import edu.ftn.isa.services.AvioService;
+import edu.ftn.isa.services.DestinationService;
+import edu.ftn.isa.services.FlightService;
 import edu.ftn.isa.services.StatsService;
 
 @RestController
@@ -52,19 +38,13 @@ import edu.ftn.isa.services.StatsService;
 public class AvioAdminController {
 	
 	@Autowired
-	private FlightRepository flightRepo;
+	private DestinationService destService;
 	
 	@Autowired
-	private DestinationRepository destRepo;
+	private AvioService avioService;
 	
 	@Autowired
-	private AvioRepository avioRepo;
-	
-	@Autowired
-	private FlightSeatRepository flightSeatRepo;
-	
-	@Autowired
-	private FlightReservationRepository flightResRepo;
+	private FlightService flightService;
 	
 	@Autowired
 	private StatsService statsService;
@@ -72,106 +52,44 @@ public class AvioAdminController {
 	@PostMapping("/addFlight")
 	public ResponseEntity<?> addFlight(@Valid
 			@RequestBody Flight flight) {
-		flightRepo.save(flight);
+		Flight f = flightService.saveFlight(flight);
+		if(f == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@PostMapping("/createDestination")
-	public ResponseEntity<?> createDestination(@Valid
-			@RequestBody Destination dest) {
-		destRepo.save(dest);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
+//	@PostMapping("/addDestination/{id}")
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public ResponseEntity<?> createDestination(@Valid
+//			@RequestBody Destination dest, 
+//			@PathVariable("id") Long id) {
+//		Optional<AvioCompany> optionalAvio = avioRepo.findById(id);
+//		if(!optionalAvio.isPresent())
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		AvioCompany avio = optionalAvio.get();
+//		avio.getDestinations().add(dest);
+//		avioRepo.save(avio);
+//		return new ResponseEntity<>(HttpStatus.OK);
+//	}
 	
-	@PostMapping("/addDestination/{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseEntity<?> createDestination(@Valid
-			@RequestBody Destination dest, 
-			@PathVariable("id") Long id) {
-		Optional<AvioCompany> optionalAvio = avioRepo.findById(id);
-		if(!optionalAvio.isPresent())
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		AvioCompany avio = optionalAvio.get();
-		avio.getDestinations().add(dest);
-		avioRepo.save(avio);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	@PostMapping("/addDestinations/{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseEntity<?> addDestinations(
-			@RequestBody DestinationsWrapper destsDto, 
-			@PathVariable("id") Long id) {
-		Optional<AvioCompany> optionalAvio = avioRepo.findById(id);
-		if(!optionalAvio.isPresent())
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		AvioCompany avio = optionalAvio.get();
-		for(int i=0; i<destsDto.getDestinations().size(); ++i) {
-			avio.getDestinations().add(destRepo.findByNameAndDeleted(
-					destsDto.getDestinations().get(i).getName(), false));
-		}
-		avioRepo.save(avio);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	@PostMapping("/addFlight/{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseEntity<?> createFlight(@Valid
-			@RequestBody Flight flight,
-			@PathVariable("id") Long avioId) {
-		Optional<AvioCompany> avio = avioRepo.findById(avioId);
-		if(!avio.isPresent())
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		flight.setAvioCompany(avio.get());
-		flightRepo.save(flight);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	@PostMapping("/createSeats/{flightId}")
-	public ResponseEntity<?> createSeatsAPI(@RequestBody SeatConfigDTO configDto, 
-			@PathVariable("flightId") Long flightId) {
-		Flight f = flightRepo.findById(flightId).get();
-//		switch(configDto.getConfigType()) {
-//			case "SmallJet": createSeats(configDto.getNumOfRows(), 6, f); break;
-//			case "MediumJet": createSeats(configDto.getNumOfRows(), 7, f); break;
-//			case "AirBus": createSeats(configDto.getNumOfRows(), 8, f); break;
-//			case "JumboJet": createSeats(configDto.getNumOfRows(), 10, f); break;
-//		}
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	private void createSeats(int numOfRows, String configType, Flight f) {
-		int numOfCols = 6;
-		switch(configType) {
-		case "SmallJet":  numOfCols = 6; break;
-		case "MediumJet": numOfCols = 7; break;
-		case "AirBus": numOfCols = 8; break;
-		case "JumboJet": numOfCols = 9; break;
-		}
-		int seatNumber = 0;
-		for(int i=1; i<=numOfRows; ++i) {
-			for(int j=1; j<=numOfCols; ++j) {
-				FlightSeat fs = new FlightSeat();
-				fs.setAvailable(true);
-				fs.setFastReservation(false);
-				fs.setFlight(f);
-				fs.setColNo(j);
-				fs.setRowNo(i);
-				fs.setSeatNumber(++seatNumber);
-				if(i <= numOfRows/3)
-					fs.setFlightClass(FlightClass.Business);
-				else
-					fs.setFlightClass(FlightClass.Economic);
-				flightSeatRepo.save(fs);
-			}
-		}
-	}
+//	@PostMapping("/addFlight/{id}")
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	public ResponseEntity<?> createFlight(@Valid
+//			@RequestBody Flight flight,
+//			@PathVariable("id") Long avioId) {
+//		Optional<AvioCompany> avio = avioRepo.findById(avioId);
+//		if(!avio.isPresent())
+//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		flight.setAvioCompany(avio.get());
+//		flightRepo.save(flight);
+//		return new ResponseEntity<>(HttpStatus.OK);
+//	}
 
 	@GetMapping("/getCompany")
 	public ResponseEntity<?> getAvioCompany() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany retVal = avioRepo.findByAdmin(userDetails.getUser());
+		AvioCompany retVal = avioService.getAvioByAdmin(userDetails.getUser());
+		if(retVal == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<AvioCompany>(retVal, HttpStatus.OK);
 	}
 	
@@ -179,22 +97,17 @@ public class AvioAdminController {
 	public ResponseEntity<?> updateBasicCompanyInfo(@RequestBody BasicAvioInfoDTO avioDto) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany avioToModify = avioRepo.findByAdmin(userDetails.getUser());
-		avioToModify.setName(avioDto.getName());
-		avioToModify.setAddress(avioDto.getAddress());
-		avioToModify.setPromo(avioDto.getPromo());
-		avioRepo.save(avioToModify);
-		return new ResponseEntity<AvioCompany>(avioToModify, HttpStatus.OK);
+		AvioCompany modifiedAvio = avioService.updateAvio(avioDto, userDetails.getUser());
+		if(modifiedAvio == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<AvioCompany>(modifiedAvio, HttpStatus.OK);
 	}
 	
 	@PostMapping("/addDestination")
 	public ResponseEntity<?> addDest(@RequestBody DestinationDTO destDto) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
-		Destination dest = destRepo.findByNameAndDeleted(destDto.getName(), false);
-		avio.getDestinations().add(dest);
-		avioRepo.save(avio);
+		AvioCompany avio = avioService.addDestinationToAvio(destDto.getName(), userDetails.getUser());
+		if(avio == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<AvioCompany>(avio, HttpStatus.OK);
 	}
 	
@@ -202,18 +115,8 @@ public class AvioAdminController {
 	public ResponseEntity<?> removeDestatination(@PathVariable("id") Long id) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
-		Destination theDest = destRepo.findById(id).get();
-		List<FlightReservation> reservations = flightResRepo.findAvioCompanyAndDestination(avio, theDest);
-		if(reservations.isEmpty()) {
-			for(Destination dest : avio.getDestinations()) {
-				if(dest == theDest) {
-					avio.getDestinations().remove(dest);
-					break;
-				}
-			}
-		}
-		avioRepo.save(avio);
+		AvioCompany avio = avioService.removeDestinationFromAvio(id, userDetails.getUser());
+		if(avio == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<Collection<Destination>>(avio.getDestinations(), HttpStatus.OK);
 	}
 	
@@ -221,8 +124,7 @@ public class AvioAdminController {
 	public ResponseEntity<?> getFlights() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
-		List<Flight> flights = flightRepo.findByAvioCompany(avio);
+		List<Flight> flights = flightService.getFlightsOfAvio(userDetails.getUser());
 		return new ResponseEntity<List<Flight>>(flights, HttpStatus.OK);
 	}
 	
@@ -230,10 +132,7 @@ public class AvioAdminController {
 	public ResponseEntity<?> getDestinations() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
-		List<AvioCompany> avios = new ArrayList<AvioCompany>();
-		avios.add(avio);
-		List<Destination> dests = destRepo.findByAvioCompanies(avios);
+		List<Destination> dests = destService.getDestinationsForAdmin(userDetails.getUser());
 		return new ResponseEntity<List<Destination>>(dests, HttpStatus.OK);
 	}
 	
@@ -241,10 +140,7 @@ public class AvioAdminController {
 	public ResponseEntity<?> getRestOfDestinations() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
-		List<AvioCompany> avios = new ArrayList<AvioCompany>();
-		avios.add(avio);
-		List<Destination> dests = destRepo.findRestOfDestinations(avio.getId());
+		List<Destination> dests = destService.getRestOfDestinationsForAdmin(userDetails.getUser());
 		return new ResponseEntity<List<Destination>>(dests, HttpStatus.OK);
 	}
 	
@@ -252,56 +148,17 @@ public class AvioAdminController {
 	public ResponseEntity<?> createFlight(@RequestBody FlightDTO flightData) throws ParseException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
-		Destination from = destRepo.findByNameAndDeleted(flightData.getFrom(), false);
-		Destination to = destRepo.findByNameAndDeleted(flightData.getTo(), false);
-		Date takeoff = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(flightData.getDepart());
-		Date landing = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(flightData.getLand());
-		Flight flight = new Flight();
-		flight.setAvioCompany(avio);
-		flight.setBaggageOver7Price(flightData.getPriceForBaggageOver7kg());
-		flight.setBaggageOver20Price(flightData.getPriceForBaggageOver14kg());
-		flight.setEconomicClassPrice(flightData.getEconomicPrice());
-		flight.setBussinessClassPrice(flightData.getBusinessPrice());
-		flight.setFrom(from);
-		flight.setToDest(to);
-		flight.setTakeoff(takeoff);
-		flight.setLanding(landing);
-		flight.setConfigurationType(flightData.getConfigType());
-		flight.setNumOfRows(flightData.getNumOfRows());
-		flight.setDiscount(flightData.getDiscount());
-		flightRepo.save(flight);
-		saveSeats(flight, flightData.getSeats());
-		return new ResponseEntity<>(HttpStatus.OK); 
+		Flight flight = flightService.createFlight(userDetails.getUser(), flightData);
+		if(flight == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@GetMapping("/avioStatistics")
 	public ResponseEntity<?> avioStatistics() throws ParseException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany avio = avioRepo.findByAdmin(userDetails.getUser());
-		
-		AvioStatisticsDTO stats = statsService.getAvioStats(avio);
-		
+		AvioStatisticsDTO stats = statsService.getAvioStats(userDetails.getUser());
 		return new ResponseEntity<AvioStatisticsDTO>(stats, HttpStatus.OK);
-	}
-
-	private void saveSeats(Flight flight, List<SeatDTO> seats) {
-		int seatNumber = 0;
-		for(int i=0; i<seats.size(); ++i) {
-			FlightSeat fs = new FlightSeat();
-			fs.setAvailable(true);
-			fs.setFastReservation(seats.get(i).isFastRes());
-			fs.setFlight(flight);
-			fs.setColNo(seats.get(i).getColNum());
-			fs.setRowNo(seats.get(i).getRowNum());
-			fs.setSeatNumber(++seatNumber);
-			if(seats.get(i).getFlightClass().equals("business"))
-				fs.setFlightClass(FlightClass.Business);
-			else
-				fs.setFlightClass(FlightClass.Economic);
-			flightSeatRepo.save(fs);
-		}
 	}
 	
 }
