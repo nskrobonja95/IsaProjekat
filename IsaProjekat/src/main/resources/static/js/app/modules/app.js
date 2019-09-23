@@ -230,6 +230,21 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     }]
                 }
             })
+            .state('home-abstract.hotel-admin-welcome',{
+                url:'/hotel-admin-welcome',
+                views: {
+                    'hotel-admin-welcome': {
+                        templateUrl: "partials/hotel-admin-welcome",
+                        controller: "HotelAdminWelcomeController",
+                        controllerAs: "hawCtrl"
+                    }
+                },
+                resolve: {
+                    initalHotelList: ['HotelService', function(HotelService){
+                        return HotelService.loadHotelListForAdmin($rootScope.globals.currentUser.username);
+                    }]
+                }
+            })
             .state('home-abstract.hotel-admin',{
                 url:'/hotel-admin',
                 views: {

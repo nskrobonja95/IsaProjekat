@@ -22,8 +22,25 @@
         service.getAllUserHotelReservations = getAllUserHotelReservations;
         service.cancelReservation = cancelReservation;
         service.rateReservation = rateReservation;
+        service.loadHotelListForAdmin = loadHotelListForAdmin;
         return service;
 
+        function loadHotelListForAdmin(username) {
+            var list = $http.get(urls.HOTEL_ADMIN_API+'getHotels/'+ username)
+            .then(function (response) {
+                console.log("Hotel service response:", response);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  hotels list!", error);
+            });
+
+            return $q.all([list])
+                .then(function (results) {
+                    return {
+                        list: results[0]
+                    };
+                });
+        }
         function cancelReservation(reservationId){
             var canceled = $http.put(urls.USERS_SERVICE_API+'cancelAccomodation/'+reservationId)
             .then(function (response) {

@@ -784,7 +784,7 @@ form.blackbg{
 .btn {
 	letter-spacing: 1px;
 	text-decoration: none;
-	background: none;
+	/* background: none; */
     -moz-user-select: none;
     background-image: none;
     border: 1px solid transparent;
