@@ -8,6 +8,7 @@ angular.module('flightApp').controller('EditRoomController',
             self.services = initialHotelServices.hotelServices;
             self.checkedServices = {};
             self.editRoom = editRoom;
+            self.editBack = editBack;
             console.log(self.services);
             for(var j=0; j<self.services.length; ++j) {
                 var roomService = self.services[j];
@@ -27,7 +28,9 @@ angular.module('flightApp').controller('EditRoomController',
                 // }
             }
             console.log(self.checkedServices);
-
+            function editBack(){
+                $state.go("home-abstract.hotel-admin-hotel-profile.admin-rooms-list",{hotelId: self.room.hotel.id});
+            }
             function editRoom() {
                 console.log(self.room);
                 var obj = {};
@@ -138,11 +141,10 @@ angular.module('flightApp').controller('EditRoomController',
                 console.log(obj);
                 HotelService.editRoom(obj)
                     .then(function(response) {
-                        debugger;
                         if(response.response.status == 400){
                             alert("Reservations exist for this room");
                         }
-                        $state.go("home-abstract.admin-rooms-list");
+                        $state.go("home-abstract.hotel-admin-hotel-profile.admin-rooms-list",{hotelId: self.room.hotel.id});
                     }, function(errResponse) {
                         console.log(errResponse);
                     });

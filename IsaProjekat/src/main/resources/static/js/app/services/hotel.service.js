@@ -29,8 +29,8 @@
         service.loadHotelListForAdmin = loadHotelListForAdmin;
         return service;
 
-        function loadHotelListForAdmin(username) {
-            var list = $http.get(urls.HOTEL_ADMIN_API+'getHotels/'+ username)
+        function loadHotelListForAdmin() {
+            var list = $http.get(urls.HOTEL_ADMIN_API+'getHotels/')
             .then(function (response) {
                 console.log("Hotel service response:", response);
                 return response.data;
@@ -233,8 +233,8 @@
                 });
         }
 
-        function loadHotelForAdmin() {
-            var hotel = $http.get(urls.HOTEL_ADMIN_API+'getHotel')
+        function loadHotelForAdmin(id) {
+            var hotel = $http.get(urls.HOTEL_ADMIN_API+'getHotel/'+id)
             .then(function (response) {
                 console.log("Hotel service response:", response);
                 return response.data;
@@ -267,8 +267,8 @@
                 });
         }
 
-        function loadHotelServicesForAdmin() {
-            var hotelServices = $http.get(urls.HOTEL_ADMIN_API+'getServices/')
+        function loadHotelServicesForAdmin(id) {
+            var hotelServices = $http.get(urls.HOTEL_ADMIN_API+'getServices/'+id)
             .then(function (response) {
                 console.log("Search hotel service response:", response.data);
                 return response.data;
@@ -284,8 +284,8 @@
                 });
         }
 
-        function saveService(obj) {
-            var service = $http.post(urls.HOTEL_ADMIN_API+'saveService', obj)
+        function saveService(obj, hotelId) {
+            var service = $http.post(urls.HOTEL_ADMIN_API+'saveService/'+hotelId, obj)
             .then(function (response) {
                 console.log("Add service response:", response.data);
                 return response.data;
@@ -301,13 +301,13 @@
                 });
         }
 
-        function removeService(id) {
-            var services = $http.delete(urls.HOTEL_ADMIN_API+'removeService/' + id)
+        function removeService(serviceId, hotelId) {
+            var services = $http.delete(urls.HOTEL_ADMIN_API+'removeService/' + serviceId + "/" + hotelId)
             .then(function (response) {
                 console.log("Add service response:", response.data);
                 return response.data;
             }, function (error) {
-                console.log("Error occured while adding hotel service!", error);
+                console.log("Error occured while removing hotel service!", error);
             });
 
             return $q.all([services])
@@ -318,13 +318,13 @@
                 });
         }
 
-        function loadRoomsForAdmin() {
-            var hotelRooms = $http.get(urls.HOTEL_ADMIN_API+'getRooms/')
+        function loadRoomsForAdmin(id) {
+            var hotelRooms = $http.get(urls.HOTEL_ADMIN_API+'getRooms/'+id)
             .then(function (response) {
-                console.log("Search hotel service response:", response.data);
+                console.log("Load rooms for admin response:", response.data);
                 return response.data;
             }, function (error) {
-                console.log("Error occured while initializing  Hotel!", error);
+                console.log("Error occured while initializing  admin room!", error);
             });
 
             return $q.all([hotelRooms])
@@ -335,11 +335,11 @@
                 });
         }
 
-        function saveRoom(obj) {
-            var response = $http.post(urls.HOTEL_ADMIN_API+'saveRoom', obj)
+        function saveRoom(obj, id) {
+            var response = $http.post(urls.HOTEL_ADMIN_API+'saveRoom/'+id, obj)
             .then(function (response) {
-                console.log("Search hotel service response:", response.data);
-                return response.data;
+                console.log("Search hotel service response:", response);
+                return response;
             }, function (error) {
                 console.log("Error occured while initializing  Hotel!", error);
             });

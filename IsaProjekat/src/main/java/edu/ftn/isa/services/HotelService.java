@@ -1,5 +1,8 @@
 package edu.ftn.isa.services;
 
+import java.util.List;
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,6 @@ import edu.ftn.isa.model.Role;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.repositories.DestinationRepository;
 import edu.ftn.isa.repositories.HotelRepository;
-import edu.ftn.isa.repositories.RentACarRepository;
 import edu.ftn.isa.repositories.UserRepository;
 
 @Service
@@ -64,6 +66,20 @@ public class HotelService {
 		return retVal;
 	}
 
+	@Transactional
+	public List<Hotel> findHotelsByAdmin(User user) {
+		List<Hotel> hotels = hotelRepo.findHotelsByAdmin(user);
+		return hotels;
+	}
+	@Transactional
+	public Hotel findHotelById(Long id) {
+		Optional<Hotel> temp = hotelRepo.findById(id);
+		if(!temp.isPresent()) {
+			return null;
+		}
+		Hotel hotel = temp.get();
+		return hotel;
+	}
 	@Transactional
 	public Hotel updateBasicHotelInfo(User user, BasicHotelInfoDTO hotelDto) {
 		Hotel retVal = hotelRepo.findByAdmin(user);

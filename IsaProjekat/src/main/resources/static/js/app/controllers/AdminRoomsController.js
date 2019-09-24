@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('flightApp').controller('AdminRoomsController',
-    ['$scope', '$rootScope', '$state', 'HotelService', 'initialRooms',
-        function ($scope, $rootScope, $state, HotelService, initialRooms) {
+    ['$scope', '$rootScope', '$state', 'HotelService', 'initialRooms','$stateParams', 
+        function ($scope, $rootScope, $state, HotelService, initialRooms, $stateParams) {
             var self = this;
             console.log(initialRooms);
             self.rooms = initialRooms.hotelRooms;
@@ -10,7 +10,7 @@ angular.module('flightApp').controller('AdminRoomsController',
             self.todayDate = new Date();
             self.goToEditPage = goToEditPage;
             self.removeRoom = removeRoom;
-
+            self.createRoom = createRoom;
             function activePriceCheck(price) {
                 var fromDate = new Date(price.activeFrom);
                 var toDate = new Date(price.activeTo);
@@ -18,10 +18,11 @@ angular.module('flightApp').controller('AdminRoomsController',
             }
 
             function goToEditPage(room) {
-                debugger;
                 $state.go("home-abstract.edit-room", {roomId: room.id});
             }
-
+            function createRoom(){
+                $state.go("home-abstract.create-room",{hotelId: $stateParams.hotelId});
+            }
             function removeRoom(room) {
                 HotelService.deleteRoom(room.id)
                     .then(function(response) {

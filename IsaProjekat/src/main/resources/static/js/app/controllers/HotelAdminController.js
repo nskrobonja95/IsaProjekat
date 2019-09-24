@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('flightApp').controller('HotelAdminController',
-    ['$scope', '$rootScope', '$state', 'HotelService', 'hotelData', 'initialHotelServices',
-        function ($scope, $rootScope, $state, HotelService, hotelData, initialHotelServices) {
+    ['$scope', '$rootScope', '$state', 'HotelService', 'hotelData', 'initialHotelServices','$stateParams',
+        function ($scope, $rootScope, $state, HotelService, hotelData, initialHotelServices, $stateParams) {
             var self = this;
             console.log(hotelData);
             console.log(hotelData.hotel);
@@ -54,11 +54,12 @@ angular.module('flightApp').controller('HotelAdminController',
             }
 
             function addService() {
-                $state.go("home-abstract.add-service");
+                console.log("Usao u fju")
+                $state.go("home-abstract.add-service",{hotelId:$stateParams.hotelId});
             }
 
-            function removeService(id) {
-                HotelService.removeService(id)
+            function removeService(serviceId) {
+                HotelService.removeService(serviceId, $stateParams.hotelId)
                     .then(function(response) {
                         self.hotelServices = response.services;
                     }, function(errResponse) {

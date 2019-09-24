@@ -64,15 +64,20 @@ public class HotelAdminController {
 	@Autowired
 	private PriceOfRoomRepository priceOfRoomRepo;
 
-	@GetMapping("/getHotel")
-	public ResponseEntity<?> getAvioCompany() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		Hotel hotel = hotelService.findHotelByAdmin(userDetails.getUser());
+	@GetMapping("/getHotel/{id}")
+	public ResponseEntity<?> getHotel(@PathVariable("id") Long id) {
+		Hotel hotel = hotelService.findHotelById(id);
 		if(hotel == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<Hotel>(hotel, HttpStatus.OK);
 	}
-	
+	@GetMapping("/getHotels")
+	public ResponseEntity<?> getHotels() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		List<Hotel> hotel = hotelService.findHotelsByAdmin(userDetails.getUser());
+		if(hotel == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<List<Hotel>>(hotel, HttpStatus.OK);
+	}
 	@PutMapping("/updateBasicHotelInfo")
 	public ResponseEntity<?> updateBasicHotelInfo(@RequestBody BasicHotelInfoDTO hotelDto) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -82,45 +87,39 @@ public class HotelAdminController {
 		return new ResponseEntity<Hotel>(retVal, HttpStatus.OK);
 	}
 	
-	@GetMapping("/getServices")
-	public ResponseEntity<?> getServices() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		List<HotelServiceModel> hotelServices = hotelServiceService.findByHotel(userDetails.getUser());
+	@GetMapping("/getServices/{id}")
+	public ResponseEntity<?> getServices(@PathVariable("id") Long id) {
+		List<HotelServiceModel> hotelServices = hotelServiceService.findByHotel(id);
 		if(hotelServices == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<List<HotelServiceModel>>(hotelServices, HttpStatus.OK);
 	}
 	
-	@PostMapping("/saveService")
-	public ResponseEntity<?> saveService(@RequestBody AddHotelServiceDTO serviceDto) {
+	@PostMapping("/saveService/{id}")
+	public ResponseEntity<?> saveService(@PathVariable("id") Long id, @RequestBody AddHotelServiceDTO serviceDto) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		HotelServiceModel hotelService = hotelServiceService.saveService(userDetails.getUser(), serviceDto);
+		HotelServiceModel hotelService = hotelServiceService.saveService(id, serviceDto);
 		if(hotelService == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<HotelServiceModel>(hotelService, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("removeService/{id}")
-	public ResponseEntity<?> removeService(@PathVariable("id") Long id) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		List<HotelServiceModel> services = hotelServiceService.removeService(id, userDetails.getUser());
+	@DeleteMapping("removeService/{serviceId}/{hotelId}")
+	public ResponseEntity<?> removeService(@PathVariable("serviceId") Long serviceId, @PathVariable("hotelId") Long hotelId) {
+		
+		List<HotelServiceModel> services = hotelServiceService.removeService(serviceId, hotelId);
 		if(services == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<List<HotelServiceModel>>(services, HttpStatus.OK);
 	}
 	
-	@GetMapping("/getRooms")
-	public ResponseEntity<?> getRooms() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		List<Room> rooms = roomService.getRoomsForAdmin(userDetails.getUser());
+	@GetMapping("/getRooms/{id}")
+	public ResponseEntity<?> getRooms(@PathVariable("id") Long id) {
+		List<Room> rooms = roomService.getRoomsForAdmin(id);
 		return new ResponseEntity<List<Room>>(rooms, HttpStatus.OK);
 	}
 	
-	@PostMapping("/saveRoom")
-	public ResponseEntity<?> saveRoom(@RequestBody CreateRoomDTO roomDto) throws ParseException {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	@PostMapping("/saveRoom/{id}")
+	public ResponseEntity<?> saveRoom(@RequestBody CreateRoomDTO roomDto, @PathVariable("id") Long id) throws ParseException {
+		System.out.println("Usao ovde:" + id);
 //		Hotel hotel = hotelRepo.findByAdmin(userDetails.getUser());
 //		Room room = new Room();
 //		room.setHotel(hotel);
@@ -153,13 +152,14 @@ public class HotelAdminController {
 //			price.setRoom(room);
 //			priceOfRoomRepo.save(price);
 //		}
-		Room savedRoom = roomService.saveRoom(roomDto, userDetails.getUser());
+		Room savedRoom = roomService.saveRoom(roomDto, id);
 		if(savedRoom == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PutMapping("/editRoom")
 	public ResponseEntity<?> editRoom(@RequestBody EditRoomDTO room) throws ParseException {
+		
 		Room retVal = roomService.editRoom(room);
 		if(retVal == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(HttpStatus.OK);

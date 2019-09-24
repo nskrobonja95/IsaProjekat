@@ -39,4 +39,8 @@ public interface HotelRepository extends JpaRepository<Hotel, Long>{
 	
 	Hotel findByAdmin(User user);
 	
+	@Query("SELECT h from Hotel h where h.admin = :user")
+	List<Hotel> findHotelsByAdmin(@Param("user") User user);
+	
+	
 }

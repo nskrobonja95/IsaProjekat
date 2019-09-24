@@ -32,8 +32,6 @@ import edu.ftn.isa.dto.FlightReservationDTO;
 import edu.ftn.isa.dto.FriendsDTO;
 import edu.ftn.isa.dto.HotelReservationDTO;
 import edu.ftn.isa.dto.InviteFriendFlightReservationDTO;
-import edu.ftn.isa.dto.ReservationsDTO;
-import edu.ftn.isa.dto.SeatDTO;
 import edu.ftn.isa.dto.SeatRowDTO;
 import edu.ftn.isa.dto.UserDTO;
 import edu.ftn.isa.dto.UserHotelReservationDTO;
@@ -316,7 +314,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/sendInvitation")
-	public ResponseEntity<?> sendInvitation(@RequestBody InviteFriendFlightReservationDTO reservationDto) {
+	public ResponseEntity<?> sendInvitation(@RequestBody InviteFriendFlightReservationDTO reservationDto) throws ParseException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		User user = userDetails.getUser();
@@ -352,6 +350,10 @@ public class UserController {
 		res.setUser(userRecipient);
 		res.setFastReservation(false);
 		res.setRate(0);
+		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date todayDate = new Date();
+		Date reserveDate = formatter.parse(formatter.format(todayDate));
+		res.setReserveDate(reserveDate);
 		flightResRepo.save(res);
 		if(reservationDto.getSeats().size() == 1) {
 			confirm += "0";

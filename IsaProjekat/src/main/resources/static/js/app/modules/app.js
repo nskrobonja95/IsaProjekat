@@ -240,12 +240,23 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     }
                 },
                 resolve: {
-                    initalHotelList: ['HotelService', function(HotelService){
+                    initalHotelList: ['HotelService','$rootScope', function(HotelService, $rootScope){
                         return HotelService.loadHotelListForAdmin($rootScope.globals.currentUser.username);
                     }]
                 }
             })
-            .state('home-abstract.hotel-admin',{
+            .state('home-abstract.hotel-admin-hotel-profile',{
+                url:'/hotel-admin-hotel-profile/:hotelId',
+                abstract:true,
+                views: {
+                    'hotel-admin-hotel-profile': {
+                        templateUrl: "partials/hotel-admin-hotel-profile",
+                        controller: "HotelAdminHotelProfileController",
+                        controllerAs: "hahpCtrl"
+                    }
+                }
+            })
+            .state('home-abstract.hotel-admin-hotel-profile.hotel-admin',{
                 url:'/hotel-admin',
                 views: {
                     'hotel-admin': {
@@ -255,16 +266,26 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     }
                 },
                 resolve: {
-                    hotelData: ['HotelService', function(HotelService){
-                        return HotelService.loadHotelForAdmin();
+                    hotelData: ['HotelService','$stateParams', function(HotelService, $stateParams){
+                        return HotelService.loadHotelForAdmin($stateParams.hotelId);
                     }],
-                    initialHotelServices: ['HotelService',function(HotelService){
-                        return HotelService.loadHotelServicesForAdmin();
+                    initialHotelServices: ['HotelService', '$stateParams',function(HotelService, $stateParams){
+                        return HotelService.loadHotelServicesForAdmin($stateParams.hotelId);
                     }]
                 }
             })
+            .state('home-abstract.hotel-admin-hotel-profile.hotel-admin-statistics',{
+                url:'/hotel-admin-statistics',
+                views: {
+                    'hotel-admin-statistics': {
+                        template: "partials/hotel-admin",
+                        controller: "HotelAdminController",
+                        controllerAs: "hotelAdminCtrl"
+                    }
+                }
+            })
             .state('home-abstract.add-service',{
-                url:'/add-service',
+                url:'/add-service/:hotelId',
                 views: {
                     'add-service': {
                         templateUrl: "partials/add-service",
@@ -274,7 +295,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 }
             })
             .state('home-abstract.create-room',{
-                url:'/create-room',
+                url:'/create-room/:hotelId',
                 views: {
                     'create-room': {
                         templateUrl: "partials/create-room",
@@ -283,12 +304,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     }
                 },
                 resolve: {
-                    initialHotelServices: ['HotelService',function(HotelService){
-                        return HotelService.loadHotelServicesForAdmin();
+                    initialHotelServices: ['HotelService','$stateParams',function(HotelService, $stateParams){
+                        return HotelService.loadHotelServicesForAdmin($stateParams.hotelId);
                     }]
                 }
             })
-            .state('home-abstract.admin-rooms-list',{
+            .state('home-abstract.hotel-admin-hotel-profile.admin-rooms-list',{
                 url:'/admin-rooms-list',
                 views: {
                     'admin-rooms-list': {
@@ -298,8 +319,8 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     }
                 },
                 resolve: {
-                    initialRooms: ['HotelService', function(HotelService){
-                        return HotelService.loadRoomsForAdmin();
+                    initialRooms: ['HotelService', '$stateParams', function(HotelService, $stateParams){
+                        return HotelService.loadRoomsForAdmin($stateParams.hotelId);
                     }]
                 }
             })

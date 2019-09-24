@@ -1,12 +1,17 @@
 'use strict';
 
 angular.module('flightApp').controller('CreateRoomController',
-    ['$scope', '$rootScope', '$state', 'HotelService', 'initialHotelServices',
-        function ($scope, $rootScope, $state, HotelService, initialHotelServices) {
+    ['$scope', '$rootScope', '$state', 'HotelService', 'initialHotelServices','$stateParams',
+        function ($scope, $rootScope, $state, HotelService, initialHotelServices, $stateParams) {
             var self = this;
             self.services = initialHotelServices.hotelServices;
             self.addRoom = addRoom;
+            self.addRoomBack = addRoomBack;
+            self.checkedServices = [];
 
+            function addRoomBack(){
+                $state.go("home-abstract.hotel-admin-hotel-profile.admin-rooms-list",{hotelId: $stateParams.hotelId});
+            }
             function addRoom() {
                 var obj = {};
                 obj.description = self.description;
@@ -89,15 +94,19 @@ angular.module('flightApp').controller('CreateRoomController',
                 obj.services = [];
                 for(var j=0; j<self.services.length; ++j) {
                     var roomService = self.services[j];
+                    debugger;
                     var serviceChecked = self.checkedServices[roomService.name];
                     if(serviceChecked){
                         obj.services.push(roomService.name);
                     }
                 }
                 console.log(obj);
-                HotelService.saveRoom(obj)
+                HotelService.saveRoom(obj, $stateParams.hotelId)
                     .then(function(response) {
-                        $state.go("home-abstract.admin-rooms-list");
+                        if(response.response.status == 200)
+                        $state.go("home-abstract.hotel-admin-hotel-profile.admin-rooms-list",{hotelId: $stateParams.hotelId});
+                        else
+                            alert("Stani malo covjece prokleti");
                     }, function(errResponse) {
                         console.log(errResponse);
                     });

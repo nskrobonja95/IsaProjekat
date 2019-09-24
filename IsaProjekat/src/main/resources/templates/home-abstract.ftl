@@ -304,6 +304,8 @@
 <div ui-view="avio-fast-reservations"></div>
 <div ui-view="edit-room"></div>
 <div ui-view="avio-statistics"></div>
+<div ui-view="hotel-admin-welcome"></div>
+<div ui-view="hotel-admin-hotel-profile"></div>
 
 <script>
   $('#loginModal').on('show.bs.modal', function (event) {
