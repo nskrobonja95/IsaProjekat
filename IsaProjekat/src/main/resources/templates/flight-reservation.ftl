@@ -13,12 +13,12 @@
           <div id="status-buttons" class="text-center">
               <a ui-sref-active="active" ui-sref=".interests"><span>1</span> Seats</a>
               <a ui-sref-active="active" ui-sref=".profile"><span>2</span> Information</a>
-              <a ui-sref-active="active" ui-sref=".payment"><span>3</span> Payment</a>
+              <a ui-sref-active="active" ui-sref=".payment"><span>3</span> Additional</a>
           </div>
       </div>
       
       <!-- use ng-submit to catch the form submission and use our Angular function -->
-      <form name="signupform" novalidate ng-submit="processForm()">
+      <form name="signupform" novalidate>
           <!-- our nested state views will be injected here  -->
           <div id="form-views" ui-view></div>
       </form>

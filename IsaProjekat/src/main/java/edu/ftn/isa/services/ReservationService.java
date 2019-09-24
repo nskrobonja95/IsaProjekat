@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import edu.ftn.isa.dto.FlightRatingDTO;
 import edu.ftn.isa.dto.FlightReservationDTO;
+import edu.ftn.isa.dto.FlightReservationResponseDTO;
 import edu.ftn.isa.dto.HotelReservationDTO;
 import edu.ftn.isa.dto.SeatDTO;
 import edu.ftn.isa.dto.SeatRowDTO;
@@ -79,6 +80,13 @@ public class ReservationService {
 			res.getFlightReservationSeats().get(i).setAvailable(true);
 		}
 		flightResRepo.save(res);
+		HotelReservation hr = res.getHotelReservation();
+		List<FlightReservation> reservations = flightResRepo.findByHotelReservationAndStatus(res.getHotelReservation(), ReservationStatus.APPROVED);
+		if(reservations == null || reservations.isEmpty()) {
+			hr.setCanceled(true);
+			hr.setStatus(ReservationStatus.CANCELED);
+			hotelResRepo.save(hr);
+		}
 		return true;
 	}
 	
@@ -147,6 +155,7 @@ public class ReservationService {
 		reservation.setCanceled(false);
 		reservation.setUser(user);
 		reservation.setRoom(room);
+		reservation.setStatus(ReservationStatus.APPROVED);
 		reservation.setArrivalDate(reservationDto.getArrivalDate());
 		reservation.setDepartingDate(reservationDto.getDepartingDate());
 		List<HotelServiceModel> services = new ArrayList<HotelServiceModel>();
@@ -157,6 +166,17 @@ public class ReservationService {
 		reservation.setServices(services);
 		
 		hotelResRepo.save(reservation);
+		if(reservationDto.getFlightReservationIds() != null) {	
+			for(int i=0; i<reservationDto.getFlightReservationIds().size(); ++i) {
+				Optional<FlightReservation> optFlightRes = flightResRepo.findById(reservationDto.getFlightReservationIds().get(i).longValue());
+				if(!optFlightRes.isPresent()) {
+					return false;
+				}
+				FlightReservation flightRes = optFlightRes.get();
+				flightRes.setHotelReservation(reservation);
+				flightResRepo.save(flightRes);
+			}
+		}
 		return true;
 	}
 	
@@ -194,6 +214,54 @@ public class ReservationService {
 	
 			
 		return true;
+	}
+	
+	@Transactional(readOnly=false, propagation = Propagation.REQUIRES_NEW)
+	@SuppressWarnings(value = { "unused" })
+	public FlightReservationResponseDTO reserveFlightSeat(List<FlightReservationDTO> flightDto, User user) throws ParseException {
+		//Flight flight = em.find(Flight.class, flightDto.getSeats().get(0).getFlight().getId(), LockModeType.PESSIMISTIC_FORCE_INCREMENT );
+		List<Integer> succussfulRetVal = new ArrayList<Integer>();
+		FlightReservationResponseDTO dto = new FlightReservationResponseDTO();
+		for(int j=0; j<flightDto.size(); ++j) {
+			FlightReservation reservation = new FlightReservation();
+			reservation.setUser(user);
+			reservation.setName(flightDto.get(j).getName());
+			reservation.setLastname(flightDto.get(j).getLastname());
+			reservation.setPassportNumber(flightDto.get(j).getPassportNumber());
+			reservation.setRate(0);
+			reservation.setStatus(ReservationStatus.APPROVED);
+			List<FlightSeat> seats = new ArrayList<FlightSeat>();
+			SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			Date todayDate = new Date();
+			Date reserveDate = formatter.parse(formatter.format(todayDate));
+			reservation.setReserveDate(reserveDate);
+			for(int i=0; i<flightDto.get(j).getSeats().size(); ++i) {
+	//			Optional<FlightSeat> optionalSeat = flightSeatRepo.findById(flightDto.getSeats().get(i).getId());
+	//			FlightSeat seat = optionalSeat.get();
+				FlightSeat seat = em.find(FlightSeat.class, flightDto.get(j).getSeats().get(i).getId(), LockModeType.OPTIMISTIC);
+				if(!seat.isAvailable()) {
+					List<Integer> temp = new ArrayList<Integer>();
+					temp.add(seat.getSeatNumber());
+					dto.setIds(temp);
+					dto.setSuccesfullyReserved(false);
+					return dto;
+				}
+				if(seat == null) {
+					List<Integer> temp = new ArrayList<Integer>();
+					dto.setIds(temp);
+					return dto;
+				}
+				seat.setAvailable(false);
+	//			if(seat.getVersion() != flightDto.getSeats().get(i).getVersion())
+	//				return false;
+				seats.add(seat);
+			}
+			reservation.setFlightReservationSeats(seats);
+			FlightReservation res = flightResRepo.save(reservation);
+			dto.getIds().add(res.getId().intValue());
+		}
+		dto.setSuccesfullyReserved(true);
+		return dto;
 	}
 	
 	@Transactional

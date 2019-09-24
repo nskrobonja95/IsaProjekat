@@ -46,26 +46,26 @@ public class ReservationController {
 	@Autowired
 	private ReservationService resService;
 	
-	@GetMapping("/flightUserReservationsList")
-	public ResponseEntity<?> getUserFlightReservations(){
-		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
-		User user = userDetails.getUser();
-		
-		List<FlightReservation> reservationsList = flightResRepo.getUserReservationsList(user.getId());
-		List<UserFlightReservationDTO> retVal = new ArrayList<UserFlightReservationDTO>();
-		for(FlightReservation reservation : reservationsList) {
-			retVal.add(new UserFlightReservationDTO(reservation.getId(),
-					reservation.getFlightReservationSeats(),
-					reservation.getRate(),
-					reservation.getName(),
-					reservation.getLastname(),
-					reservation.getStatus().toString()));
-		}
-		
-		return new ResponseEntity<List<UserFlightReservationDTO>>(retVal, HttpStatus.OK);
-	}
+//	@GetMapping("/flightUserReservationsList")
+//	public ResponseEntity<?> getUserFlightReservations(){
+//		
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+//		User user = userDetails.getUser();
+//		
+//		List<FlightReservation> reservationsList = flightResRepo.getUserReservationsList(user.getId());
+//		List<UserFlightReservationDTO> retVal = new ArrayList<UserFlightReservationDTO>();
+//		for(FlightReservation reservation : reservationsList) {
+//			retVal.add(new UserFlightReservationDTO(reservation.getId(),
+//					reservation.getFlightReservationSeats(),
+//					reservation.getRate(),
+//					reservation.getName(),
+//					reservation.getLastname(),
+//					reservation.getStatus().toString()));
+//		}
+//		
+//		return new ResponseEntity<List<UserFlightReservationDTO>>(retVal, HttpStatus.OK);
+//	}
 	
 //	@PostMapping("/flight")
 //	public ResponseEntity<?> reserveFlight(

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('flightApp').controller('FlightReservationController', [
-    '$scope', '$rootScope', 'AvioService', 'HotelService', 'FriendService', '$state','$stateParams', 'direct_flight', 'return_flight', 'dir_seats', 'ret_seats',
-    function ($scope, $rootScope, AvioService, HotelService, FriendService,$state, $stateParams, direct_flight, return_flight, dir_seats, ret_seats) {
+    '$scope', '$rootScope', 'AvioService', 'HotelService', 'UserService', 'FriendService', '$state','$stateParams', 'direct_flight', 'return_flight', 'dir_seats', 'ret_seats',
+    function ($scope, $rootScope, AvioService, HotelService, UserService, FriendService,$state, $stateParams, direct_flight, return_flight, dir_seats, ret_seats) {
         var self = this;
         self.dir_flight = direct_flight.flight;
         self.ret_flight = return_flight.flight;
@@ -24,6 +24,8 @@ angular.module('flightApp').controller('FlightReservationController', [
         $scope.friendsList = [];
         $scope.recommendation = false;
         $scope.numOfReservationsMade = 0;
+        $scope.successfullyReserved = false;
+        $scope.succesfulResponse = {};
         // console.log(direct_flight);
         // console.log(return_flight);
         // console.log(dir_seats);
@@ -54,6 +56,8 @@ angular.module('flightApp').controller('FlightReservationController', [
                 }
                 seat.available = false;
                 seat.reserved = true;
+                seat.forMeDisabled = false;
+                seat.forMyselfSelected = false;
                 seat.successfullyReserved = false;
                 seat.inviteFriend = false;
                 $scope.roundTripObj.push(seat);
@@ -70,12 +74,32 @@ angular.module('flightApp').controller('FlightReservationController', [
             }
             seat.available = false;
             seat.reserved = true;
+            seat.forMeDisabled = false;
+            seat.forMyselfSelected = false;
             // seat.successfullyReserved = false;
             $scope.dirSeatSelected = true;
             $scope.reservationObj.push(seat);
             $scope.reservationObj.successfullyReserved = false;
             $scope.reservationObj.inviteFriend = false;
             console.log($scope.roundTripObj);
+        }
+
+        $scope.enterUserData = function(seat) {
+            seat.forMyselfSelected = true;
+            for(var i=0; i<$scope.roundTripObj.length; ++i) {
+                $scope.roundTripObj[i].forMeDisabled = true;
+            }
+            seat.forMyselfSelected = true;
+            UserService.loadYourself()
+                .then(
+                    function(response) {
+                        seat.name = response.you.name;
+                        seat.lastname = response.you.lastname;
+                        seat.passnum = "000000";
+                        seat.email = response.you.email;
+                        seat.inviteFriend = true;
+                    }
+                );
         }
 
         $scope.selectSeatForReturnFlight = function(seat) {
@@ -86,40 +110,94 @@ angular.module('flightApp').controller('FlightReservationController', [
             $scope.dirSeatSelected = false;
             seat.available = false;
             seat.reserved = true;
+            seat.forMeDisabled = false;
             $scope.reservationObj.push(seat);
             $scope.roundTripObj.push($scope.reservationObj);
             $scope.reservationObj = [];
             console.log($scope.roundTripObj);
         }
 
-        $scope.reserve = function(seat) {
-            var obj = {};
-            obj.name = seat.name;
-            obj.lastname = seat.lastname;
-            obj.passportNumber = seat.passnum;
-            obj.seats = [];
-            if(seat instanceof Array) {
-                for(var i=0; i<seat.length; ++i) {
-                    obj.seats.push(seat[i]);
+        // $scope.reserve = function(seat) {
+        //     debugger;
+        //     console.log($scope.roundTripObj);
+        //     var obj = {};
+        //     obj.name = seat.name;
+        //     obj.lastname = seat.lastname;
+        //     obj.passportNumber = seat.passnum;
+        //     obj.seats = [];
+        //     if(seat instanceof Array) {
+        //         for(var i=0; i<seat.length; ++i) {
+        //             obj.seats.push(seat[i]);
+        //         }
+        //     } else {
+        //         obj.seats.push(seat);
+        //     }
+        //     AvioService.makeReservation(obj)
+        //         .then(
+        //             function (response) {
+        //             	if(response.response.status == 500 || response.response.status == 400) {
+        //             		alert("Seat has been taken! Please select other!");
+        //             		for(var i=0; i<$scope.roundTripObj.length; ++i) {
+        //             			if($scope.roundTripObj[i] == seat) {
+        //             				$scope.roundTripObj.splice(i, 1);
+        //             			}
+        //             		}
+        //             		return;
+        //             	}
+        //                 seat.successfullyReserved = true;
+        //                 $scope.recommendation = true;
+        //                 ++$scope.numOfReservationsMade;
+        //             },
+        //             function (errResponse) {
+        //                 alert("RESPONSE ERROR");
+        //             }
+        //         );
+        // }
+
+        $scope.reserve = function() {
+            debugger;
+            console.log($scope.roundTripObj);
+            var arr = [];
+            for(var i=0; i<$scope.roundTripObj.length; ++i){
+                var obj = {};
+
+                obj.name = $scope.roundTripObj[i].name;
+                obj.lastname = $scope.roundTripObj[i].lastname;
+                obj.passportNumber = $scope.roundTripObj[i].passportNumber;
+                if($scope.return_flight == -1){//ako je one way
+                    
+                } else {
+
                 }
-            } else {
-                obj.seats.push(seat);
+                
+                obj.seats = [];
+                if($scope.roundTripObj[i] instanceof Array) {
+                    for(var j=0; j<$scope.roundTripObj[i].length; ++j) {
+                        obj.seats.push($scope.roundTripObj[i][j]);
+                    }
+                } else {
+                    obj.seats.push($scope.roundTripObj[i]);
+                }
+                arr.push(obj);
             }
-            AvioService.makeReservation(obj)
+            console.log(arr);
+            AvioService.makeReservation(arr)
                 .then(
                     function (response) {
                     	if(response.response.status == 500 || response.response.status == 400) {
-                    		alert("Seat has been taken! Please select other!");
-                    		for(var i=0; i<$scope.roundTripObj.length; ++i) {
-                    			if($scope.roundTripObj[i] == seat) {
-                    				$scope.roundTripObj.splice(i, 1);
-                    			}
-                    		}
-                    		return;
-                    	}
-                        seat.successfullyReserved = true;
-                        $scope.recommendation = true;
-                        ++$scope.numOfReservationsMade;
+                            if(response.response.data.isSuccesfullyReserved){
+                                alert("Seat" + response.response.data + "has been taken! Please select other!");
+                            } else {
+                                alert("Reservation process not succesful.");
+                            }
+                            $state.reload();
+                            return;
+                        }
+                        $scope.succesfulResponse =  response.response.data;
+                        $state.go("home-abstract.flight-reservation.payment");
+                        // seat.successfullyReserved = true;
+                        // $scope.recommendation = true;
+                        // ++$scope.numOfReservationsMade;
                     },
                     function (errResponse) {
                         alert("RESPONSE ERROR");
@@ -149,7 +227,8 @@ angular.module('flightApp').controller('FlightReservationController', [
 
         $scope.showSearchFriendForm = function(seat) {
             seat.inviteFriend = true;
-            seat.friendInvited = false;
+            // seat.friendInvited = false;
+            seat.inviteMode = 
             seat.filterFriends = [];
         }
 
@@ -181,7 +260,13 @@ angular.module('flightApp').controller('FlightReservationController', [
                 .then(
                     function (response) {
                         // seat.inviteFriend = false;
-                        seat.friendInvited = true;
+                        alert("Email invitation sent to friend");
+                        for(var i=0; i<$scope.roundTripObj.length; ++i) {
+                            if($scope.roundTripObj[i] == seat) {
+                                $scope.roundTripObj.splice(i, 1);
+                            }
+                        }
+                        // seat.friendInvited = true;
                     },
                     function (errResponse) {
                         alert("RESPONSE ERROR");
@@ -190,6 +275,7 @@ angular.module('flightApp').controller('FlightReservationController', [
         }
 
         $scope.findRecommendations = function() {
+            console.log($scope.succesfulResponse);
             var obj = {};
             console.log($scope.direct_flight);
             obj.checkIn = $scope.direct_flight.landing.split(" ")[0];
@@ -202,7 +288,7 @@ angular.module('flightApp').controller('FlightReservationController', [
             HotelService.search(obj)
                 .then(function(response) {
                     console.log("Response of the search:", response);
-                    $state.go('home-abstract.hotel-search-results', {hotelSearchData:JSON.stringify(response)});
+                    $state.go('home-abstract.hotel-recommendation-results', {hotelSearchData:JSON.stringify(response), flightReservations: JSON.stringify($scope.succesfulResponse)});
                 }, function (errResponse) {
                     console.log("Error response of the search:", errResponse);
                 });

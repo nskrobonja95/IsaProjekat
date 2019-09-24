@@ -86,7 +86,7 @@
             });
         }
         function getAllUserFlightReservations(){
-            var flightReservationsList = $http.get(urls.RESERVATION_SERVICE_API+'flightUserReservationsList')
+            var flightReservationsList = $http.get(urls.USERS_SERVICE_API+'flightUserReservationsList')
             .then(function (response) {
                 console.log("Avio service response:", response.data);
                 return response.data;
@@ -426,6 +426,24 @@
                         };
                     });
             }
+
+            // function makeReservation(obj) {
+            //     var response = $http.post(urls.USERS_SERVICE_API+'reserve', obj)
+            //     .then(function (response) {
+            //         console.log("Response:", response);
+            //         return response;
+            //     }, function (error) {
+            //         console.log("Error occured while removing destinations!", error);
+            //         return error;
+            //     });
+    
+            //     return $q.all([response])
+            //         .then(function (results) {
+            //             return {
+            //                 response: results[0]
+            //             };
+            //         });
+            // }
 
             function makeReservation(obj) {
                 var response = $http.post(urls.USERS_SERVICE_API+'reserve', obj)

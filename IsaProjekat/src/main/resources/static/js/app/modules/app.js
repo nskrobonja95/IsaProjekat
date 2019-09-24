@@ -110,6 +110,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 templateUrl: 'form.html',
                 controller: 'formController'
             })
+
+            // url will be /form/interests
+            .state('home-abstract.flight-reservation.interests', {
+                url: '/interests',
+                templateUrl: 'partials/form-interests'
+            })
             
             // nested states 
             // each of these sections will have their own view
@@ -117,12 +123,6 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
             .state('home-abstract.flight-reservation.profile', {
                 url: '/profile',
                 templateUrl: 'partials/form-profile'
-            })
-            
-            // url will be /form/interests
-            .state('home-abstract.flight-reservation.interests', {
-                url: '/interests',
-                templateUrl: 'partials/form-interests'
             })
             
             // url will be /form/payment
@@ -143,6 +143,20 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     hotelSearchData: null
                 }
             })
+            .state('home-abstract.hotel-recommendation-results', {
+                url: '/hotel-recommendation-results',
+                views: {
+                    'hotel-recommendation-results': {
+                        templateUrl: "partials/hotel-recommendation-results",
+                        controller: "HotelRecommendationResultsController",
+                        controllerAs: "hrsCtrl"
+                    }
+                },
+                params: {
+                    hotelSearchData: null,
+                    flightReservations: null
+                }
+            })
             .state('home-abstract.hotel-profile', {
                 url: '/hotel-profile/:hotelId/:checkIn/:checkOut',
                 views: {
@@ -151,6 +165,9 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                         controller: "HotelProfileController",
                         controllerAs: "hpCtrl"
                     }
+                },
+                params: {
+                    flightReservations: null
                 },
                 resolve: {
                     availableRooms: ['$stateParams', 'HotelService',function($stateParams, HotelService){
@@ -629,6 +646,14 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                       templateUrl: 'partials/create-flight',
                       controller: 'CreateFlightController',
                       controllerAs: 'createFlightCtrl'
+                  }
+                }  
+            })
+            .state('home-abstract.succesful-reservation', {
+                url: '/succesfulReservation',
+                views: {
+                    'succesful-reservation': {
+                      templateUrl: 'partials/succesful-reservation'
                   }
                 }  
             })

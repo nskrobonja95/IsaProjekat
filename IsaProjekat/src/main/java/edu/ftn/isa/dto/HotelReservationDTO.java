@@ -16,8 +16,6 @@ public @Data class HotelReservationDTO {
 
 	private Long roomId;
 	
-	private Long flightResId;
-	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
 	private Date arrivalDate;
 	
@@ -25,5 +23,7 @@ public @Data class HotelReservationDTO {
 	private Date departingDate;
 	
 	private List<String> hotelServices;
+	
+	private List<Integer> flightReservationIds;
 	
 }

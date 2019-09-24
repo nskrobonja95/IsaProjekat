@@ -55,7 +55,7 @@
 
 <div class="form-group row">
 <div class="col-xs-12" class="btnbox-center">
-    <a ui-sref="form.profile" class="btn btn-right btn-info">
+    <a ui-sref="home-abstract.flight-reservation.profile" class="btn btn-right btn-info">
     Next <span class="glyphicon glyphicon-circle-arrow-right"></span>
     </a>
     <#--  <button class="btn btn-right btn-info" ng-click="">

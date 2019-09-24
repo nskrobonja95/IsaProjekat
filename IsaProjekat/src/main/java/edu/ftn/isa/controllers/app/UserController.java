@@ -29,11 +29,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.ftn.isa.dto.FlightRatingDTO;
 import edu.ftn.isa.dto.FlightReservationDTO;
+import edu.ftn.isa.dto.FlightReservationResponseDTO;
 import edu.ftn.isa.dto.FriendsDTO;
 import edu.ftn.isa.dto.HotelReservationDTO;
 import edu.ftn.isa.dto.InviteFriendFlightReservationDTO;
 import edu.ftn.isa.dto.SeatRowDTO;
 import edu.ftn.isa.dto.UserDTO;
+import edu.ftn.isa.dto.UserFlightReservationDTO;
 import edu.ftn.isa.dto.UserHotelReservationDTO;
 import edu.ftn.isa.model.Flight;
 import edu.ftn.isa.model.FlightReservation;
@@ -276,41 +278,20 @@ public class UserController {
 	}
 	
 	@PostMapping("/reserve")
-	public ResponseEntity<?> reserve(@RequestBody FlightReservationDTO flightDto) throws ParseException {
+	public ResponseEntity<?> reserve(@RequestBody List<FlightReservationDTO> flightDto) throws ParseException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		User user = userDetails.getUser();
-//		FlightReservation reservation = new FlightReservation();
-//		reservation.setUser(user);
-//		reservation.setName(flightDto.getName());
-//		reservation.setLastname(flightDto.getLastname());
-//		reservation.setPassportNumber(flightDto.getPassportNumber());
-//		reservation.setRate(0);
-//		reservation.setStatus(ReservationStatus.APPROVED);
-//		List<FlightSeat> seats = new ArrayList<FlightSeat>();
-//		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
-//		Date todayDate = new Date();
-//		Date reserveDate = formatter.parse(formatter.format(todayDate));
-//		reservation.setReserveDate(reserveDate);
-//		for(int i=0; i<flightDto.getSeats().size(); ++i) {
-//			Optional<FlightSeat> optionalSeat = flightSeatRepo.findById(flightDto.getSeats().get(i).getId());
-//			if(!optionalSeat.isPresent())
-//				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//			FlightSeat seat = optionalSeat.get();
-//			seat.setAvailable(false);
-//			seats.add(optionalSeat.get());
-//		}
-//		reservation.setFlightReservationSeats(seats);
-//		flightResRepo.save(reservation);
-		boolean flag = false;
+		FlightReservationResponseDTO dto;
 		try {
-			flag = resService.reserveFlightSeat(flightDto, user);
+			dto = resService.reserveFlightSeat(flightDto, user);
 		} catch(StaleObjectStateException exp) {
+			exp.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		if(!flag)
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		return new ResponseEntity<>(HttpStatus.OK);
+		if(!dto.isSuccesfullyReserved())
+			return new ResponseEntity<FlightReservationResponseDTO>(dto, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<FlightReservationResponseDTO>(dto, HttpStatus.OK);
 	}
 	
 	@PostMapping("/sendInvitation")
@@ -399,6 +380,27 @@ public class UserController {
 		res.setStatus(ReservationStatus.APPROVED);
 		flightResRepo.save(res);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/flightUserReservationsList")
+	public ResponseEntity<?> getUserFlightReservations(){
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+		User user = userDetails.getUser();
+		
+		List<FlightReservation> reservationsList = flightResRepo.getUserReservationsList(user.getId());
+		List<UserFlightReservationDTO> retVal = new ArrayList<UserFlightReservationDTO>();
+		for(FlightReservation reservation : reservationsList) {
+			retVal.add(new UserFlightReservationDTO(reservation.getId(),
+					reservation.getFlightReservationSeats(),
+					reservation.getRate(),
+					reservation.getName(),
+					reservation.getLastname(),
+					reservation.getStatus().toString()));
+		}
+		
+		return new ResponseEntity<List<UserFlightReservationDTO>>(retVal, HttpStatus.OK);
 	}
 	
 	@PutMapping("/cancelFlight/{resId}")
