@@ -11,6 +11,8 @@ import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.FlightSeat;
+import edu.ftn.isa.model.HotelReservation;
+import edu.ftn.isa.model.ReservationStatus;
 import edu.ftn.isa.model.User;
 
 public interface FlightReservationRepository extends JpaRepository<FlightReservation, Long> {
@@ -41,5 +43,7 @@ public interface FlightReservationRepository extends JpaRepository<FlightReserva
 //			"FROM air_company.flight_reservation as fr join air_company.hotel_reservation as hr " + 
 //			"on fr.flightticketid = hr.flight_res_id);")
 //	List<HotelFlightReservationDTO> findJointReservations(@Param("user") User user);
+	
+	List<FlightReservation> findByHotelReservationAndStatus(HotelReservation hotelReservation, ReservationStatus reservationStatus);
 	
 }

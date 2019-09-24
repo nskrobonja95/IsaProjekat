@@ -62,4 +62,8 @@ public @Data class FlightReservation {
     	inverseJoinColumns = @JoinColumn(name = "seatId") )
 	private List<FlightSeat> flightReservationSeats;
 	
+	@ManyToOne
+	@JoinColumn(name = "hotelReservation", nullable=true)
+	private HotelReservation hotelReservation;
+	
 }

@@ -43,22 +43,24 @@
                 placeholder="Email address"
                 ng-minlength=3 ng-maxlength=50 required />
 
-                <button ng-show="!resSeats.successfullyReserved && !resSeats.inviteFriend" ng-click="reserve(resSeats)">Reserve</button>
-                <button ng-show="!resSeats.successfullyReserved && !resSeats.inviteFriend" ng-click="showSearchFriendForm(resSeats)">Invite</button>
-                <label ng-show="resSeats.inviteFriend && !resSeats.friendInvited" for="searchForFriends">Search </label>
-                <input ng-show="resSeats.inviteFriend && !resSeats.friendInvited" class="form-control" type="search" id="searchForFriends" name="searchForFriends" ng-model="resSeats.searchValue" ng-keyup="search(resSeats)" placeholder="Search new friends" aria-label="Search new friends">
-                <ul class="list-group" ng-show="resSeats.inviteFriend">
+                <#--  <button ng-show="!resSeats.successfullyReserved && !resSeats.inviteFriend" ng-click="reserveCopy()">Reserve</button>  -->
+                <button ng-show="!resSeats.inviteFriend" ng-disabled="resSeats.forMyselfSelected" ng-click="showSearchFriendForm(resSeats)">Invite</button>
+                <label ng-show="resSeats.inviteFriend && !resSeats.forMyselfSelected" for="searchForFriends">Search </label>
+                <input ng-show="resSeats.inviteFriend && !resSeats.forMyselfSelected" class="form-control" type="search" id="searchForFriends" name="searchForFriends" ng-model="resSeats.searchValue" ng-keyup="search(resSeats)" placeholder="Search new friends" aria-label="Search new friends">
+                <ul class="list-group" ng-show="resSeats.inviteFriend && !resSeats.forMyselfSelected">
                     <li class="list-group-item" ng-repeat="username in resSeats.filterFriends" ng-click="fillTextBox(username, resSeats)">
                         {{username}}
                     </li>
                 </ul>
-                <button ng-show="resSeats.inviteFriend && !resSeats.friendInvited" ng-click="invite(resSeats)">Send</button>
-                <button ng-show="resSeats.inviteFriend && !resSeats.friendInvited" class="btn btn-outline-success my-2 my-sm-0" ng-click="hideSearchFriendForm(resSeats)">Cancel</button>
-                <label ng-show="!resSeats.successfullyReserved && resSeats.friendInvited">Successfully sent invitation</label>
-                <label ng-show="resSeats.successfullyReserved && !resSeats.inviteFriend">Reserved successfully</label>
-                <img ng-show="resSeats.successfullyReserved || resSeats.friendInvited" class="img-thumbnail" ng-src="images/reservation-success.png" width='25' height='25'>
+                <button ng-show="resSeats.inviteFriend && !resSeats.forMyselfSelected" ng-click="invite(resSeats)">Send</button>
+                <button ng-show="resSeats.inviteFriend && !resSeats.forMyselfSelected" class="btn btn-outline-success my-2 my-sm-0" ng-click="hideSearchFriendForm(resSeats)">Cancel</button>
+                <#--  <label ng-show="!resSeats.successfullyReserved && resSeats.friendInvited">Successfully sent invitation</label>  -->
+                <button ng-disabled="resSeats.forMeDisabled" ng-click="enterUserData(resSeats)">For myself</button>
+                <#--  <label ng-show="resSeats.successfullyReserved && !resSeats.inviteFriend">Reserved successfully</label>
+                <img ng-show="resSeats.successfullyReserved || resSeats.friendInvited" class="img-thumbnail" ng-src="images/reservation-success.png" width='25' height='25'>  -->
             </div>
         </div>
+        <button ng-show="!successfullyReserved" ng-click="reserve()">Reserve</button>
     </div>
     <div class="col">
         <button ng-show="recommendation" ng-click="findRecommendations()">HOTEL RECOMMENDATIONS</button>

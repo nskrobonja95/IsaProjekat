@@ -10,6 +10,7 @@ angular.module('flightApp').controller('HotelProfileController',
             self.user = $rootScope.globals.currentUser;
             console.log("Current user:");
             console.log(self.user);
+            self.flightReservations = JSON.parse($stateParams.flightReservations);
             self.hotel = initialHotel.hotel;
             self.availableRooms = availableRooms.availableRooms;
             for(var i=0; i<availableRooms.lenght; ++i) {
@@ -87,19 +88,28 @@ angular.module('flightApp').controller('HotelProfileController',
                 obj.arrivalDate = SearchService.formatDateString(self.checkInDate);
                 obj.departingDate = SearchService.formatDateString(self.checkOutDate);
                 console.log(obj);
-                obj.flightResId = null;
+                debugger;
+                if(self.flightReservations != null)
+                    obj.flightReservationIds = self.flightReservations.ids;
+                else
+                obj.flightReservationIds = null;
                 HotelService.bookRoom(obj)
                     .then(
                         function (response) {
-                            var btn = document.getElementById(room.id);
-                            btn.disabled = true;
-                            btn.style.backgroundColor="green";
-                            btn.innerHTML = 'RESERVED';
-                            // btn.style.visibility = 'hidden';
-                            // var lbl = btn.nextElementSibling;
-                            // lbl.style.visibility = 'visible';
-                            // lbl.textContent = 'BOOKED';
-                            room.dataLoading = false;
+                            if(self.flightReservations == null) {
+                                var btn = document.getElementById(room.id);
+                                btn.disabled = true;
+                                btn.style.backgroundColor="green";
+                                btn.innerHTML = 'RESERVED';
+                                // btn.style.visibility = 'hidden';
+                                // var lbl = btn.nextElementSibling;
+                                // lbl.style.visibility = 'visible';
+                                // lbl.textContent = 'BOOKED';
+                                room.dataLoading = false;
+                            } else {
+                                room.dataLoading = false;
+                                $state.go("home-abstract.succesful-reservation");
+                            }
                         },
                         function (errResponse) {
                             room.dataLoading = false;
