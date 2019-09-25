@@ -249,7 +249,7 @@
 								</div>
 								<div class="class">
 									<h3>Class</h3>
-									<select id="w3_country3" class="frm-field required">
+									<select id="w3_country3" class="frm-field required" ng-model="avioCtrl.multiCity.flightClass">
 										<option value="Economic">Economy</option>
 										<option value="Business">Business</option>
 									</select>

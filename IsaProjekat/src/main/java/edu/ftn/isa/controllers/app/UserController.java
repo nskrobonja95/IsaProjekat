@@ -286,6 +286,7 @@ public class UserController {
 		FlightReservationResponseDTO dto;
 		try {
 			dto = resService.reserveFlightSeat(flightDto, user);
+			System.out.println("caooo");
 		} catch(StaleObjectStateException exp) {
 			exp.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -328,9 +328,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 url:'/hotel-admin-statistics',
                 views: {
                     'hotel-admin-statistics': {
-                        template: "partials/hotel-admin",
-                        controller: "HotelAdminController",
-                        controllerAs: "hotelAdminCtrl"
+                        template: "partials/hotel-admin"
                     }
                 }
             })
@@ -447,6 +445,9 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 resolve: {
                     initialDestinationsList: ['AvioService', function(AvioService){
                         return AvioService.loadAllDestiantions();
+                      }],
+                    initialHotelAdminList: ['UserService', function(UserService){
+                        return UserService.loadAllHotelAdmins();
                       }]
                 }
             })
@@ -458,6 +459,11 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                         controller: "AddAirlineController",
                         controllerAs: "aaCtrl"
                     }
+                },
+                resolve: {
+                    initialAvioAdminList: ['UserService', function(UserService){
+                        return UserService.loadAllAirlineAdmins();
+                      }]
                 }
             })
             .state('home-abstract.change-password',{

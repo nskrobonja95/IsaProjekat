@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="css/avio-company-profile.css" />
+
   <div class="">
 		<div class="">
 			<section class="head">

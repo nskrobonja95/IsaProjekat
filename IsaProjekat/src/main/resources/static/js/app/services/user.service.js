@@ -10,8 +10,42 @@
         // service.addUser = addUser;
         // service.deleteUser = deleteUser;
         service.editUser = editUser;
+        service.loadAllAirlineAdmins = loadAllAirlineAdmins;
+        service.loadAllHotelAdmins = loadAllHotelAdmins;
         return service;
 
+        function loadAllAirlineAdmins(){
+            var avioAdmins = $http.get(urls.SYS_ADMIN_API + "getAvioAdminUsers/")
+                .then(function(response){
+                    console.log("Users response for avio admins search", response.data);
+                    return response.data;
+                }, function(error){
+                    console.log("Error occured while initializing list of avio admin users!");
+                    return error
+                });
+            return $q.all([avioAdmins])
+                .then(function(results){
+                    return {
+                        avioAdmins: results[0]
+                    };
+                });
+        }
+        function loadAllHotelAdmins(){
+            var hotelAdmins = $http.get(urls.SYS_ADMIN_API + "getHotelAdminUsers/")
+                .then(function(response){
+                    console.log("Users response for hotel admins search", response.data);
+                    return response.data;
+                }, function(error){
+                    console.log("Error occured while initializing list of hotel admin users!");
+                    return error
+                });
+            return $q.all([hotelAdmins])
+                .then(function(results){
+                    return {
+                        hotelAdmins: results[0]
+                    };
+                });
+        }
         function searchUsers(searchQuery) {
             var usersList = $http.get(urls.USERS_SERVICE_API + "searchFriends/" + searchQuery)
                 .then(function (response) {
