@@ -25,6 +25,7 @@ import edu.ftn.isa.dto.AddHotelServiceDTO;
 import edu.ftn.isa.dto.BasicHotelInfoDTO;
 import edu.ftn.isa.dto.CreateRoomDTO;
 import edu.ftn.isa.dto.EditRoomDTO;
+import edu.ftn.isa.dto.FastRoomReservationDTO;
 import edu.ftn.isa.dto.PriceOfMonthDTO;
 import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.HotelServiceModel;
@@ -184,6 +185,15 @@ public class HotelAdminController {
 		List<HotelServiceModel> services = hotelServiceService.loadHotelServicesByRoomId(id);
 		if(services == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<List<HotelServiceModel>>(services, HttpStatus.OK);
+	}
+	
+	@PostMapping("/createFastReservation/{roomId}")
+	public ResponseEntity<?> createFastReservation(@PathVariable("roomId") Long id,
+			@RequestBody FastRoomReservationDTO dto) throws ParseException {
+		Integer retVal = hotelService.createFastReservation(id, dto); 
+		if(retVal == -1)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(retVal, HttpStatus.OK);
 	}
 	
 }

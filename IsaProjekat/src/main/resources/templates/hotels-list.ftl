@@ -134,7 +134,7 @@
           <div class="fav-box"><i class="fa fa-heart-o" aria-hidden="true"></i></div>
           <img class="d-flex align-self-start" src="images/hotels.jpg" alt="Generic placeholder image">
           <div class="media-body pl-3">
-            <div class="price"><a class="price" ui-sref="home-abstract.hotel-profile({hotelId:hotel.id})">{{hotel.name}}</a><small>{{hotel.address}}</small>
+            <div class="price"><a class="price" ui-sref="home-abstract.user-hotel({hotelId:hotel.id})">{{hotel.name}}</a><small>{{hotel.address}}</small>
             </div>
             <div class="address">{{hotel.promo}}</div>
           </div>

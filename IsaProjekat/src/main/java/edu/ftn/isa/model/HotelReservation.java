@@ -72,5 +72,11 @@ public @Data class HotelReservation {
 	
 	@Column(name="rating")
 	private Integer rating;
+	
+	@Column(name="fastReservation")
+	private boolean fastReservation;
+	
+	@Column(name="discount")
+	private Double discount;
 
 }

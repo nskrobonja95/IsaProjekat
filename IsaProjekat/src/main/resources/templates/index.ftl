@@ -111,6 +111,9 @@
     <script src="js/app/controllers/HotelReservationListController.js"></script>
     <script src="js/app/controllers/AvioFastReservationsController.js"></script>
     <script src="js/app/controllers/AvioStatsController.js"></script>
+    <script src="js/app/controllers/CreateRoomFastReservationController.js"></script>
+    <script src="js/app/controllers/UserHotelController.js"></script>
+    <script src="js/app/controllers/HotelFastReservationsController.js"></script>
 
     <script src="js/app/controllers/HotelAdminWelcomeController.js"></script>
     <script src="js/app/controllers/HotelAdminHotelProfileController.js"></script>

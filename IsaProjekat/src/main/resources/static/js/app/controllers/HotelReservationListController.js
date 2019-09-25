@@ -6,7 +6,7 @@ angular.module('flightApp').controller('HotelReservationListController', [
 
         var self = this;
         
-        self.hotelReservationsList = initialHotelReservationsData.hotelReservationsList
+        self.hotelReservationsList = initialHotelReservationsData.hotelReservationsList;
         self.cancelationEnabled = cancelationEnabled;
         self.cancelReservation = cancelReservation;
         self.rateEnabled = rateEnabled;

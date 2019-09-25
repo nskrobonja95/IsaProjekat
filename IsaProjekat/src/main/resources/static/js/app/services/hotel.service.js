@@ -27,6 +27,9 @@
         service.cancelReservation = cancelReservation;
         service.rateReservation = rateReservation;
         service.loadHotelListForAdmin = loadHotelListForAdmin;
+        service.createFastReservation = createFastReservation;
+        service.loadFastReservationsForHotel = loadFastReservationsForHotel;
+        service.fastHotelReserve = fastHotelReserve;
         return service;
 
         function loadHotelListForAdmin() {
@@ -45,6 +48,42 @@
                     };
                 });
         }
+
+        function loadFastReservationsForHotel(id) {
+            var list = $http.get(urls.USERS_SERVICE_API+'getFastReservations/' + id)
+            .then(function (response) {
+                console.log("Hotel service response:", response);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  hotels list!", error);
+            });
+
+            return $q.all([list])
+                .then(function (results) {
+                    return {
+                        list: results[0]
+                    };
+                });
+        }
+
+        function fastHotelReserve(id) {
+            var response = $http.put(urls.USERS_SERVICE_API+'fastHotelReserve/' + id)
+            .then(function (response) {
+                console.log("Hotel service response:", response);
+                return response;
+            }, function (error) {
+                console.log("Error occured while initializing  hotels list!", error);
+                return error;
+            });
+
+            return $q.all([response])
+                .then(function (results) {
+                    return {
+                        response: results[0]
+                    };
+                });
+        }
+
         function cancelReservation(reservationId){
             var canceled = $http.put(urls.USERS_SERVICE_API+'cancelAccomodation/'+reservationId)
             .then(function (response) {
@@ -418,6 +457,24 @@
                 .then(function (results) {
                     return {
                         room: results[0]
+                    };
+                });
+        }
+
+        function createFastReservation(obj, id) {
+            var result = $http.post(urls.HOTEL_ADMIN_API+'createFastReservation/' + id, obj)
+            .then(function (response) {
+                console.log("Search hotel service response:", response);
+                return response;
+            }, function (error) {
+                console.log("Error occured while initializing  Hotel!", error);
+                return error;
+            });
+
+            return $q.all([result])
+                .then(function (results) {
+                    return {
+                        result: results[0]
                     };
                 });
         }

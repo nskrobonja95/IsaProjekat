@@ -42,6 +42,7 @@ import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.FlightSeat;
 import edu.ftn.isa.model.Friends;
 import edu.ftn.isa.model.HotelReservation;
+import edu.ftn.isa.model.HotelServiceModel;
 import edu.ftn.isa.model.ReservationStatus;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.payload.PasswordChangePayload;
@@ -454,6 +455,23 @@ public class UserController {
 					));
 		}
 		return new ResponseEntity<List<UserHotelReservationDTO>>(retVal, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getFastReservations/{hotelId}")
+	public ResponseEntity<?> getFastReservationsForHotel(@PathVariable("hotelId") Long id) {
+		List<UserHotelReservationDTO> reservations = resService.retrieveFastReservationsForHotel(id);
+		if(reservations == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<List<UserHotelReservationDTO>>(reservations, HttpStatus.OK);
+	}
+	
+	@PutMapping("/fastHotelReserve/{resId}")
+	public ResponseEntity<?> fastHotelReserve(@PathVariable("resId") Long id) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		User user = userDetails.getUser();
+		List<UserHotelReservationDTO> ret = resService.fastHotelReserve(id, user);
+		if(ret == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<List<UserHotelReservationDTO>>(ret, HttpStatus.OK);
 	}
 	
 }
