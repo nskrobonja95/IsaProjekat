@@ -15,7 +15,7 @@ angular.module('flightApp').controller('ChangePasswordController',
                         if($rootScope.globals.currentUser.userType == 'AvioAdmin') {
                             $state.go('home-abstract.avio-admin');
                         } else {
-                            $state.go('home-abstract.hotel-admin');
+                            $state.go('home-abstract.hotel-admin-welcome');
                         }
                     }, function(errResponse) {
                         console.log(errResponse);

@@ -18,4 +18,5 @@ public @Data class AddHotelDTO {
 	
 	private String password;
 	
+	private Long existingAdminId;
 }

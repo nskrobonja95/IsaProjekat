@@ -42,14 +42,24 @@ public class HotelService {
 	@Transactional
 	public Hotel addHotel(AddHotelDTO HotelDto) {
 		Hotel hotel = new Hotel();
-		User user = new User();
-		user.setEmail(HotelDto.getEmail());
-		user.setUsername(HotelDto.getUsername());
-		user.setEnabled(true);
-		user.setRole(Role.HotelAdmin);
-		user.setPassword(passwordEncoder.encode(HotelDto.getPassword()));
-		user.setPasswordChanged(false);
-		userRepo.save(user);
+		User user;
+		if(HotelDto.getExistingAdminId() == null) {
+			System.out.println("Usao je u ovu petlju");
+			user  = new User();
+			user.setEmail(HotelDto.getEmail());
+			user.setUsername(HotelDto.getUsername());
+			user.setEnabled(true);
+			user.setRole(Role.HotelAdmin);
+			user.setPassword(passwordEncoder.encode(HotelDto.getPassword()));
+			user.setPasswordChanged(false);
+			userRepo.save(user);
+		}else {
+			Optional<User> temp = userRepo.findById(HotelDto.getExistingAdminId());
+			if(!temp.isPresent()) {
+				return null;
+			}
+			user = temp.get();
+		}
 		hotel.setAdmin(user);
 		hotel.setName(HotelDto.getName());
 		hotel.setPromo(HotelDto.getPromo());

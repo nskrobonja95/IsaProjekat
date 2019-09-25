@@ -63,6 +63,7 @@ angular.module('flightApp').controller('AvioController',
                 self.multiCity.from = self.multiCity.from.name;
                 self.multiCity.midDest = self.multiCity.midDest.name;
                 self.multiCity.to = self.multiCity.to.name;
+                self.mu
                 console.log(self.multiCity);
                 AvioService.multiCitySearch(self.multiCity)
                     .then(function (response) {
