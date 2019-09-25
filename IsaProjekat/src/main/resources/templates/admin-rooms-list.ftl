@@ -1,8 +1,8 @@
-<div class="company-list-box-div">
+<link rel="stylesheet" href="css/avio-company-profile.css" />
+  <div class="">
 		<div class="">
 			<section class="head">
 
-				<#--  <div class="top-margin-div "></div>  -->
 				<h1 class="text-center " style="margin:25px">Rooms</h1>
 
 			</section>
@@ -34,9 +34,7 @@
                                                                 <i class="fa fa-star"></i>
                                                                 <i class="fa fa-star-half"></i>
                                                             </li>
-                                                            <#--  <li class="list-item text-success">
-                                                                <i class="fa fa-thumbs-up"></i>
-                                                            </li>  -->
+                                                            
                                                         </ul>
                                                     </div>
                                                     <div class="list-descrip">
@@ -61,7 +59,7 @@
                             </div>
 						</div>
 					</div>
-					<a ui-sref="home-abstract.create-room()">Create room</a>
+					<a href ng-click="adminRoomsCtrl.createRoom()">Create room</a>
 			</section>
-			<div class="top-margin-div "></div>
 		</div>
+

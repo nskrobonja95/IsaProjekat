@@ -70,15 +70,16 @@ angular.module('flightApp').controller('HomeController',
                         self.userLogin.username = '';
                         self.userLogin.password = '';
                         if($rootScope.globals.currentUser.userType == 'User') {
-                            $state.go('home-abstract.avio-companies-list');
+                            //$state.go('home-abstract.avio-companies-list');
                         } else if($rootScope.globals.currentUser.userType == 'AvioAdmin') {
                             if(response.data.passwordChanged)
                                 $state.go('home-abstract.avio-admin');
                             else
                                 $state.go('home-abstract.change-password');
                         } else if($rootScope.globals.currentUser.userType == 'HotelAdmin') {
-                            if(response.data.passwordChanged)
-                                $state.go('home-abstract.hotel-admin');
+                            if(response.data.passwordChanged){
+                                $state.go('home-abstract.hotel-admin-welcome');
+                            }
                             else
                                 $state.go('home-abstract.change-password');
                         }

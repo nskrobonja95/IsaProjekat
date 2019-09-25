@@ -52,7 +52,14 @@ public class RoomService {
 		List<Room> rooms = roomRepo.findByHotel(hotel);
 		return rooms;
 	}
-
+	public List<Room> getRoomsForAdmin(Long id) {
+		Optional<Hotel> temp = hotelRepo.findById(id);
+		if(!temp.isPresent()) {
+			return null;
+		}
+		List<Room> rooms = roomRepo.findByHotel(temp.get());
+		return rooms;
+	}
 	public Room saveRoom(CreateRoomDTO roomDto, User user) throws ParseException {
 		Hotel hotel = hotelRepo.findByAdmin(user);
 		Room room = new Room();
@@ -89,7 +96,47 @@ public class RoomService {
 		}
 		return room;
 	}
-	
+	public Room saveRoom(CreateRoomDTO roomDto, Long id) throws ParseException {
+		Optional<Hotel> temp = hotelRepo.findById(id);
+		if(!temp.isPresent()) {
+			return null;
+		}
+		
+		Room room = new Room();
+		room.setHotel(temp.get());
+		room.setBalcony(roomDto.isBalcony());
+		room.setDescription(roomDto.getDescription());
+		room.setNumOfBeds(roomDto.getNumOfBeds());
+		List<HotelServiceModel> services = new ArrayList<HotelServiceModel>();
+		for(int i=0; i<roomDto.getServices().size(); ++i) {
+			HotelServiceModel hs = hotelServicesRepo.
+								retrieveByNameAndHotel(roomDto.getServices().get(i), 
+														temp.get().getId());
+			services.add(hs);
+		}
+		room.setHotelServices(services);
+		roomRepo.save(room);
+		Calendar now = Calendar.getInstance();
+		int year = now.get(Calendar.YEAR);
+		String yearInString = String.valueOf(year);
+		for(int i=0; i<roomDto.getMonthPrices().size(); ++i) {
+			PriceOfMonthDTO p = roomDto.getMonthPrices().get(i);
+			Date from = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm").
+						parse(yearInString + p.getFrom());
+			Date to = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm").
+						parse(yearInString + p.getTo());
+			PriceOfRoom price = new PriceOfRoom();
+			price.setActiveFrom(from);
+			price.setActiveTo(to);
+			price.setPrice(p.getPrice());
+			price.setRoom(room);
+			priceOfRoomRepo.save(price);
+		}
+		return room;
+		
+	}
 	@Transactional
 	public Room getRoomById(Long id) {
 		Optional<Room> optRoom = roomRepo.findById(id);
@@ -137,7 +184,9 @@ public class RoomService {
 			price.setRoom(room);
 			priceOfRoomRepo.save(price);
 		}
+		System.out.println("Odavle");
 		roomRepo.save(room);
+		System.out.println("Dovle");
 		return room;
 	}
 	
@@ -153,5 +202,8 @@ public class RoomService {
 		roomRepo.delete(room);
 		return true;
 	}
+	
+
+	
 	
 }

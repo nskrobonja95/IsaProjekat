@@ -80,6 +80,7 @@
                         </div>
                     </div>
                 </div>
+                <button class="btn btn-danger" ng-click="createRoomCtrl.addRoomBack()">Cancel</button>
                 <button class="btn btn-info" ng-click="createRoomCtrl.addRoom()">Save</button>
             </form>
         </div>

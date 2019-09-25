@@ -506,10 +506,7 @@ public class UnregisteredUsersController {
 			return "<div>You have already declined this invitation.</div>";
 		}
 		reservation.setStatus(ReservationStatus.APPROVED);
-		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		Date todayDate = new Date();
-		Date reserveDate = formatter.parse(formatter.format(todayDate));
-		reservation.setReserveDate(reserveDate);
+		
 		flightResRepo.save(reservation);
 		return "<div>RESERVATION SUCCESSFUL</div>";
 	}

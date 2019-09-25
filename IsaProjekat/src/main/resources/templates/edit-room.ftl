@@ -36,6 +36,7 @@
                         </div>
                     </div>
                 </div>
+                <button class="btn btn-danger" ng-click="editRoomsCtrl.editBack()">Cancel</button>
                 <button class="btn btn-info" ng-click="editRoomsCtrl.editRoom()">Save</button>
             </form>
         </div>

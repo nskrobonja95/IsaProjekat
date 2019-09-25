@@ -47,7 +47,20 @@ public class HotelServiceService {
 		hotelServicesRepo.save(hotelService);
 		return hotelService;
 	}
-
+	
+	public HotelServiceModel saveService(Long id, AddHotelServiceDTO serviceDto) {
+		Optional<Hotel> temp = hotelRepo.findById(id);
+		if(!temp.isPresent()) {
+			return null;
+		}
+		HotelServiceModel hotelService = new HotelServiceModel();
+		hotelService.setHotel(temp.get());
+		hotelService.setName(serviceDto.getName());
+		hotelService.setRate((double) serviceDto.getRate());
+		hotelService.setCharge(serviceDto.getCharge());
+		hotelServicesRepo.save(hotelService);
+		return hotelService;
+	}
 	@Transactional
 	public List<HotelServiceModel> removeService(Long id, User user) {
 		Hotel hotel = hotelRepo.findByAdmin(user);
@@ -55,7 +68,17 @@ public class HotelServiceService {
 		List<HotelServiceModel> services = hotelServicesRepo.findByHotel(hotel);
 		return services;
 	}
-
+	public List<HotelServiceModel> removeService(Long serviceId, Long hotelId) {
+		
+		Optional<Hotel> temp = hotelRepo.findById(hotelId);
+		if(!temp.isPresent()) {
+			return null;
+		}
+		hotelServicesRepo.deleteById(serviceId);
+		List<HotelServiceModel> services = hotelServicesRepo.findByHotel(temp.get());
+		return services;
+		
+	}
 	public List<HotelServiceModel> loadHotelServicesByRoomId(Long id) {
 		Optional<Room> optRoom = roomRepo.findById(id);
 		if(!optRoom.isPresent())
@@ -64,6 +87,20 @@ public class HotelServiceService {
 		List<HotelServiceModel> services = hotelServicesRepo.findByHotel(room.getHotel());
 		return services;
 	}
+
+	public List<HotelServiceModel> findByHotel(Long id) {
+		Optional<Hotel> temp = hotelRepo.findById(id);
+		if(!temp.isPresent()) {
+			return null;
+		}
+		Hotel hotel = temp.get();
+		List<HotelServiceModel> hotelServices = hotelServicesRepo.findByHotel(hotel);
+		return hotelServices;
+	}
+
+	
+
+	
 	
 	
 	

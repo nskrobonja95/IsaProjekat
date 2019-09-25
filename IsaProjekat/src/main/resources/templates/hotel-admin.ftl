@@ -9,7 +9,9 @@
   </form>
   <br>
   <button class="btn btn-info" id="editHotelBtn" ng-click="hotelAdminCtrl.switchToEditState()">Edit</button>
-  <button class="btn btn-info" id="cancelEditHotelBtn" ng-click="hotelAdminCtrl.cancelEditing()" ng-show="avioAdminCtrl.editState">Cancel</button>
+  <button class="btn btn-info" id="cancelEditHotelBtn" ng-click="hotelAdminCtrl.cancelEditing()" ng-show="hotelAdminCtrl.editState">Cancel</button>
+ <br>
+ 
   <div class="accordion accordion-div" id="accordionExample">
     <div class="card">
       <div class="card-header " id="headingOne">
