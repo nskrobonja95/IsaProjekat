@@ -232,6 +232,7 @@
         </button>
       </div>
       <div class="modal-body">
+        <div class="alert alert-danger" role="alert" ng-if="homeCtrl.loginErrorMessage">{{homeCtrl.loginErrorMessage}}</div>
         <form name="loginForm" ng-submit="homeCtrl.login()" role="form">
           <div class="form-group">
             <input type="text" class="form-control" name="username" placeholder="Username" ng-pattern="homeCtrl.usernamePattern"

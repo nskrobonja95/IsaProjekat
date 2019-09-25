@@ -86,6 +86,3 @@
         </div>
     </form>
 </div>
-
-
-{{gsCtrl.userData}}

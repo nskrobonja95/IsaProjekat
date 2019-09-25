@@ -55,6 +55,7 @@ import edu.ftn.isa.security.CustomUserDetails;
 import edu.ftn.isa.services.AuthService;
 import edu.ftn.isa.services.EmailService;
 import edu.ftn.isa.services.ReservationService;
+import edu.ftn.isa.services.UserService;
 
 @RequestMapping("/user")
 @RestController
@@ -85,29 +86,41 @@ public class UserController {
 	@Autowired
 	private ReservationService resService;
 	
+	@Autowired
+	private UserService userService;
+	
 	@PutMapping("/edit/{oldusername}")
 	public ResponseEntity<?> editUser(
 			@PathVariable("oldusername") String oldusername, 
 			@RequestBody UserDTO userdto, HttpServletRequest request) {
 		String username = authService.extractAuthUsernameFromRequest(request);
-		if(!username.equals(oldusername))
-			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-		User user = userRepo.findByUsername(oldusername);
-		if(!oldusername.equals(userdto.getUsername())) {
-			if(userRepo.findByUsername(userdto.getUsername()) != null)
-				return new ResponseEntity<>(HttpStatus.CONFLICT);
-		}
-		user.setName(userdto.getName());
-		user.setLastname(userdto.getLastname());
-		user.setUsername(userdto.getUsername());
-		user.setCity(userdto.getCity());
-		try {
-			userRepo.save(user);
-		} catch(Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-		return new ResponseEntity<User>(user, HttpStatus.OK);
+		boolean flag = userService.editUser(userdto, oldusername, username);
+//		if(!username.equals(oldusername))
+//			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+//		User user = userRepo.findByUsername(oldusername);
+//		if(!oldusername.equals(userdto.getUsername())) {
+//			if(userRepo.findByUsername(userdto.getUsername()) != null)
+//				return new ResponseEntity<>(HttpStatus.CONFLICT);
+//		}
+//		if(!user.getEmail().equals(userdto.getEmail())) {
+//			if(userRepo.findByEmail(userdto.getEmail()) != null)
+//				return new ResponseEntity<>(HttpStatus.CONFLICT);
+//		}
+//		
+//		user.setName(userdto.getName());
+//		user.setLastname(userdto.getLastname());
+//		user.setEmail(userdto.getEmail());
+//		user.setPhoneNumber(userdto.getPhoneNumber());
+//		user.setUsername(userdto.getUsername());
+//		user.setCity(userdto.getCity());
+//		try {
+//			userRepo.save(user);
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+//		}
+		if(!flag) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<UserDTO>(userdto, HttpStatus.OK);
 	}
 	
 	@PutMapping("/changePassword/{username}")

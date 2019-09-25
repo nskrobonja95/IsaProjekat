@@ -130,7 +130,7 @@
         function editUser(username, user) {
             var response = $http.put(urls.USERS_SERVICE_API + "edit/" + username, user)
                 .then(function (response) {
-                    return response.data;
+                    return response;
                 }, function (error) {
                     console.log("Error occured while editing an user!");
                     return error;
