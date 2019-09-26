@@ -11,6 +11,8 @@ angular.module('flightApp').controller('AdminRoomsController',
             self.goToEditPage = goToEditPage;
             self.removeRoom = removeRoom;
             self.createRoom = createRoom;
+            self.createFastReservation = createFastReservation;
+
             function activePriceCheck(price) {
                 var fromDate = new Date(price.activeFrom);
                 var toDate = new Date(price.activeTo);
@@ -39,6 +41,11 @@ angular.module('flightApp').controller('AdminRoomsController',
                     }, function(errResponse) {
                         console.log(errResponse);
                     });
+            }
+
+            function createFastReservation(room) {
+                debugger;
+                $state.go("home-abstract.create-room-fast-reservation", {roomId: room.id});
             }
         }
     ]);

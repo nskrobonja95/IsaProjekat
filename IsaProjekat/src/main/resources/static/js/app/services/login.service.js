@@ -100,7 +100,7 @@
             console.log(Base64.decode($rootScope.globals.currentUser.authdata));
             var password = Base64.decode($rootScope.globals.currentUser.authdata).split(":")[1];
             var role = $rootScope.globals.currentUser.userType;
-            SetCredentials(username, password, role);
+            ClearCredentials();
         }
         
         function ClearCredentials() {       

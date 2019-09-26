@@ -25,6 +25,8 @@ public @Data class UserDTO {
 
 	private String password;
 	
+	private String phoneNumber;
+	
 	private boolean passwordChanged;
 
 	private Role role;
@@ -37,6 +39,7 @@ public @Data class UserDTO {
 		userDTO.email = user.getEmail();
 		userDTO.password = user.getPassword();
 		userDTO.city = user.getCity();
+		userDTO.phoneNumber = user.getPhoneNumber();
 		userDTO.role = user.getRole();
 		userDTO.username = user.getUsername();
 		userDTO.passwordChanged = user.isPasswordChanged();

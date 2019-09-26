@@ -42,6 +42,7 @@ angular.module('flightApp').controller('HomeController',
             function submitReg() {
                 console.log('Submitting');
                 self.dataLoading = true;
+                debugger;
                 if (self.user.id === undefined || self.user.id === null) {
                     console.log('Saving New User', self.user);
                     createUser(self.user);
@@ -61,6 +62,7 @@ angular.module('flightApp').controller('HomeController',
                 })();
                 self.dataLoading = true;
                 LoginService.Login(self.userLogin.username, self.userLogin.password, function (response) {
+                    debugger;
                     if (response.status == 200) {
                         LoginService.SetCredentials(self.userLogin.username, self.userLogin.password, response.data.role);
 
@@ -88,8 +90,9 @@ angular.module('flightApp').controller('HomeController',
                             $state.go('home-abstract.system-admin-airlines');
                         }
                     } else {
+                        debugger;
                         console.log('Ovo je poruka o gresci ' + response.data.errorMessage);
-                        self.errorMessage = response.data.errorMessage;
+                        self.loginErrorMessage = "Bad credentials! Try again";
                         self.dataLoading = false;
 
                     }
@@ -129,6 +132,7 @@ angular.module('flightApp').controller('HomeController',
                             self.errorMessage = '';
                             self.done = true;
                             self.user = {};
+                            self.passwordRepeat = '';
                             $scope.registerForm.$setPristine();
                             $scope.registerForm.$setUntouched();
                             self.dataLoading = false;
@@ -136,7 +140,7 @@ angular.module('flightApp').controller('HomeController',
                         },
                         function (errResponse) {
                             console.error('Error while creating User');
-                            self.errorMessage = 'Error while creating User: ' + errResponse.data.errorMessage;
+                            self.errorMessage = 'Please fill in all the inputs and make sure username and email are unique';
                             self.successMessage = '';
                             self.dataLoading = false;
                         }

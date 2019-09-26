@@ -199,6 +199,39 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                       }]
                 }
             })
+            .state('home-abstract.user-hotel',{
+                url:'/user-hotel/:hotelId',
+                views: {
+                    'user-hotel': {
+                        templateUrl: "partials/user-hotel",
+                        controller: "UserHotelController",
+                        controllerAs: "uhCtrl"
+                    }
+                },
+                resolve: {
+                      hotelData: ['$stateParams', 'HotelService',function($stateParams, HotelService){
+                        return HotelService.loadHotelById($stateParams.hotelId);   
+                      }],
+                      initialHotelServices: ['HotelService', '$stateParams',function(HotelService, $stateParams){
+                          return HotelService.loadHotelServicesForAdmin($stateParams.hotelId);
+                      }]
+                }
+            })
+            .state('home-abstract.hotel-fast-reservations',{
+                url:'/hotel-fast-reservations/:hotelId',
+                views: {
+                    'hotel-fast-reservations': {
+                        templateUrl: "partials/hotel-fast-reservations",
+                        controller: "HotelFastReservationsController",
+                        controllerAs: "hotelFastCtrl"
+                    }
+                },
+                resolve: {
+                      fastReservations: ['$stateParams', 'HotelService',function($stateParams, HotelService){
+                        return HotelService.loadFastReservationsForHotel($stateParams.hotelId);   
+                      }]
+                }
+            })
             .state('home-abstract.avio-fast-reservations',{
                 url:'/avio-fast-reservations/:companyId',
                 views: {
@@ -346,6 +379,16 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     initialHotelServices: ['HotelService','$stateParams',function(HotelService, $stateParams){
                         return HotelService.loadHotelServicesForAdmin($stateParams.hotelId);
                     }]
+                }
+            })
+            .state('home-abstract.create-room-fast-reservation',{
+                url:'/create-room-fast-reservation/:roomId',
+                views: {
+                    'create-room-fast-reservation': {
+                        templateUrl: "partials/create-room-fast-reservation",
+                        controller: "CreateRoomFastReservationController",
+                        controllerAs: "crfCtrl"
+                    }
                 }
             })
             .state('home-abstract.hotel-admin-hotel-profile.admin-rooms-list',{

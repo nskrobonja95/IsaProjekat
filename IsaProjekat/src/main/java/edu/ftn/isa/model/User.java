@@ -47,6 +47,9 @@ public @Data class User implements Serializable {
 	@Column(name="city")
 	private String city;
 	
+	@Column(name="phonenumber")
+	private String phoneNumber;
+	
 	@Column(name="enabled")
 	private boolean enabled;
 	

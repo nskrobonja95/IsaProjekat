@@ -1,5 +1,8 @@
 package edu.ftn.isa.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,12 +14,18 @@ import org.springframework.stereotype.Service;
 
 import edu.ftn.isa.dto.AddHotelDTO;
 import edu.ftn.isa.dto.BasicHotelInfoDTO;
+import edu.ftn.isa.dto.FastRoomReservationDTO;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Hotel;
+import edu.ftn.isa.model.HotelReservation;
+import edu.ftn.isa.model.ReservationStatus;
 import edu.ftn.isa.model.Role;
+import edu.ftn.isa.model.Room;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.repositories.DestinationRepository;
 import edu.ftn.isa.repositories.HotelRepository;
+import edu.ftn.isa.repositories.HotelReservationRepository;
+import edu.ftn.isa.repositories.RoomRepository;
 import edu.ftn.isa.repositories.UserRepository;
 
 @Service
@@ -33,6 +42,12 @@ public class HotelService {
 	
 	@Autowired
 	private DestinationRepository destRepo;
+	
+	@Autowired
+	private RoomRepository roomRepo;
+	
+	@Autowired
+	private HotelReservationRepository hotelResRepo;
 	
 	@Transactional
 	public void saveHotel(Hotel hotel) {
@@ -114,6 +129,31 @@ public class HotelService {
 		retVal.setPromo(hotelDto.getPromo());
 		hotelRepo.save(retVal);
 		return retVal;
+	}
+
+	public Integer createFastReservation(Long id, FastRoomReservationDTO dto) throws ParseException {
+		Optional<Room> optRoom = roomRepo.findById(id);
+		if(!optRoom.isPresent()) {
+			return -1;
+		}
+		Room room = optRoom.get();
+		Date checkInDate = new SimpleDateFormat("yyyy-MM-dd").parse(dto.getArrivalDate());
+		Date checkOutDate = new SimpleDateFormat("yyyy-MM-dd").parse(dto.getDepartingDate());
+		
+		if(!hotelResRepo.checkIfRoomIsAvailableInPeriod(checkInDate, checkOutDate, room).isEmpty())
+			return -1;
+		
+		HotelReservation res = new HotelReservation();
+		res.setRoom(room);
+		res.setRating(0);
+		res.setDiscount(dto.getDiscount());
+		res.setFastReservation(true);
+		res.setArrivalDate(checkInDate);
+		res.setDepartingDate(checkOutDate);
+		res.setCanceled(false);
+		res.setStatus(ReservationStatus.PENDING);
+		hotelResRepo.save(res);
+		return room.getHotel().getId().intValue();
 	}
 	
 }

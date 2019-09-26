@@ -248,6 +248,7 @@
         </button>
       </div>
       <div class="modal-body">
+        <div class="alert alert-danger" role="alert" ng-if="homeCtrl.loginErrorMessage">{{homeCtrl.loginErrorMessage}}</div>
         <form name="loginForm" ng-submit="homeCtrl.login()" role="form">
           <div class="form-group">
             <input type="text" class="form-control" name="username" placeholder="Username" ng-pattern="homeCtrl.usernamePattern"
@@ -312,6 +313,7 @@
 <div ui-view="add-service"></div>
 <div ui-view="admin-rooms-list"></div>
 <div ui-view="create-room"></div>
+<div ui-view="create-room-fast-reservation"></div>
 <div ui-view="system-admin-airlines"></div>
 <div ui-view="system-admin-hotels"></div>
 <div ui-view="add-hotel"></div>
@@ -320,6 +322,8 @@
 <div ui-view="avio-fast-reservations"></div>
 <div ui-view="edit-room"></div>
 <div ui-view="avio-statistics"></div>
+<div ui-view="user-hotel"></div>
+<div ui-view="hotel-fast-reservations"></div>
 
 <div ui-view="hotel-admin-welcome"></div>
 <div ui-view="hotel-admin-hotel-profile"></div>

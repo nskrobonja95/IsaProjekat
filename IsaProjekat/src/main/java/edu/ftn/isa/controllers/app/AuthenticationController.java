@@ -31,6 +31,7 @@ import edu.ftn.isa.payload.SignupPayload;
 import edu.ftn.isa.repositories.FlightSeatRepository;
 import edu.ftn.isa.repositories.UserRepository;
 import edu.ftn.isa.services.EmailService;
+import edu.ftn.isa.services.UserService;
 
 @RestController
 @RequestMapping("/auth")
@@ -43,13 +44,7 @@ public class AuthenticationController {
 	private UserRepository userRepo;
 	
 	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	private FlightSeatRepository flightSeatRepo;
-	
-	@Autowired
-	private EmailService emailService;
+	private UserService userService;
 	
 	@PostMapping("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -62,7 +57,7 @@ public class AuthenticationController {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		
-		User u = userRepo.findByUsername(loginPayload.getUsername());
+		User u = userService.findByUsername(loginPayload.getUsername());
 		UserDTO userDTO = UserDTO.parseUsertoDTO(u);
 		return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
 	}
@@ -70,29 +65,31 @@ public class AuthenticationController {
 	@PostMapping("/register")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public ResponseEntity<?> login(@RequestBody SignupPayload signupPayload) {
-		if(userRepo.findByUsername(signupPayload.getUsername()) != null) {
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
-		}
-		if(userRepo.findByEmail(signupPayload.getEmail()) != null) {
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
-		}
-		User u = createUser(signupPayload);
-		try{
-			userRepo.save(u);
-			u.setEnabled(false);
-			SimpleMailMessage registrationEmail = new SimpleMailMessage();
-			registrationEmail.setTo(u.getEmail());
-			registrationEmail.setSubject("Flight App - Confirmation Email");
-			String url = "http://localhost:8080/auth/confirmRegistration/" + u.getVerificationToken();
-			String verificationEmail = "Hello %s, \nTo confirm your e-mail address for Flight Application, please click the link below:\n %s";
-			String email = String.format(verificationEmail, u.getName(), url);
-			registrationEmail.setText(email);
-			registrationEmail.setFrom("noreply@domain.com");
-			
-			emailService.sendEmail(registrationEmail);
-		} catch(Exception e) {
-			return new ResponseEntity<User>(HttpStatus.UNPROCESSABLE_ENTITY);
-		}
+		if(!userService.register(signupPayload))
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//		if(userRepo.findByUsername(signupPayload.getUsername()) != null) {
+//			return new ResponseEntity<>(HttpStatus.CONFLICT);
+//		}
+//		if(userRepo.findByEmail(signupPayload.getEmail()) != null) {
+//			return new ResponseEntity<>(HttpStatus.CONFLICT);
+//		}
+//		User u = createUser(signupPayload);
+//		try{
+//			userRepo.save(u);
+//			u.setEnabled(false);
+//			SimpleMailMessage registrationEmail = new SimpleMailMessage();
+//			registrationEmail.setTo(u.getEmail());
+//			registrationEmail.setSubject("Flight App - Confirmation Email");
+//			String url = "http://localhost:8080/auth/confirmRegistration/" + u.getVerificationToken();
+//			String verificationEmail = "Hello %s, \nTo confirm your e-mail address for Flight Application, please click the link below:\n %s";
+//			String email = String.format(verificationEmail, u.getName(), url);
+//			registrationEmail.setText(email);
+//			registrationEmail.setFrom("noreply@domain.com");
+//			
+//			emailService.sendEmail(registrationEmail);
+//		} catch(Exception e) {
+//			return new ResponseEntity<User>(HttpStatus.UNPROCESSABLE_ENTITY);
+//		}
 		return new ResponseEntity<User>(HttpStatus.CREATED);
 	}
 	
@@ -110,18 +107,19 @@ public class AuthenticationController {
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 	}
 	
-	private User createUser(SignupPayload payload) {
-		User u = new User();
-		u.setName(payload.getName());
-		u.setLastname(payload.getLastname());
-		u.setEmail(payload.getEmail());
-		u.setPassword(passwordEncoder.encode(payload.getPassword()));
-		u.setUsername(payload.getUsername());
-		u.setCity(payload.getCity());
-		u.setEnabled(false);
-		u.setVerificationToken(UUID.randomUUID().toString());
-		u.setRole(Role.User);
-		return u;
-	}
+//	private User createUser(SignupPayload payload) {
+//		User u = new User();
+//		u.setName(payload.getName());
+//		u.setLastname(payload.getLastname());
+//		u.setEmail(payload.getEmail());
+//		u.setPassword(passwordEncoder.encode(payload.getPassword()));
+//		u.setUsername(payload.getUsername());
+//		u.setCity(payload.getCity());
+//		u.setPhoneNumber(payload.getPhoneNumber());
+//		u.setEnabled(false);
+//		u.setVerificationToken(UUID.randomUUID().toString());
+//		u.setRole(Role.User);
+//		return u;
+//	}
 	
 }

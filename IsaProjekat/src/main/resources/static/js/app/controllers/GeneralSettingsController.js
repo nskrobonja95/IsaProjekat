@@ -30,18 +30,28 @@ angular.module('flightApp').controller('GeneralSettingsController',
             UserService.editUser(username, user)
                 .then(
                     function (response){
-                        console.log('User updated successfully');
-                        console.log("User: ", response);
-                        console.log(response.response.username);
-                        self.successMessage='User updated successfully';
-                        self.errorMessage='';
-                        self.done = true;
-                        self.dataLoading = false;
-                        LoginService.setCredentialsUsername(response.response.username);
-                        //LoginService.ClearCredentials();
-                        $state.go('home-abstract.settings-abstract.general-settings');
+                        debugger;
+                        if(response.response.status == 200){
+                            console.log('User updated successfully');
+                            console.log("User: ", response);
+                            console.log(response.response.data.username);
+                            self.successMessage='User updated successfully';
+                            self.errorMessage='';
+                            self.done = true;
+                            self.dataLoading = false;
+                            if(username != response.response.data.username){
+                                LoginService.ClearCredentials();
+                                $state.go('home-abstract.avio-companies-list');
+                            }
+                        } else {
+                            self.successMessage='';
+                            self.errorMessage='User with this email or username already exists';
+                            self.done = true;
+                            self.dataLoading = false;
+                        }
                     },
                     function(errResponse){
+                        debugger;
                         console.error('Error while updating User');
                         self.errorMessage=errResponse.data.errorMessage;
                         self.dataLoading = false;

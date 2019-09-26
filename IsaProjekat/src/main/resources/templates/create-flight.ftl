@@ -73,7 +73,7 @@
                 <input type="number" class="form-control" ng-model="createFlightCtrl.businessPrice" id="businessPrice">
             </div>
             <div class="form-group">
-                <label for="businessPrice">Discount(%):</label>
+                <label for="discount">Discount(%):</label>
                 <input type="number" class="form-control" ng-model="createFlightCtrl.discount" id="discount">
             </div>
         </div>

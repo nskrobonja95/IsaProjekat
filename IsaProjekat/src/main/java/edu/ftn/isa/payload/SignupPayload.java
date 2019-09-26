@@ -32,4 +32,6 @@ public @Data class SignupPayload {
 	@Size(min = 2)
 	private String city;
 	
+	private String phoneNumber;
+	
 }

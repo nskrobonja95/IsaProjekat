@@ -25,10 +25,12 @@ import edu.ftn.isa.dto.FlightReservationResponseDTO;
 import edu.ftn.isa.dto.HotelReservationDTO;
 import edu.ftn.isa.dto.SeatDTO;
 import edu.ftn.isa.dto.SeatRowDTO;
+import edu.ftn.isa.dto.UserHotelReservationDTO;
 import edu.ftn.isa.model.Flight;
 import edu.ftn.isa.model.FlightRate;
 import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.FlightSeat;
+import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.HotelReservation;
 import edu.ftn.isa.model.HotelServiceModel;
 import edu.ftn.isa.model.ReservationStatus;
@@ -39,6 +41,7 @@ import edu.ftn.isa.repositories.FlightRateRepository;
 import edu.ftn.isa.repositories.FlightRepository;
 import edu.ftn.isa.repositories.FlightReservationRepository;
 import edu.ftn.isa.repositories.FlightSeatRepository;
+import edu.ftn.isa.repositories.HotelRepository;
 import edu.ftn.isa.repositories.HotelReservationRepository;
 import edu.ftn.isa.repositories.RoomRepository;
 
@@ -68,6 +71,9 @@ public class ReservationService {
 	
 	@Autowired
 	private RoomRepository roomRepo;
+	
+	@Autowired
+	private HotelRepository hotelRepo;
 	
 	@Transactional
 	public boolean cancelReservation(Long resid) {
@@ -295,6 +301,51 @@ public class ReservationService {
 			}
 		}
 		return seatRows;
+	}
+
+	public List<UserHotelReservationDTO> retrieveFastReservationsForHotel(Long id) {
+		Optional<Hotel> optHotel = hotelRepo.findById(id);
+		if(!optHotel.isPresent())
+			return null;
+		Hotel hotel = optHotel.get();
+		List<HotelReservation> reservations = hotelResRepo.findByHotelAndStatus(hotel, ReservationStatus.PENDING);
+		List<UserHotelReservationDTO> retVal = new ArrayList<UserHotelReservationDTO>();
+		for(HotelReservation reservation : reservations) {
+			
+			retVal.add(new UserHotelReservationDTO(reservation.getId(),
+					reservation.getRoom(),
+					reservation.getArrivalDate(),
+					reservation.getDepartingDate(),
+					reservation.getStatus().toString(),
+					reservation.getRating(),
+					reservation.getServices()
+					));
+		}
+		return retVal;
+	}
+
+	public List<UserHotelReservationDTO> fastHotelReserve(Long id, User user) {
+		Optional<HotelReservation> optRes = hotelResRepo.findById(id);
+		if(!optRes.isPresent())
+			return null;
+		HotelReservation res = optRes.get();
+		res.setUser(user);
+		res.setStatus(ReservationStatus.APPROVED);
+		hotelResRepo.save(res);
+		List<HotelReservation> reservations = hotelResRepo.findByHotelAndStatus(res.getRoom().getHotel(), ReservationStatus.PENDING);
+		List<UserHotelReservationDTO> retVal = new ArrayList<UserHotelReservationDTO>();
+		for(HotelReservation reservation : reservations) {
+			
+			retVal.add(new UserHotelReservationDTO(reservation.getId(),
+					reservation.getRoom(),
+					reservation.getArrivalDate(),
+					reservation.getDepartingDate(),
+					reservation.getStatus().toString(),
+					reservation.getRating(),
+					reservation.getServices()
+					));
+		}
+		return retVal;
 	}
 	
 }
