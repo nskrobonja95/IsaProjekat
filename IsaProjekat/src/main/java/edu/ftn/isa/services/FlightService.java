@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -52,6 +53,16 @@ public class FlightService {
 	}
 	
 	@Transactional
+	public List<Flight> getFlightsOfAvio(Long avioId) {
+		Optional<AvioCompany> temp = avioRepo.findById(avioId);
+		if(!temp.isPresent()) {
+			return null;
+		}
+		
+		List<Flight> flights = flightRepo.findByAvioCompany(temp.get());
+		return flights;
+	}
+	@Transactional
 	public Flight createFlight(User admin, FlightDTO flightData) throws ParseException {
 		AvioCompany avio = avioRepo.findByAdmin(admin);
 		Destination from = destRepo.findByNameAndDeleted(flightData.getFrom(), false);
@@ -75,7 +86,33 @@ public class FlightService {
 		saveSeats(flight, flightData.getSeats());
 		return flight;
 	}
-	
+	public Flight createFlight(Long avioId, FlightDTO flightData) throws ParseException {
+		Optional<AvioCompany> temp = avioRepo.findById(avioId);
+		if(!temp.isPresent()) {
+			return null;
+		}
+		AvioCompany avio = temp.get();
+		Destination from = destRepo.findByNameAndDeleted(flightData.getFrom(), false);
+		Destination to = destRepo.findByNameAndDeleted(flightData.getTo(), false);
+		Date takeoff = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(flightData.getDepart());
+		Date landing = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(flightData.getLand());
+		Flight flight = new Flight();
+		flight.setAvioCompany(avio);
+		flight.setBaggageOver7Price(flightData.getPriceForBaggageOver7kg());
+		flight.setBaggageOver20Price(flightData.getPriceForBaggageOver14kg());
+		flight.setEconomicClassPrice(flightData.getEconomicPrice());
+		flight.setBussinessClassPrice(flightData.getBusinessPrice());
+		flight.setFrom(from);
+		flight.setToDest(to);
+		flight.setTakeoff(takeoff);
+		flight.setLanding(landing);
+		flight.setConfigurationType(flightData.getConfigType());
+		flight.setNumOfRows(flightData.getNumOfRows());
+		flight.setDiscount(flightData.getDiscount());
+		Flight savedFlight = flightRepo.save(flight);
+		saveSeats(flight, flightData.getSeats());
+		return flight;
+	}
 	private void saveSeats(Flight flight, List<SeatDTO> seats) {
 		int seatNumber = 0;
 		for(int i=0; i<seats.size(); ++i) {
@@ -93,5 +130,9 @@ public class FlightService {
 			flightSeatRepo.save(fs);
 		}
 	}
+
+	
+
+	
 	
 }

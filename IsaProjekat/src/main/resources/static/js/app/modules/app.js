@@ -247,7 +247,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                       }]
                 }
             })
-            .state('home-abstract.avio-statistics',{
+            .state('home-abstract.avio-admin-avio-profile.avio-statistics',{
                 url:'/avio-statistics',
                 views: {
                     'avio-statistics': {
@@ -257,12 +257,12 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     }
                 },
                 resolve: {
-                    avioStatisticData: ['AvioService', function(AvioService){
-                        return AvioService.loadAvioStatistics();
+                    avioStatisticData: ['AvioService','$stateParams', function(AvioService, $stateParams){
+                        return AvioService.loadAvioStatistics($stateParams.avioId);
                     }]
                 }
             })
-            .state('home-abstract.avio-admin',{
+            .state('home-abstract.avio-admin-avio-profile.avio-admin',{
                 url:'/avio-admin',
                 views: {
                     'avio-admin': {
@@ -272,12 +272,36 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     }
                 },
                 resolve: {
-                    companyData: ['AvioService', function(AvioService){
-                        return AvioService.loadAvioForAdmin();
+                    companyData: ['AvioService', '$stateParams', function(AvioService, $stateParams){
+                        return AvioService.loadAvioForAdmin($stateParams.avioId);
                     }],
-                    restOfDestinationsList: ['AvioService', function(AvioService){
-                        return AvioService.loadRestOfDestinations();
+                    restOfDestinationsList: ['AvioService','$stateParams', function(AvioService, $stateParams){
+                        return AvioService.loadRestOfDestinations($stateParams.avioId);
                     }]
+                }
+            })
+            .state('home-abstract.avio-admin-welcome',{
+                url:'/avio-admin-welcome',
+                views: {
+                    'avio-admin-welcome': {
+                        templateUrl: "partials/avio-admin-welcome",
+                        controller: "AvioAdminWelcomeController",
+                        controllerAs: "aawCtrl"
+                    }
+                },
+                resolve: {
+                    initalAvioList: ['AvioService','$rootScope', function(AvioService, $rootScope){
+                        return AvioService.loadAvioListForAdmin();
+                    }]
+                }
+            })
+            .state('home-abstract.avio-admin-avio-profile',{
+                url:'/avio-admin-avio-profile/:avioId',
+                abstract:true,
+                views: {
+                    'avio-admin-avio-profile': {
+                        templateUrl: "partials/avio-admin-avio-profile"
+                    }
                 }
             })
             .state('home-abstract.hotel-admin-welcome',{
@@ -290,8 +314,8 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                     }
                 },
                 resolve: {
-                    initalHotelList: ['HotelService','$rootScope', function(HotelService, $rootScope){
-                        return HotelService.loadHotelListForAdmin($rootScope.globals.currentUser.username);
+                    initalHotelList: ['HotelService', function(HotelService){
+                        return HotelService.loadHotelListForAdmin();
                     }]
                 }
             })
@@ -668,11 +692,11 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                   }
                 }  
             })
-            .state('home-abstract.admin-flights', {
-                url: '/adminflights',
+            .state('home-abstract.avio-admin-avio-profile.admin-flights', {
+                url: '/admin-flights',
                 resolve: {
-                    initialFlights: ['AvioService',function(AvioService){
-                        return AvioService.loadAllFlightsForAdmin();
+                    initialFlights: ['AvioService', '$stateParams',function(AvioService, $stateParams){
+                        return AvioService.loadAllFlightsForAdmin($stateParams.avioId);
                     }]
                 },
                 views: {
@@ -684,7 +708,7 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 }  
             })
             .state('home-abstract.create-flight', {
-                url: '/createflight',
+                url: '/createflight/:avioId',
                 resolve: {
                     initialDestinations: ['AvioService',function(AvioService){
                         return AvioService.loadDestinationsForAdmin();

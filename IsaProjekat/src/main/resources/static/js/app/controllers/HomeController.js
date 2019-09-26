@@ -75,7 +75,8 @@ angular.module('flightApp').controller('HomeController',
                             //$state.go('home-abstract.avio-companies-list');
                         } else if($rootScope.globals.currentUser.userType == 'AvioAdmin') {
                             if(response.data.passwordChanged)
-                                $state.go('home-abstract.avio-admin');
+                                $state.go('home-abstract.avio-admin-welcome');
+                                // $state.go('home-abstract.avio-admin');
                             else
                                 $state.go('home-abstract.change-password');
                         } else if($rootScope.globals.currentUser.userType == 'HotelAdmin') {
@@ -84,6 +85,9 @@ angular.module('flightApp').controller('HomeController',
                             }
                             else
                                 $state.go('home-abstract.change-password');
+                        }else if($rootScope.globals.currentUser.userType == 'SysAdmin'){
+                            
+                            $state.go('home-abstract.system-admin-airlines');
                         }
                     } else {
                         debugger;

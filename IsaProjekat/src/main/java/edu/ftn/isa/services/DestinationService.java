@@ -55,5 +55,10 @@ public class DestinationService {
 		List<Destination> dests = destRepo.findRestOfDestinations(avio.getId());
 		return dests;
 	}
-	
+	@Transactional
+	public List<Destination> getRestOfDestinationsForAdmin(Long id) {
+		
+		List<Destination> dests = destRepo.findRestOfDestinations(id);
+		return dests;
+	}
 }

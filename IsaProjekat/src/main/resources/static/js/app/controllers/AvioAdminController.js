@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('flightApp').controller('AvioAdminController',
-    ['$scope', '$rootScope', '$state', 'AvioService', 'companyData', 'restOfDestinationsList',
-        function ($scope, $rootScope, $state, AvioService, companyData, restOfDestinationsList) {
+    ['$scope', '$rootScope', '$state', 'AvioService', 'companyData', 'restOfDestinationsList','$stateParams',
+        function ($scope, $rootScope, $state, AvioService, companyData, restOfDestinationsList, $stateParams) {
             var self = this;
             self.company = companyData.airline;
             self.companyName = self.company.name;
@@ -61,12 +61,12 @@ angular.module('flightApp').controller('AvioAdminController',
             function saveNewDestination() {
                 var obj = {};
                 obj.name = self.newDest.name;
-                AvioService.addDestination(obj)
+                AvioService.addDestination(obj, $stateParams.avioId)
                     .then(function(response) {
                             console.log(response);
                             self.company = response.avio;
                             self.destinations = self.company.destinations;
-                            AvioService.loadRestOfDestinations()
+                            AvioService.loadRestOfDestinations($stateParams.avioId)
                                 .then(function(response) {
                                     self.restOfDestinations = response.destList;
                                 }, function(errResponse) {      
@@ -82,12 +82,17 @@ angular.module('flightApp').controller('AvioAdminController',
                 self.addDestState = false;
             }
 
-            function removeDestination(id) {
-                AvioService.removeDestinationForAdmin(id)
+            function removeDestination(destId) {
+                AvioService.removeDestinationForAdmin(destId, $stateParams.avioId)
                     .then(function(response) {
                         console.log(response);
+                        
+                        if(response.dests.status == 400){
+                            alert("Cannot remove destination. There are active flights for this destination.")
+                            return;
+                        }
                         self.destinations = response.dests;
-                        AvioService.loadRestOfDestinations()
+                        AvioService.loadRestOfDestinations($stateParams.avioId)
                                 .then(function(response) {
                                     self.restOfDestinations = response.destList;
                                 }, function(errResponse) {      

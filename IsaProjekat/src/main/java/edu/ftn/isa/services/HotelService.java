@@ -55,11 +55,25 @@ public class HotelService {
 	}
 
 	@Transactional
-	public Hotel addHotel(AddHotelDTO HotelDto) {
+	public int addHotel(AddHotelDTO HotelDto) {
 		Hotel hotel = new Hotel();
+		int response;
 		User user;
+		if(HotelDto.getExistingAdminId() == null && HotelDto.getEmail() == null) {
+			response = 1;
+			return response;
+		}
+		
 		if(HotelDto.getExistingAdminId() == null) {
-			System.out.println("Usao je u ovu petlju");
+			if(userRepo.findByUsername(HotelDto.getUsername()) != null) {
+				response = 2;
+				return response;
+			}
+			if(userRepo.findByEmail(HotelDto.getEmail()) != null) {
+				response = 2;
+				return response;
+			}
+			
 			user  = new User();
 			user.setEmail(HotelDto.getEmail());
 			user.setUsername(HotelDto.getUsername());
@@ -71,7 +85,8 @@ public class HotelService {
 		}else {
 			Optional<User> temp = userRepo.findById(HotelDto.getExistingAdminId());
 			if(!temp.isPresent()) {
-				return null;
+				response = 3;
+				return response;
 			}
 			user = temp.get();
 		}
@@ -82,7 +97,8 @@ public class HotelService {
 		Destination dest = destRepo.findByNameAndDeleted(HotelDto.getDestination(), false);
 		hotel.setDestination(dest);
 		hotelRepo.save(hotel);
-		return hotel;
+		response = 0;
+		return response;
 	}
 
 	@Transactional

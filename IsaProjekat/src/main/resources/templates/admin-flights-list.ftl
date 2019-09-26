@@ -26,8 +26,8 @@
 									<#--  <div class="address">Price: {{flights.price}}</div>  -->
 								</div>
                                 <div style="margin: auto; height:100%" >
-                                    <a href="#"  class="btn btn-outlined btn-theme btn-lg d-flex align-self-start"  data-wow-delay="0.7s">Select</a>
-                                    <a href="#"  class="btn btn-outlined btn-theme btn-lg d-flex align-self-start"  data-wow-delay="0.7s">Book hotel</a>
+                                    <a href="#"  class="btn btn-outlined btn-theme btn-lg d-flex align-self-start"  data-wow-delay="0.7s">Edit</a>
+                                    <a href="#"  class="btn btn-outlined btn-theme btn-lg d-flex align-self-start"  data-wow-delay="0.7s">Add fast reservation</a>
                                 </div>
                         
                                 <#--  <img class="d-flex align-self-start" style="border-radius:25px 0px 0px 25px;"
@@ -36,7 +36,7 @@
 
 						</div>
 					</div>
-					<a ui-sref="home-abstract.create-flight()">Create flight</a>
+					<a ui-sref="home-abstract.create-flight({avioId:adminFlightsCtrl.avioId})">Create flight</a>
 			</section>
 			<div class="top-margin-div "></div>
 		</div>

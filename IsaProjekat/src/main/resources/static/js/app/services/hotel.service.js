@@ -433,7 +433,8 @@
                 console.log("Search hotel service response:", response.data);
                 return response.data;
             }, function (error) {
-                console.log("Error occured while initializing  Hotel!", error);
+                console.log("Error occured while adding  Hotel!", error);
+                return error;
             });
 
             return $q.all([response])

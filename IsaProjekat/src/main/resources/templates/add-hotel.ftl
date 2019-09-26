@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <button class="btn btn-info" ng-click="ahCtrl.addHotel()">Save</button>
+                <button class="btn btn-info" ng-click="ahCtrl.goBack()">Cancel</button>
             </form>
         </div>
     </div>
-    asfas{{ahCtrl.obj.existingAdminId}}

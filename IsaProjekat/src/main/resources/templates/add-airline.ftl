@@ -48,7 +48,7 @@
                         <div ng-show="aaCtrl.radioAdmin == 'existing' ">
                             <div class="form-group">
                                 <label for="inputState">Select admin:</label>
-                                <select id="inputState" ng-model="aaCtrl.obj.existingAdminId" class="form-control">
+                                <select id="inputState" ng-model="aaCtrl.existingAdminId" class="form-control">
                                     <option value="{{admin.id}}" ng-repeat="admin in aaCtrl.avioAdmins" >{{admin.username}}</option>
                                 </select>
                             </div>
@@ -57,6 +57,7 @@
                     </div>
                 </div>
                 <button class="btn btn-info" ng-click="aaCtrl.addAirline()">Save</button>
+                <button class="btn btn-info" ng-click="aaCtrl.goBack()">Cancel</button>
             </form>
         </div>
     </div>

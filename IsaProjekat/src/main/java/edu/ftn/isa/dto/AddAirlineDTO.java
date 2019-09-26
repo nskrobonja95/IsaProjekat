@@ -16,4 +16,6 @@ public @Data class AddAirlineDTO {
 	
 	private String password;
 	
+	private Long existingAdminId;
+	
 }

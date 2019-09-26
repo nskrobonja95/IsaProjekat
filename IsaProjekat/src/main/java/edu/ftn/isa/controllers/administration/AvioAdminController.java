@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ import edu.ftn.isa.dto.FlightDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
+import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.security.CustomUserDetails;
 import edu.ftn.isa.services.AvioService;
 import edu.ftn.isa.services.DestinationService;
@@ -84,47 +86,49 @@ public class AvioAdminController {
 //		return new ResponseEntity<>(HttpStatus.OK);
 //	}
 
-	@GetMapping("/getCompany")
-	public ResponseEntity<?> getAvioCompany() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany retVal = avioService.getAvioByAdmin(userDetails.getUser());
+	@GetMapping("/getCompany/{id}")
+	public ResponseEntity<?> getAvioCompany(@PathVariable("id") Long id) {
+		
+		AvioCompany retVal = avioService.getAvioById(id);
 		if(retVal == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<AvioCompany>(retVal, HttpStatus.OK);
 	}
-	
-	@PutMapping("/updateBasicCompanyInfo")
-	public ResponseEntity<?> updateBasicCompanyInfo(@RequestBody BasicAvioInfoDTO avioDto) {
+	@GetMapping("/getCompanies")
+	public ResponseEntity<?> getAvioCompanies() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany modifiedAvio = avioService.updateAvio(avioDto, userDetails.getUser());
+		List<AvioCompany> retVal = avioService.getAviosByAdmin(userDetails.getUser());
+		if(retVal == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<List<AvioCompany>>(retVal, HttpStatus.OK);
+	}
+	
+	@PutMapping("/updateBasicCompanyInfo/{id}")
+	public ResponseEntity<?> updateBasicCompanyInfo(@PathVariable("id") Long id,@RequestBody BasicAvioInfoDTO avioDto) {
+		AvioCompany modifiedAvio = avioService.updateAvio(avioDto, id);
 		if(modifiedAvio == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<AvioCompany>(modifiedAvio, HttpStatus.OK);
 	}
 	
-	@PostMapping("/addDestination")
-	public ResponseEntity<?> addDest(@RequestBody DestinationDTO destDto) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany avio = avioService.addDestinationToAvio(destDto.getName(), userDetails.getUser());
+	@PostMapping("/addDestination/{avioId}")
+	public ResponseEntity<?> addDest(@PathVariable("avioId") Long avioId, @RequestBody DestinationDTO destDto) {
+		AvioCompany avio = avioService.addDestinationToAvio(destDto.getName(), avioId);
 		if(avio == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<AvioCompany>(avio, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/removeDestination/{id}")
-	public ResponseEntity<?> removeDestatination(@PathVariable("id") Long id) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioCompany avio = avioService.removeDestinationFromAvio(id, userDetails.getUser());
+	@DeleteMapping("/removeDestination/{destId}/{avioId}")
+	public ResponseEntity<?> removeDestatination(@PathVariable("destId") Long destId, @PathVariable("avioId") Long avioId) {
+		
+		AvioCompany avio = avioService.removeDestinationFromAvio(destId, avioId);
 		if(avio == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<Collection<Destination>>(avio.getDestinations(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/getFlights")
-	public ResponseEntity<?> getFlights() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		List<Flight> flights = flightService.getFlightsOfAvio(userDetails.getUser());
+	@GetMapping("/getFlights/{avioId}")
+	public ResponseEntity<?> getFlights(@PathVariable("avioId") Long avioId) {
+		
+		List<Flight> flights = flightService.getFlightsOfAvio(avioId);
+		if(flights == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<List<Flight>>(flights, HttpStatus.OK);
 	}
 	
@@ -136,28 +140,28 @@ public class AvioAdminController {
 		return new ResponseEntity<List<Destination>>(dests, HttpStatus.OK);
 	}
 	
-	@GetMapping("/getRestOfDestinations")
-	public ResponseEntity<?> getRestOfDestinations() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		List<Destination> dests = destService.getRestOfDestinationsForAdmin(userDetails.getUser());
+	@GetMapping("/getRestOfDestinations/{avioId}")
+	public ResponseEntity<?> getRestOfDestinations(@PathVariable("avioId") Long avioId) {
+		
+		List<Destination> dests = destService.getRestOfDestinationsForAdmin(avioId);
 		return new ResponseEntity<List<Destination>>(dests, HttpStatus.OK);
 	}
 	
-	@PostMapping("/createFlight")
-	public ResponseEntity<?> createFlight(@RequestBody FlightDTO flightData) throws ParseException {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		Flight flight = flightService.createFlight(userDetails.getUser(), flightData);
+	@PostMapping("/createFlight/{avioId}")
+	public ResponseEntity<?> createFlight(@PathVariable("avioId") Long avioId, @RequestBody FlightDTO flightData) throws ParseException {
+		
+		Flight flight = flightService.createFlight(avioId, flightData);
 		if(flight == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@GetMapping("/avioStatistics")
-	public ResponseEntity<?> avioStatistics() throws ParseException {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		AvioStatisticsDTO stats = statsService.getAvioStats(userDetails.getUser());
+	@GetMapping("/avioStatistics/{avioId}")
+	public ResponseEntity<?> avioStatistics(@PathVariable("avioId") Long avioId) throws ParseException {
+		
+		AvioStatisticsDTO stats = statsService.getAvioStats(avioId);
+		if(stats == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		return new ResponseEntity<AvioStatisticsDTO>(stats, HttpStatus.OK);
 	}
 	

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ftn.isa.dto.AddAirlineDTO;
+import edu.ftn.isa.dto.AddAvioResponseDTO;
 import edu.ftn.isa.dto.AddHotelDTO;
 import edu.ftn.isa.dto.AdminDTO;
 import edu.ftn.isa.dto.DestinationDTO;
@@ -35,6 +36,7 @@ import edu.ftn.isa.repositories.UserRepository;
 import edu.ftn.isa.services.AvioService;
 import edu.ftn.isa.services.DestinationService;
 import edu.ftn.isa.services.HotelService;
+import edu.ftn.isa.util.CustomErrorType;
 
 @RestController
 @RequestMapping("/admin")
@@ -229,21 +231,26 @@ public class AdminController {
 	}
 	
 	@PostMapping("/saveAirline")
-	public ResponseEntity<?> saveAirline(@RequestBody AddAirlineDTO airlineDto) {
-		AvioCompany avio = avioService.addAvio(airlineDto);
-		if(avio == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<String> saveAirline(@RequestBody AddAirlineDTO airlineDto) {
+		int response = avioService.addAvio(airlineDto);
+		
+		if(response == 1) return new ResponseEntity(new CustomErrorType("Fill the form properly"), HttpStatus.BAD_REQUEST);
+		if(response == 2) return new ResponseEntity(new CustomErrorType("Error while creating new admin. Admin already exists with given credentials."), HttpStatus.BAD_REQUEST);
+		if(response == 3) return new ResponseEntity(new CustomErrorType("Error while adding new airline. Something went wrong."), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("",HttpStatus.OK);
 	}
 	
 	@PostMapping("/saveHotel")
-	public ResponseEntity<?> saveHotel(@RequestBody AddHotelDTO HotelDto) {
-		Hotel retVal = hotelService.addHotel(HotelDto);
-		if(retVal == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		return new ResponseEntity<>(HttpStatus.OK);
+	public ResponseEntity<String> saveHotel(@RequestBody AddHotelDTO HotelDto) {
+		int response = hotelService.addHotel(HotelDto);
+		if(response == 1) return new ResponseEntity(new CustomErrorType("Fill the form properly"), HttpStatus.BAD_REQUEST);
+		if(response == 2) return new ResponseEntity(new CustomErrorType("Error while creating new admin. Admin already exists with given credentials."), HttpStatus.BAD_REQUEST);
+		if(response == 3) return new ResponseEntity(new CustomErrorType("Error while adding new airline. Something went wrong."), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("",HttpStatus.OK);
 	}
 	
 	@PostMapping("/saveDestination")
-	public ResponseEntity<?> saveDestination(DestinationDTO destDto) {
+	public ResponseEntity<?> saveDestination(@RequestBody DestinationDTO destDto) {
 		destService.addDestination(destDto);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
