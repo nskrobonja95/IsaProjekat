@@ -34,10 +34,28 @@
         service.makeFastReservation = makeFastReservation;
         service.rateReservation = rateReservation;
         service.loadAvioStatistics = loadAvioStatistics;
+        service.loadAvioListForAdmin = loadAvioListForAdmin;
         return service;
         
-        function loadAvioStatistics(){
-            var stats = $http.get(urls.AVIO_ADMIN_API+'avioStatistics')
+        function loadAvioListForAdmin() {
+            var list = $http.get(urls.AVIO_ADMIN_API+'getCompanies/')
+            .then(function (response) {
+                console.log("Hotel service response:", response);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing  hotels list!", error);
+            });
+
+            return $q.all([list])
+                .then(function (results) {
+                    return {
+                        list: results[0]
+                    };
+                });
+        }
+
+        function loadAvioStatistics(avioId){
+            var stats = $http.get(urls.AVIO_ADMIN_API+'avioStatistics/'+avioId)
             .then(function (response) {
                 console.log("Avio service response:", response.data);
                 return response.data;
@@ -121,8 +139,9 @@
             });
         }
 
-        function loadRestOfDestinations(){
-            var destList = $http.get(urls.AVIO_ADMIN_API+'getRestOfDestinations')
+        function loadRestOfDestinations(id){
+            console.log(id);
+            var destList = $http.get(urls.AVIO_ADMIN_API+'getRestOfDestinations/'+id)
             .then(function (response) {
                 console.log("Avio service response:", response.data);
                 return response.data;
@@ -239,8 +258,8 @@
                     });
             }
 
-            function loadAvioForAdmin(){
-                var airline = $http.get(urls.AVIO_ADMIN_API+'getCompany')
+            function loadAvioForAdmin(id){
+                var airline = $http.get(urls.AVIO_ADMIN_API+'getCompany/'+id)
                 .then(function (response) {
                     console.log("Avio response for admin:", response);
                     return response.data;
@@ -273,8 +292,8 @@
                     });
             }
 
-            function addDestination(obj) {
-                var avio = $http.post(urls.AVIO_ADMIN_API+'addDestination', obj)
+            function addDestination(obj, companyId) {
+                var avio = $http.post(urls.AVIO_ADMIN_API+'addDestination/'+companyId, obj)
                 .then(function (response) {
                     console.log("Updated avio:", response);
                     return response.data;
@@ -291,7 +310,8 @@
             }
 
             function saveDestination(obj) {
-                var avio = $http.post(urls.SYS_ADMIN_API+'saveDestination', obj)
+                debugger;
+                var avio = $http.post(urls.SYS_ADMIN_API+'saveDestination/', obj)
                 .then(function (response) {
                     console.log("Updated avio:", response);
                     return response.data;
@@ -307,13 +327,14 @@
                     });
             }
 
-            function removeDestinationForAdmin(id) {
-                var dests = $http.delete(urls.AVIO_ADMIN_API+'removeDestination/' + id)
+            function removeDestinationForAdmin(destId, avioId) {
+                var dests = $http.delete(urls.AVIO_ADMIN_API+'removeDestination/' + destId + "/" + avioId)
                 .then(function (response) {
                     console.log("Response:", response);
                     return response.data;
                 }, function (error) {
                     console.log("Error occured while removing destinations!", error);
+                    return error;
                 });
     
                 return $q.all([dests])
@@ -324,8 +345,8 @@
                     });
             }
 
-            function loadAllFlightsForAdmin() {
-                var flights = $http.get(urls.AVIO_ADMIN_API+'getFlights')
+            function loadAllFlightsForAdmin(avioId) {
+                var flights = $http.get(urls.AVIO_ADMIN_API+'getFlights/'+avioId)
                 .then(function (response) {
                     console.log("Response:", response);
                     return response.data;
@@ -358,13 +379,13 @@
                     });
             }
 
-            function saveFlight(obj) {
-                var flight = $http.post(urls.AVIO_ADMIN_API+'createFlight', obj)
+            function saveFlight(obj, avioId) {
+                var flight = $http.post(urls.AVIO_ADMIN_API+'createFlight/'+avioId, obj)
                 .then(function (response) {
                     console.log("Response:", response);
                     return response.data;
                 }, function (error) {
-                    console.log("Error occured while removing destinations!", error);
+                    console.log("Error occured while creating flight!", error);
                 });
     
                 return $q.all([flight])
@@ -381,6 +402,7 @@
                     console.log("Response:", response);
                     return response.data;
                 }, function (error) {
+                    return error;
                     console.log("Error occured while removing destinations!", error);
                 });
     

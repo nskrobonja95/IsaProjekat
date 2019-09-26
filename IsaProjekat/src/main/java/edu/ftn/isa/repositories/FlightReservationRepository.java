@@ -22,7 +22,7 @@ public interface FlightReservationRepository extends JpaRepository<FlightReserva
 	int countNumOfReservationsForFlight(@Param("flightId") Long flightId);
 	
 	@Query("select fr from FlightReservation fr join fr.flightReservationSeats frs"
-			+ " on frs.flight.avioCompany = :avio where "
+			+ " where frs.flight.avioCompany = :avio and "
 			+ "(frs.flight.toDest = :dest or frs.flight.from = :dest) and "
 			+ "frs.flight.takeoff > CURDATE()")
 	List<FlightReservation> findAvioCompanyAndDestination(@Param("avio") AvioCompany avio, 

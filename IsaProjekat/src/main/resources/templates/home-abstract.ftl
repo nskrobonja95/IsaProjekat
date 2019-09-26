@@ -1,11 +1,27 @@
 
 <nav class="navbar navbar-expand-lg navbar-custom">
-  <a class="navbar-brand" href="#"><img alt="Brand" ng-src="images/airplane-logo.png" id="brandImg" width="75" height="75"></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+  <div ng-if="globals.currentUser.userType!='SysAdmin' && globals.currentUser.userType!='HotelAdmin'">
+    <a class="navbar-brand" href="#"><img alt="Brand" ng-src="images/airplane-logo.png" id="brandImg" width="75" height="75"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+  <div ng-if="globals.currentUser.userType=='SysAdmin'">
+    <a class="navbar-brand" ui-sref="home-abstract.system-admin-airlines()"><img alt="Brand" ng-src="images/airplane-logo.png" id="brandImg" width="75" height="75"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+
+  <div ng-if="globals.currentUser.userType=='HotelAdmin'">
+    <a class="navbar-brand" ui-sref="home-abstract.hotel-admin-welcome()"><img alt="Brand" ng-src="images/airplane-logo.png" id="brandImg" width="75" height="75"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    
     <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.username==null || globals.currentUser.userType=='User'">
       <li class="nav-item active">
         <a class="nav-link" ui-sref="home-abstract.avio-companies-list()" style="color:white"><i class="fas fa-plane"></i> Flights <span class="sr-only">(current)</span></a>
@@ -30,7 +46,7 @@
       </li>
     </ul>
 
-    <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.userType=='HotelAdmin'">
+    <#--  <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.userType=='HotelAdmin'">
       <li class="nav-item active">
         <a class="nav-link" ui-sref="home-abstract.hotel-admin()" style="color:white" ><i class="fas fa-hotel"></i> Hotel <span class="sr-only"></span></a>
       </li>
@@ -40,7 +56,7 @@
       <li class="nav-item active">
         <a class="nav-link" ui-sref="home-abstract.hotels-list()" style="color:white" ><i class="fas fa-hotel"></i> Discounts <span class="sr-only"></span></a>
       </li>
-    </ul>
+    </ul>  -->
 
     <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.userType=='SysAdmin'">
       <li class="nav-item active">
@@ -310,7 +326,8 @@
 
 <div ui-view="hotel-recommendation-results"></div>
 <div ui-view="succesful-reservation"></div>
-
+<div ui-view="avio-admin-welcome"></div>
+<div ui-view="avio-admin-avio-profile"></div>
 
 <script>
   $('#loginModal').on('show.bs.modal', function (event) {

@@ -33,7 +33,7 @@ public class DestinationService {
 	public Destination addDestination(DestinationDTO destDto) {
 		Destination dest = new Destination();
 		dest.setName(destDto.getName());
-		dest.setDeleted(true);
+		dest.setDeleted(false);
 		destRepo.save(dest);
 		return dest;
 	}
@@ -55,5 +55,10 @@ public class DestinationService {
 		List<Destination> dests = destRepo.findRestOfDestinations(avio.getId());
 		return dests;
 	}
-	
+	@Transactional
+	public List<Destination> getRestOfDestinationsForAdmin(Long id) {
+		
+		List<Destination> dests = destRepo.findRestOfDestinations(id);
+		return dests;
+	}
 }

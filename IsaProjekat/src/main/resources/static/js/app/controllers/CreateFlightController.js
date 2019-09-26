@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('flightApp').controller('CreateFlightController',
-    ['$scope', '$rootScope', '$state', 'AvioService', 'initialDestinations',
-        function ($scope, $rootScope, $state, AvioService, initialDestinations) {
+    ['$scope', '$rootScope', '$state', 'AvioService', 'initialDestinations','$stateParams',
+        function ($scope, $rootScope, $state, AvioService, initialDestinations, $stateParams) {
             var self = this;
             console.log(initialDestinations);
             self.destinations = initialDestinations.dests;
@@ -85,9 +85,9 @@ angular.module('flightApp').controller('CreateFlightController',
                     }
                 }
                 console.log(obj);
-                AvioService.saveFlight(obj)
+                AvioService.saveFlight(obj, $stateParams.avioId)
                     .then(function(response) {
-                        $state.go("home-abstract.admin-flights");
+                        $state.go("home-abstract.avio-admin-avio-profile.admin-flights", {avioId: $stateParams.avioId});
                     }, function(errResponse){
                         console.log(errResponse);
                     });

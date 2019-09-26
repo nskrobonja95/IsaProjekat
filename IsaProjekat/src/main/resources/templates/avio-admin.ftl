@@ -27,7 +27,7 @@
             <span><i class="fas fa-city" style="color:#3485ef"></i> {{dest.name}} </span>
             <button class="btn btn-warning pull-right" ng-click="avioAdminCtrl.removeDestination(dest.id)">-</button>
           </div>
-          <button class="btn btn-info" ng-click="avioAdminCtrl.switchAddDestState()" ng-show="!avioAdminCtrl.addDestState">Add</button>
+          <#--  <button class="btn btn-info" ng-click="avioAdminCtrl.switchAddDestState()" ng-show="!avioAdminCtrl.addDestState">Add</button>  -->
           <form>
             <ui-select class="city1 input-class" ng-model="avioAdminCtrl.newDest"
               theme="selectize" ng-disabled="ctrl.disabled" style="width: 300px;"
