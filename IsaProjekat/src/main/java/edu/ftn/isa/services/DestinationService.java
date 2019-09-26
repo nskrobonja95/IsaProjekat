@@ -33,7 +33,7 @@ public class DestinationService {
 	public Destination addDestination(DestinationDTO destDto) {
 		Destination dest = new Destination();
 		dest.setName(destDto.getName());
-		dest.setDeleted(true);
+		dest.setDeleted(false);
 		destRepo.save(dest);
 		return dest;
 	}
