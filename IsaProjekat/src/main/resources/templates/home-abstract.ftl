@@ -1,6 +1,6 @@
 
 <nav class="navbar navbar-expand-lg navbar-custom">
-  <div ng-if="globals.currentUser.userType!='SysAdmin' && globals.currentUser.userType!='HotelAdmin'">
+  <div ng-if="globals.currentUser.userType!='SysAdmin' && globals.currentUser.userType!='HotelAdmin' && globals.currentUser.userType!='AvioAdmin'">
     <a class="navbar-brand" href="#"><img alt="Brand" ng-src="images/airplane-logo.png" id="brandImg" width="75" height="75"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -19,7 +19,12 @@
       <span class="navbar-toggler-icon"></span>
     </button>
   </div>
-
+<div ng-if="globals.currentUser.userType=='AvioAdmin'">
+    <a class="navbar-brand" ui-sref="home-abstract.avio-admin-welcome()"><img alt="Brand" ng-src="images/airplane-logo.png" id="brandImg" width="75" height="75"></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     
     <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.username==null || globals.currentUser.userType=='User'">
@@ -34,7 +39,7 @@
       </li>
     </ul>
 
-    <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.userType=='AvioAdmin'">
+    <#--  <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.userType=='AvioAdmin'">
       <li class="nav-item active">
         <a class="nav-link" ui-sref="home-abstract.avio-admin()" style="color:white" ><i class="fas fa-hotel"></i> Avio-Company <span class="sr-only"></span></a>
       </li>
@@ -44,7 +49,7 @@
       <li class="nav-item active">
         <a class="nav-link" ui-sref="home-abstract.avio-statistics()" style="color:white" ><i class="fas fa-info"></i> Statistics <span class="sr-only"></span></a>
       </li>
-    </ul>
+    </ul>  -->
 
     <#--  <ul class="navbar-nav mr-auto" ng-if="globals.currentUser.userType=='HotelAdmin'">
       <li class="nav-item active">

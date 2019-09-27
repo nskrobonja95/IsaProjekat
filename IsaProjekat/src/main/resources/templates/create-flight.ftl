@@ -56,10 +56,7 @@
                     ng-change="createFlightCtrl.evaluateChange()" min="0" max="15" 
                     class="form-control" id="numOfRows" name="numOfRows">
             </div>
-            <div class="form-group">
-                <label for="baggage_over7">Price over 7kg(baggage):</label>
-                <input type="number" class="form-control" ng-model="createFlightCtrl.bggOver7" id="baggage_over7">
-            </div>
+            
             <div class="form-group">
                 <label for="baggage_over14">Price over 14kg(baggage):</label>
                 <input type="number" class="form-control" ng-model="createFlightCtrl.bggOver14" id="baggage_over14">

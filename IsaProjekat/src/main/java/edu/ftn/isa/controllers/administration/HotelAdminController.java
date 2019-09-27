@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ftn.isa.dto.AddHotelServiceDTO;
+import edu.ftn.isa.dto.AvioStatisticsDTO;
 import edu.ftn.isa.dto.BasicHotelInfoDTO;
 import edu.ftn.isa.dto.CreateRoomDTO;
 import edu.ftn.isa.dto.EditRoomDTO;
 import edu.ftn.isa.dto.FastRoomReservationDTO;
+import edu.ftn.isa.dto.HotelStatisticsDTO;
 import edu.ftn.isa.dto.PriceOfMonthDTO;
 import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.HotelServiceModel;
@@ -39,6 +41,7 @@ import edu.ftn.isa.security.CustomUserDetails;
 import edu.ftn.isa.services.HotelService;
 import edu.ftn.isa.services.HotelServiceService;
 import edu.ftn.isa.services.RoomService;
+import edu.ftn.isa.services.StatsService;
 
 @RestController
 @RequestMapping("/hoteladmin")
@@ -64,6 +67,9 @@ public class HotelAdminController {
 	
 	@Autowired
 	private PriceOfRoomRepository priceOfRoomRepo;
+	
+	@Autowired
+	private StatsService statsService;
 
 	@GetMapping("/getHotel/{id}")
 	public ResponseEntity<?> getHotel(@PathVariable("id") Long id) {
@@ -121,38 +127,7 @@ public class HotelAdminController {
 	@PostMapping("/saveRoom/{id}")
 	public ResponseEntity<?> saveRoom(@RequestBody CreateRoomDTO roomDto, @PathVariable("id") Long id) throws ParseException {
 		System.out.println("Usao ovde:" + id);
-//		Hotel hotel = hotelRepo.findByAdmin(userDetails.getUser());
-//		Room room = new Room();
-//		room.setHotel(hotel);
-//		room.setBalcony(roomDto.isBalcony());
-//		room.setDescription(roomDto.getDescription());
-//		room.setNumOfBeds(roomDto.getNumOfBeds());
-//		List<HotelServiceModel> services = new ArrayList<HotelServiceModel>();
-//		for(int i=0; i<roomDto.getServices().size(); ++i) {
-//			HotelServiceModel hs = hotelServicesRepo.
-//								retrieveByNameAndHotel(roomDto.getServices().get(i), 
-//														hotel.getId());
-//			services.add(hs);
-//		}
-//		roomRepo.save(room);
-//		Calendar now = Calendar.getInstance();
-//		int year = now.get(Calendar.YEAR);
-//		String yearInString = String.valueOf(year);
-//		for(int i=0; i<roomDto.getMonthPrices().size(); ++i) {
-//			PriceOfMonthDTO p = roomDto.getMonthPrices().get(i);
-//			Date from = new SimpleDateFormat(
-//					"yyyy-MM-dd HH:mm").
-//						parse(yearInString + p.getFrom());
-//			Date to = new SimpleDateFormat(
-//					"yyyy-MM-dd HH:mm").
-//						parse(yearInString + p.getTo());
-//			PriceOfRoom price = new PriceOfRoom();
-//			price.setActiveFrom(from);
-//			price.setActiveTo(to);
-//			price.setPrice(p.getPrice());
-//			price.setRoom(room);
-//			priceOfRoomRepo.save(price);
-//		}
+
 		Room savedRoom = roomService.saveRoom(roomDto, id);
 		if(savedRoom == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(HttpStatus.OK);
@@ -194,6 +169,15 @@ public class HotelAdminController {
 		if(retVal == -1)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(retVal, HttpStatus.OK);
+	}
+	@GetMapping("/hotelStatistics/{hotelId}")
+	public ResponseEntity<?> getHotelStats(@PathVariable("hotelId") Long hotelId) throws ParseException{
+		
+		HotelStatisticsDTO stats = statsService.getHotelStats(hotelId);
+		if(stats == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<HotelStatisticsDTO>(stats,HttpStatus.OK);
 	}
 	
 }

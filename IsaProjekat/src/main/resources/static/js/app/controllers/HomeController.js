@@ -42,7 +42,6 @@ angular.module('flightApp').controller('HomeController',
             function submitReg() {
                 console.log('Submitting');
                 self.dataLoading = true;
-                debugger;
                 if (self.user.id === undefined || self.user.id === null) {
                     console.log('Saving New User', self.user);
                     createUser(self.user);
@@ -62,7 +61,6 @@ angular.module('flightApp').controller('HomeController',
                 })();
                 self.dataLoading = true;
                 LoginService.Login(self.userLogin.username, self.userLogin.password, function (response) {
-                    debugger;
                     if (response.status == 200) {
                         LoginService.SetCredentials(self.userLogin.username, self.userLogin.password, response.data.role);
 
@@ -90,7 +88,6 @@ angular.module('flightApp').controller('HomeController',
                             $state.go('home-abstract.system-admin-airlines');
                         }
                     } else {
-                        debugger;
                         console.log('Ovo je poruka o gresci ' + response.data.errorMessage);
                         self.loginErrorMessage = "Bad credentials! Try again";
                         self.dataLoading = false;

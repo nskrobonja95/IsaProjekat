@@ -38,6 +38,7 @@ import edu.ftn.isa.dto.UserDTO;
 import edu.ftn.isa.dto.UserFlightReservationDTO;
 import edu.ftn.isa.dto.UserHotelReservationDTO;
 import edu.ftn.isa.model.Flight;
+import edu.ftn.isa.model.FlightClass;
 import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.FlightSeat;
 import edu.ftn.isa.model.Friends;
@@ -214,13 +215,6 @@ public class UserController {
 		
 	}
 	
-	public FlightReservationDTO transformFromModel(FlightReservation fr) {
-		FlightReservationDTO retVal = new FlightReservationDTO();
-		retVal.setLastname(fr.getLastname());
-		retVal.setName(fr.getName());
-		//retVal.setFlight(flightRepo.findById(retVal.getFlightId()).get());
-		return retVal;
-	}
 	
 	@GetMapping("/getFlight/{flightId}")
 	public ResponseEntity<?> loadFlight(@PathVariable("flightId") Long flightId) {
@@ -268,23 +262,7 @@ public class UserController {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		
-//		Room room = roomRepo.findById(reservationDto.getRoomId()).get();
-//		
-//		HotelReservation reservation = new HotelReservation();
-//		reservation.setCanceled(false);
-//		reservation.setUser(userDetails.getUser());
-//		reservation.setRoom(room);
-//		reservation.setArrivalDate(reservationDto.getArrivalDate());
-//		reservation.setDepartingDate(reservationDto.getDepartingDate());
-//		List<HotelService> services = new ArrayList<HotelService>();
-//		for(HotelService service : room.getHotelServices()) {
-//			if(reservationDto.getHotelServices().contains(service.getName()))
-//				services.add(service);
-//		}
-//		reservation.setServices(services);
-//		
-//		hotelResRepo.save(reservation);
+	
 		if(!resService.reserveRoom(reservationDto, userDetails.getUser())) {
 			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
 		}
@@ -387,6 +365,10 @@ public class UserController {
 		res.setName(user.getName());
 		res.setLastname(user.getLastname());
 		res.setPassportNumber("090909");
+		if(seat.getFlightClass().equals(FlightClass.Business))
+			res.setPrice(seat.getFlight().getBussinessClassPrice());
+		else
+			res.setPrice(seat.getFlight().getEconomicClassPrice());
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date todayDate = new Date();
 		Date reserveDate = formatter.parse(formatter.format(todayDate));
@@ -407,12 +389,29 @@ public class UserController {
 		List<FlightReservation> reservationsList = flightResRepo.getUserReservationsList(user.getId());
 		List<UserFlightReservationDTO> retVal = new ArrayList<UserFlightReservationDTO>();
 		for(FlightReservation reservation : reservationsList) {
+			Double price = 0D;
+			for(FlightSeat seat : reservation.getFlightReservationSeats()) {
+				if(seat.getFlightClass().equals("Business")) {
+					if(reservation.getBaggageChecked()) {
+						price = seat.getFlight().getBussinessClassPrice() + seat.getFlight().getBaggageOver20Price();
+					} else {
+						price = seat.getFlight().getBussinessClassPrice();
+					}
+				} else {
+					if(reservation.getBaggageChecked()) {
+						price = seat.getFlight().getEconomicClassPrice() + seat.getFlight().getBaggageOver20Price();
+					} else {
+						price = seat.getFlight().getEconomicClassPrice();
+					}
+				}
+			}
 			retVal.add(new UserFlightReservationDTO(reservation.getId(),
 					reservation.getFlightReservationSeats(),
 					reservation.getRate(),
 					reservation.getName(),
 					reservation.getLastname(),
-					reservation.getStatus().toString()));
+					reservation.getStatus().toString(), price));
+			
 		}
 		
 		return new ResponseEntity<List<UserFlightReservationDTO>>(retVal, HttpStatus.OK);

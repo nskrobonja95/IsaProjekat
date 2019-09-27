@@ -40,4 +40,7 @@ public @Data class Hotel {
 	@JoinColumn(name = "admin", nullable=true)
 	private User admin;
 	
+	@Column(name="averagerate")
+	private float averageRate;
+	
 }

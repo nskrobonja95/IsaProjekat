@@ -65,7 +65,6 @@ angular.module('flightApp').controller('CreateFlightController',
                 obj.to = self.to.name;
                 obj.depart = self.depart;
                 obj.land = self.landing;
-                obj.priceForBaggageOver7kg = self.bggOver7;
                 obj.priceForBaggageOver14kg = self.bggOver14;
                 obj.economicPrice = self.economicPrice;
                 obj.businessPrice = self.businessPrice;

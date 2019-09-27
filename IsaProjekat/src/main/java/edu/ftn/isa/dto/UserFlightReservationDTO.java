@@ -16,10 +16,12 @@ public @Data class UserFlightReservationDTO {
 	private String name;
 	
 	private String lastname;
+	
+	private Double price;
 
 	private String status;
 	public UserFlightReservationDTO(Long reservationId, List<FlightSeat> seats, int flightRate, String name,
-			String lastname, String status) {
+			String lastname, String status, Double price) {
 		super();
 		this.reservationId = reservationId;
 		this.seats = parseSeatDTOList(seats);
@@ -27,6 +29,7 @@ public @Data class UserFlightReservationDTO {
 		this.name = name;
 		this.lastname = lastname;
 		this.status = status;
+		this.price = price;
 	}
 	private List<SeatDTO> parseSeatDTOList(List<FlightSeat> seats){
 		List<SeatDTO> seatsDTO = new ArrayList<SeatDTO>();

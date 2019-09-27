@@ -56,6 +56,10 @@ public @Data class FlightReservation {
 	@Column(name="rate")
 	private Integer  rate;
 	
+	@Nullable
+	@Column(name="baggageChecked")
+	private Boolean  baggageChecked;
+	
 	@ManyToMany
 	@JoinTable( name = "RESERVATION_SEAT",
     	joinColumns = @JoinColumn(name = "reservationId"),
@@ -65,5 +69,8 @@ public @Data class FlightReservation {
 	@ManyToOne
 	@JoinColumn(name = "hotelReservation", nullable=true)
 	private HotelReservation hotelReservation;
+	
+	@Column(name="price")
+	private Double price;
 	
 }

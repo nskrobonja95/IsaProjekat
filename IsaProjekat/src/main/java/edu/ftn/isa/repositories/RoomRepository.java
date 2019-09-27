@@ -41,5 +41,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 	@Modifying
 	@Transactional
 	void delete(Room r);
+
+	@Query("SELECT AVG(hr.rating) FROM HotelReservation hr where hr.room = :room and hr.rating!=0")
+	Float getAverageRatingForRoom(@Param("room") Room room);
 	
 }

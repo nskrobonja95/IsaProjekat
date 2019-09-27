@@ -35,8 +35,28 @@
         service.rateReservation = rateReservation;
         service.loadAvioStatistics = loadAvioStatistics;
         service.loadAvioListForAdmin = loadAvioListForAdmin;
+        service.getGrosForInterval = getGrosForInterval;
         return service;
         
+        function getGrosForInterval(avioId, grossObj){
+            var grossResponse = $http.post(urls.AVIO_ADMIN_API+'getGrossForInterval/'+avioId, grossObj)
+            .then(function (response) {
+                console.log("Avio service response:", response);
+                return response;
+            }, function (error) {
+                console.log("Error occured while calculating  gross for interval!", error);
+                return error;
+                
+            });
+
+            return $q.all([grossResponse])
+                .then(function (results) {
+                    return {
+                        grossResponse: results[0]
+                    };
+                });
+        }
+
         function loadAvioListForAdmin() {
             var list = $http.get(urls.AVIO_ADMIN_API+'getCompanies/')
             .then(function (response) {
@@ -310,7 +330,7 @@
             }
 
             function saveDestination(obj) {
-                debugger;
+                
                 var avio = $http.post(urls.SYS_ADMIN_API+'saveDestination/', obj)
                 .then(function (response) {
                     console.log("Updated avio:", response);
@@ -361,14 +381,13 @@
                         };
                     });
             }
-
-            function loadDestinationsForAdmin() {
-                var dests = $http.get(urls.AVIO_ADMIN_API+'getDestinations')
+            function loadDestinationsForAdmin(avioId) {
+                var dests = $http.get(urls.AVIO_ADMIN_API+'getDestinations/'+avioId)
                 .then(function (response) {
                     console.log("Response:", response);
                     return response.data;
                 }, function (error) {
-                    console.log("Error occured while removing destinations!", error);
+                    console.log("Error occured while loading destinations!", error);
                 });
     
                 return $q.all([dests])

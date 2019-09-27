@@ -189,6 +189,7 @@ public class AvioService {
 		avio.setName(airlineDto.getName());
 		avio.setPromo(airlineDto.getPromo());
 		avio.setAddress(airlineDto.getAddress());
+		avio.setAverageRate(0);
 		avioRepo.save(avio);
 		
 		response = 0;

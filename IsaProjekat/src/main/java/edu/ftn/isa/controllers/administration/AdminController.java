@@ -63,20 +63,6 @@ public class AdminController {
 	@Autowired
 	private DestinationService destService;
 	
-	@PostMapping("/addAvio")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseEntity<?> addAvio(@RequestBody AvioCompany aviocomp) {
-		avioService.saveAvio(aviocomp);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}
-	
-	@PostMapping("/addHotel")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public ResponseEntity<?> addHotel(@Valid @RequestBody Hotel hotel) {
-		hotelService.saveHotel(hotel);
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	}
-	
 	@PutMapping("/changeRole")
 	public ResponseEntity<?> changeRole(
 			@QueryParam("username") String username,
@@ -101,21 +87,7 @@ public class AdminController {
 		}
 	}
 	
-//	@DeleteMapping("/deleteUser/{username}")
-//	public ResponseEntity<?> deleteUser(
-//			@PathVariable("username") String username) {
-//		User user = userRepo.findByUsername(username);
-//		if(user == null)
-//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//		try{
-//			userRepo.delete(user);
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-//		}
-//		return new ResponseEntity<>(HttpStatus.OK);
-//	}
-	
+
 	@GetMapping("/getUser/{username}")
 	public ResponseEntity<?> getUser(
 			@PathVariable("username") String username) {

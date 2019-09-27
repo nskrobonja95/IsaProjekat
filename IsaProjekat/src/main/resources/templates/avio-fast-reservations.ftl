@@ -24,7 +24,7 @@
                         <div class="address">Discount: {{ticket.flight.discount}}%</div>
                     </div>
                     <div style="margin: auto; height:100%" >
-                        <button ng-show="!ticket.reserved" ng-click="afrCtrl.fastReserve(ticket)">Reserve</button>
+                        <button ng-show="(!ticket.reserved) && (globals.currentUser.userType) == 'User'" ng-click="afrCtrl.fastReserve(ticket)">Reserve</button>
                         <label ng-show="ticket.reserved">Reserved</label>
                     </div>
             

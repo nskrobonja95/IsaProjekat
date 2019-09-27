@@ -30,7 +30,7 @@ angular.module('flightApp').controller('GeneralSettingsController',
             UserService.editUser(username, user)
                 .then(
                     function (response){
-                        debugger;
+                        
                         if(response.response.status == 200){
                             console.log('User updated successfully');
                             console.log("User: ", response);
@@ -51,7 +51,6 @@ angular.module('flightApp').controller('GeneralSettingsController',
                         }
                     },
                     function(errResponse){
-                        debugger;
                         console.error('Error while updating User');
                         self.errorMessage=errResponse.data.errorMessage;
                         self.dataLoading = false;

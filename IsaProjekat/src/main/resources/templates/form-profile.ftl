@@ -18,6 +18,15 @@
                 <label for="passnum">Passport number</label>
                 <input type="text" class="form-control" name="passnum" ng-model="resSeats.passnum"
                 placeholder="Passport" ng-minlength="6" ng-maxlength="6" ng-required required>
+
+                <div class="chiller_cb col-lg-6">
+                            <input id="balcony" type="checkbox" ng-model="resSeats.baggageChecked" />
+                            <label for="balcony">Baggage over 20kg</label>
+                            <span></span>
+                        </div>
+
+                {{resSeats.baggageChecked}}
+
                 <label for="email">Email </label> 
                 <span class="error-container" 
                     ng-show="signupform.email.$dirty && signupform.email.$invalid">

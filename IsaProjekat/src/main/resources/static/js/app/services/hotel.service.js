@@ -30,7 +30,28 @@
         service.createFastReservation = createFastReservation;
         service.loadFastReservationsForHotel = loadFastReservationsForHotel;
         service.fastHotelReserve = fastHotelReserve;
+        service.loadHotelStatistics = loadHotelStatistics;
+
         return service;
+
+        function loadHotelStatistics(hotelId){
+            var stats = $http.get(urls.HOTEL_ADMIN_API+'hotelStatistics/'+hotelId)
+            .then(function (response) {
+                console.log("Hotel service response:", response.data);
+                return response.data;
+            }, function (error) {
+                console.log("Error occured while initializing list of all hotel stats!", error);
+                return error;
+                
+            });
+
+        return $q.all([stats])
+            .then(function (results) {
+                return {
+                    stats: results[0]
+                };
+            });
+        }
 
         function loadHotelListForAdmin() {
             var list = $http.get(urls.HOTEL_ADMIN_API+'getHotels/')

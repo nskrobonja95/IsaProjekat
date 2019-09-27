@@ -1,11 +1,11 @@
 'use strict';
 
-angular.module('flightApp').controller('AvioStatsController', [
-    'avioStatisticData', '$rootScope', '$state','$stateParams','AvioService','SearchService',
-    function (avioStatisticData, $rootScope, $state, $stateParams, AvioService, SearchService) {
+angular.module('flightApp').controller('HotelStatsController', [
+    '$rootScope', '$state','$stateParams','AvioService','SearchService','hotelStatisticData',
+    function ($rootScope, $state, $stateParams, AvioService, SearchService, hotelStatisticData) {
 
         var self = this;
-        self.stats = avioStatisticData.stats;
+        self.stats = hotelStatisticData.stats;
         self.getGrosForInterval = getGrosForInterval;
         self.grossCalculated = false;
         self.grossObj = {};
@@ -22,7 +22,7 @@ angular.module('flightApp').controller('AvioStatsController', [
             }
             self.grossObj.toGrossInterval = SearchService.formatDateString(self.grossObjTemp.toGrossInterval);
             self.grossObj.fromGrossInterval = SearchService.formatDateString(self.grossObjTemp.fromGrossInterval);
-            AvioService.getGrosForInterval($stateParams.avioId, self.grossObj)
+            AvioService.getGrosForInterval($stateParams.hotelId, self.grossObj)
                 .then(function(response){
                     console.log("Status:", response.grossResponse.status);
                     if(response.grossResponse.status == 200){

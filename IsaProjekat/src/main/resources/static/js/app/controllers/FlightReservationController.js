@@ -9,8 +9,10 @@ angular.module('flightApp').controller('FlightReservationController', [
         self.dir_seats = dir_seats;
         self.ret_seats = ret_seats;
         self.dirSeatSelected = false;
+
         // we will store all of our form data in this object
         $scope.formData = {};
+        
         $scope.direct_flight = direct_flight.flight;
         $scope.return_flight = return_flight.flight;
         $scope.dir_seats = dir_seats.seats;
@@ -155,7 +157,6 @@ angular.module('flightApp').controller('FlightReservationController', [
         // }
 
         $scope.reserve = function() {
-            debugger;
             console.log($scope.roundTripObj);
             var arr = [];
             for(var i=0; i<$scope.roundTripObj.length; ++i){
@@ -164,6 +165,12 @@ angular.module('flightApp').controller('FlightReservationController', [
                 obj.name = $scope.roundTripObj[i].name;
                 obj.lastname = $scope.roundTripObj[i].lastname;
                 obj.passportNumber = $scope.roundTripObj[i].passportNumber;
+                if($scope.roundTripObj[i].baggageChecked == undefined){
+                    obj.baggageChecked = false;
+                }else{
+                    obj.baggageChecked = $scope.roundTripObj[i].baggageChecked;
+                }
+                
                 if($scope.return_flight == -1){//ako je one way
                     
                 } else {

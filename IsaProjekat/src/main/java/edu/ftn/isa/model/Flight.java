@@ -61,8 +61,6 @@ public @Data class Flight {
 	@Column(name="configurationType")
 	private String configurationType;
 	
-	@Column(name="baggageOver7Price")
-	private float baggageOver7Price;
 	
 	@Column(name="baggageOver20Price")
 	private float baggageOver20Price;
