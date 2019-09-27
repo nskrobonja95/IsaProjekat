@@ -23,7 +23,7 @@
                </div>
             </div>
             <div class="tiles-body">
-               <div class="text-center">{{avioStatsCtrl.stats.avgAvioRate}}</div>
+               <div class="text-center">{{hotelStatsCtrl.stats.avgHotelRate}}</div>
             </div>
             <div class="tiles-footer">
                <div class="pull-left">Average rate</div>
@@ -42,7 +42,7 @@
                </div>
             </div>
             <div class="tiles-body">
-               <div class="text-center">{{avioStatsCtrl.stats.dailySoldTickets}}</div>
+               <div class="text-center">{{hotelStatsCtrl.stats.dailyAttendance}}</div>
             </div>
             <div class="tiles-footer">
                <div class="pull-left">Number of visitors</div>
@@ -61,7 +61,7 @@
                </div>
             </div>
             <div class="tiles-body">
-               <div class="text-center">{{avioStatsCtrl.stats.weeklySoldTickets}}</div>
+               <div class="text-center">{{hotelStatsCtrl.stats.weeklyAttendance}}</div>
             </div>
             <div class="tiles-footer">
                <div class="pull-left">Number of visitors</div>
@@ -80,7 +80,7 @@
                </div>
             </div>
             <div class="tiles-body">
-               <div class="text-center">{{avioStatsCtrl.stats.monthlySoldTickets}}</div>
+               <div class="text-center">{{hotelStatsCtrl.stats.monthlyAttendance}}</div>
             </div>
             <div class="tiles-footer">
                <div class="pull-left">Number of visitors</div>
@@ -105,7 +105,7 @@
          </div>
          <button class="btn btn-danger" ng-click="avioStatsCtrl.getGrosForInterval()">Get gross for interval</button>
          <div class="">
-         <a class="info-tiles tiles-green " ng-show = "avioStatsCtrl.grossCalculated">
+         <a class="info-tiles tiles-green " ng-show = "hotelStatsCtrl.grossCalculated">
             <div class="tiles-heading">
                <div class="pull-left">GROSS</div>
                <div class="pull-right">
@@ -115,7 +115,7 @@
                </div>
             </div>
             <div class="tiles-body">
-               <div class="text-center">{{avioStatsCtrl.grossResult}} $</div>
+               <div class="text-center">{{hotelStatsCtrl.grossResult}} $</div>
             </div>
             <div class="tiles-footer">
                <div class="pull-left">Gross results </div>
@@ -132,7 +132,7 @@
             	<div class="features-table">
                 	<ul>
                     	<h1>Room average rates</h1>
-                    	<li ng-repeat="flight in avioStatsCtrl.stats.flights"><p>Room: <hr><br>Average rate for this flight:<span style="color:red; font-size: 30px;"> {{flight.avgRate}}</span></p></li>
+                    	<li ng-repeat="room in hotelStatsCtrl.stats.rooms"><p>Room:{{room.roomName}} <hr><br>Average rate for this room:<span style="color:red; font-size: 30px;"> {{room.averageRate}}</span></p></li>
                         
                       
                         

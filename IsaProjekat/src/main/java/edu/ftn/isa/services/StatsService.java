@@ -107,6 +107,11 @@ public class StatsService {
 		List<Flight> flightList = flightRepo.findByAvioCompany(avio);
 		for(int i=0; i<flightList.size(); ++i) {
 			FlightForStatsDTO flight = new FlightForStatsDTO();
+			if(flightRepo.getAverageRatingForFlight(flightList.get(i)) == null){
+				flight.setAvgRate((float) 0);
+			}else {
+				flight.setAvgRate(flightRepo.getAverageRatingForFlight(flightList.get(i)));
+			}
 			flight.setAvgRate(flightRepo.getAverageRatingForFlight(flightList.get(i)));
 			flight.setFrom(flightList.get(i).getFrom().getName());
 			flight.setTo(flightList.get(i).getToDest().getName());
@@ -162,7 +167,12 @@ public class StatsService {
 		List<Room> roomList = roomRepo.findByHotel(hotel);
 		for(int i=0; i<roomList.size(); ++i) {
 			RoomForStatsDTO room = new RoomForStatsDTO();
-			room.setAverageRate(roomRepo.getAverageRatingForRoom(roomList.get(i)));
+			if(roomRepo.getAverageRatingForRoom(roomList.get(i)) == null) {
+				room.setAverageRate((float) 0);
+			}else {
+				room.setAverageRate(roomRepo.getAverageRatingForRoom(roomList.get(i)));
+			}
+			
 			room.setRoomName(roomList.get(i).getDescription());
 			rooms.add(room);
 		}
