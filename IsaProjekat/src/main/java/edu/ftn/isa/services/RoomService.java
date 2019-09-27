@@ -115,6 +115,7 @@ public class RoomService {
 			services.add(hs);
 		}
 		room.setHotelServices(services);
+		
 		roomRepo.save(room);
 		Calendar now = Calendar.getInstance();
 		int year = now.get(Calendar.YEAR);

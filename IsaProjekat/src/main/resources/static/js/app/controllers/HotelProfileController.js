@@ -88,8 +88,12 @@ angular.module('flightApp').controller('HotelProfileController',
                 obj.arrivalDate = SearchService.formatDateString(self.checkInDate);
                 obj.departingDate = SearchService.formatDateString(self.checkOutDate);
                 console.log(obj);
+<<<<<<< HEAD
                 debugger;
                 if(self.flightReservations != null) {
+=======
+                if(self.flightReservations != null)
+>>>>>>> e48bfdad929e63e4ee1f3a8de00f29891978b2c4
                     obj.flightReservationIds = self.flightReservations.ids;
                 }
                 else{

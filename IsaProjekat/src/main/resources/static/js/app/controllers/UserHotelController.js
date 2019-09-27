@@ -9,7 +9,7 @@ angular.module('flightApp').controller('UserHotelController',
             self.goToFastReservationsPage = goToFastReservationsPage;
 
             function goToFastReservationsPage() {
-                debugger;
+                
                 $state.go("home-abstract.hotel-fast-reservations", {hotelId: self.hotel.id});
             }
         } 

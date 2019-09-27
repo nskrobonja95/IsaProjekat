@@ -71,7 +71,6 @@ public class FlightService {
 		Date landing = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(flightData.getLand());
 		Flight flight = new Flight();
 		flight.setAvioCompany(avio);
-		flight.setBaggageOver7Price(flightData.getPriceForBaggageOver7kg());
 		flight.setBaggageOver20Price(flightData.getPriceForBaggageOver14kg());
 		flight.setEconomicClassPrice(flightData.getEconomicPrice());
 		flight.setBussinessClassPrice(flightData.getBusinessPrice());
@@ -98,7 +97,6 @@ public class FlightService {
 		Date landing = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(flightData.getLand());
 		Flight flight = new Flight();
 		flight.setAvioCompany(avio);
-		flight.setBaggageOver7Price(flightData.getPriceForBaggageOver7kg());
 		flight.setBaggageOver20Price(flightData.getPriceForBaggageOver14kg());
 		flight.setEconomicClassPrice(flightData.getEconomicPrice());
 		flight.setBussinessClassPrice(flightData.getBusinessPrice());

@@ -6,7 +6,13 @@ angular.module('flightApp').controller('ReservationListController', [
 
         var self = this;
         self.flightReservationsList = initialFlightReservationsData.flightReservationsList;
-        
+        self.ratesList = [{
+            value: "1"
+        },
+        {
+            value: "2"
+        }
+    ]
         self.cancelationEnabled = cancelationEnabled;
         self.cancelReservation = cancelReservation;
         self.rateEnabled = rateEnabled;
@@ -15,6 +21,7 @@ angular.module('flightApp').controller('ReservationListController', [
             var nowDate = new Date();
             nowDate.setDate(nowDate.getDate()-2);
             for(var i = 0; i < self.flightReservationsList.length; i++){
+                console.log(self.flightReservationsList[i]);
                 if(self.flightReservationsList[i].reservationId == resId){
                     var takeoffDate = new Date(self.flightReservationsList[i].seats[0].flight.takeoff);
                     
@@ -51,6 +58,10 @@ angular.module('flightApp').controller('ReservationListController', [
             return true;
         }
         function rateRes(resId, flightId){
+            if(self.rate == undefined || self.rate == null){
+                alert("Please select rate number!");
+                return;
+            }
             AvioService.rateReservation({
                 flightReservationId: resId,
                 flightId: flightId,

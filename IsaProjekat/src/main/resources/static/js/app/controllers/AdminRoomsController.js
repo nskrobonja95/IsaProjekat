@@ -44,7 +44,6 @@ angular.module('flightApp').controller('AdminRoomsController',
             }
 
             function createFastReservation(room) {
-                debugger;
                 $state.go("home-abstract.create-room-fast-reservation", {roomId: room.id});
             }
         }

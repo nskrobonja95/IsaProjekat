@@ -96,6 +96,7 @@ public class HotelService {
 		hotel.setAddress(HotelDto.getAddress());
 		Destination dest = destRepo.findByNameAndDeleted(HotelDto.getDestination(), false);
 		hotel.setDestination(dest);
+		hotel.setAverageRate(0);
 		hotelRepo.save(hotel);
 		response = 0;
 		return response;

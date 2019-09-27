@@ -28,6 +28,7 @@ import edu.ftn.isa.dto.SeatDTO;
 import edu.ftn.isa.dto.SeatRowDTO;
 import edu.ftn.isa.dto.UserHotelReservationDTO;
 import edu.ftn.isa.model.Flight;
+import edu.ftn.isa.model.FlightClass;
 import edu.ftn.isa.model.FlightRate;
 import edu.ftn.isa.model.FlightReservation;
 import edu.ftn.isa.model.FlightSeat;
@@ -131,6 +132,9 @@ public class ReservationService {
 			return false;
 		HotelReservation res = optRes.get();
 		res.setRating(rate);
+		float avgRate = hotelRepo.getAverageRateForHotel(res.getRoom().getHotel());
+		res.getRoom().getHotel().setAverageRate(avgRate);
+		hotelRepo.save(res.getRoom().getHotel());
 		hotelResRepo.save(res);
 		return true;
 	}
@@ -170,6 +174,7 @@ public class ReservationService {
 		reservation.setStatus(ReservationStatus.APPROVED);
 		reservation.setArrivalDate(reservationDto.getArrivalDate());
 		reservation.setDepartingDate(reservationDto.getDepartingDate());
+		reservation.setRating(0);
 		List<HotelServiceModel> services = new ArrayList<HotelServiceModel>();
 		for(HotelServiceModel service : room.getHotelServices()) {
 			if(reservationDto.getHotelServices().contains(service.getName()))
@@ -242,12 +247,14 @@ public class ReservationService {
 			reservation.setLastname(flightDto.get(j).getLastname());
 			reservation.setPassportNumber(flightDto.get(j).getPassportNumber());
 			reservation.setRate(0);
+			reservation.setBaggageChecked(flightDto.get(j).getBaggageChecked());
 			reservation.setStatus(ReservationStatus.APPROVED);
 			List<FlightSeat> seats = new ArrayList<FlightSeat>();
 			SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
 			Date todayDate = new Date();
 			Date reserveDate = formatter.parse(formatter.format(todayDate));
 			reservation.setReserveDate(reserveDate);
+			Double price = 0D;
 			for(int i=0; i<flightDto.get(j).getSeats().size(); ++i) {
 	//			Optional<FlightSeat> optionalSeat = flightSeatRepo.findById(flightDto.getSeats().get(i).getId());
 	//			FlightSeat seat = optionalSeat.get();
@@ -267,10 +274,29 @@ public class ReservationService {
 				seat.setAvailable(false);
 	//			if(seat.getVersion() != flightDto.getSeats().get(i).getVersion())
 	//				return false;
+				if(seat.getFlightClass().equals(FlightClass.Business)) {
+					if(flightDto.get(j).getBaggageChecked()) {
+						price = seat.getFlight().getBussinessClassPrice() + seat.getFlight().getBaggageOver20Price();
+					}else {
+						price = seat.getFlight().getBussinessClassPrice();
+					}
+				} else {
+					if(flightDto.get(j).getBaggageChecked()) {
+						price = seat.getFlight().getEconomicClassPrice() + seat.getFlight().getBaggageOver20Price();
+					}else {
+						price = seat.getFlight().getEconomicClassPrice();
+					}
+				}
 				seats.add(seat);
 			}
 			reservation.setFlightReservationSeats(seats);
+//<<<<<<< HEAD
 			reservationsToSave.add(reservation);
+//=======
+//			reservation.setPrice(price);
+//			FlightReservation res = flightResRepo.save(reservation);
+//			dto.getIds().add(res.getId().intValue());
+//>>>>>>> e48bfdad929e63e4ee1f3a8de00f29891978b2c4
 		}
 		List<FlightReservation> res = flightResRepo.saveAll(reservationsToSave);
 		for(int i=0; i<res.size(); ++i)	

@@ -40,7 +40,7 @@
 										<button type="button" ng-click="resListCtrl.rateRes(reservation.reservationId, seat.flight.id)" class="btn btn-primary">Rate</button>
 										
 										<select class="form-control" id="exampleFormControlSelect1" ng-model="resListCtrl.rate">
-											<option>1</option>
+											<option >1</option>
 											<option>2</option>
 											<option>3</option>
 											<option>4</option>

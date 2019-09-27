@@ -18,12 +18,16 @@ public interface AvioRepository extends JpaRepository<AvioCompany, Long>{
 
 	AvioCompany findByAdmin(User user);
 	
-	@Query("SELECT COUNT(*) FROM FlightReservation fr where fr.reserveDate = :todayDate")
-	Long getNumOfDailySoldTickets(@Param("todayDate") Date todayDate);
+	@Query("SELECT COUNT(*) FROM FlightReservation fr join fr.flightReservationSeats frs"
+			+ " where frs.flight.avioCompany = :avio and Date(fr.reserveDate) = :todayDate"
+			+ " and fr.status = 0")
+	Long getNumOfDailySoldTickets(@Param("todayDate") Date todayDate, @Param("avio") AvioCompany avio);
 	
-	@Query("SELECT COUNT(*) FROM FlightReservation fr where "
-			+ "fr.reserveDate BETWEEN :from and :todayDate")
-	Long getNumOfSoldTicketsInInterval(@Param("from") Date from, @Param("todayDate") Date todayDate);
+	@Query("SELECT COUNT(*) FROM FlightReservation fr join fr.flightReservationSeats frs"
+			+ " where frs.flight.avioCompany = :avio and Date(fr.reserveDate) <= :todayDate "
+			+ "and Date(fr.reserveDate) >= :from"
+			+ " and fr.status = 0")
+	Long getNumOfSoldTicketsInInterval(@Param("from") Date from, @Param("todayDate") Date todayDate, @Param("avio") AvioCompany avio);
 
 	@Query("SELECT h from Hotel h where h.admin = :user")
 	List<Hotel> findHotelsByAdmin(@Param("user") User user);

@@ -94,7 +94,6 @@ angular.module('flightApp').controller('CreateRoomController',
                 obj.services = [];
                 for(var j=0; j<self.services.length; ++j) {
                     var roomService = self.services[j];
-                    debugger;
                     var serviceChecked = self.checkedServices[roomService.name];
                     if(serviceChecked){
                         obj.services.push(roomService.name);

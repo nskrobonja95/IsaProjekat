@@ -15,7 +15,6 @@ public @Data class FlightDTO {
 	
 	private String land;
 	
-	private float priceForBaggageOver7kg;
 	
 	private float priceForBaggageOver14kg;
 	

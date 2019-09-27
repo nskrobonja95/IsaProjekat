@@ -1,5 +1,6 @@
 package edu.ftn.isa.repositories;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -45,5 +46,10 @@ public interface FlightReservationRepository extends JpaRepository<FlightReserva
 //	List<HotelFlightReservationDTO> findJointReservations(@Param("user") User user);
 	
 	List<FlightReservation> findByHotelReservationAndStatus(HotelReservation hotelReservation, ReservationStatus reservationStatus);
+	
+	@Query("select sum(fr.price) from FlightReservation fr join fr.flightReservationSeats frs "
+			+ "where frs.flight.avioCompany = :avio and fr.reserveDate >= :from and fr.reserveDate <= :to")
+	Double getGrossInPeriodForAvio(@Param("avio") AvioCompany avio, @Param("from") Date from,
+										@Param("to") Date to);
 	
 }

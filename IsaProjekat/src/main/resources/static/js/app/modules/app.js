@@ -352,8 +352,15 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
                 url:'/hotel-admin-statistics',
                 views: {
                     'hotel-admin-statistics': {
-                        template: "partials/hotel-admin"
+                        templateUrl: "partials/hotel-admin-statistics",
+                        controller: "HotelStatsController",
+                        controllerAs: "hotelStatsCtrl"
                     }
+                },
+                resolve: {
+                    hotelStatisticData: ['HotelService','$stateParams', function(HotelService, $stateParams){
+                        return HotelService.loadHotelStatistics($stateParams.hotelId);
+                    }]
                 }
             })
             .state('home-abstract.add-service',{
@@ -710,8 +717,8 @@ app.config(['$stateProvider', '$urlRouterProvider', '$mdThemingProvider',
             .state('home-abstract.create-flight', {
                 url: '/createflight/:avioId',
                 resolve: {
-                    initialDestinations: ['AvioService',function(AvioService){
-                        return AvioService.loadDestinationsForAdmin();
+                    initialDestinations: ['AvioService', '$stateParams',function(AvioService, $stateParams){
+                        return AvioService.loadDestinationsForAdmin($stateParams.avioId);
                     }]
                 },
                 views: {

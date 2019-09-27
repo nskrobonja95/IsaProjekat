@@ -25,6 +25,7 @@ import edu.ftn.isa.dto.AvioStatisticsDTO;
 import edu.ftn.isa.dto.BasicAvioInfoDTO;
 import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.dto.FlightDTO;
+import edu.ftn.isa.dto.GrossIntervalDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Flight;
@@ -34,6 +35,7 @@ import edu.ftn.isa.services.AvioService;
 import edu.ftn.isa.services.DestinationService;
 import edu.ftn.isa.services.FlightService;
 import edu.ftn.isa.services.StatsService;
+import edu.ftn.isa.util.CustomErrorType;
 
 @RestController
 @RequestMapping("/avioadmin")
@@ -132,11 +134,9 @@ public class AvioAdminController {
 		return new ResponseEntity<List<Flight>>(flights, HttpStatus.OK);
 	}
 	
-	@GetMapping("/getDestinations")
-	public ResponseEntity<?> getDestinations() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		List<Destination> dests = destService.getDestinationsForAdmin(userDetails.getUser());
+	@GetMapping("/getDestinations/{avioId}")
+	public ResponseEntity<?> getDestinations(@PathVariable("avioId") Long avioId) {
+		List<Destination> dests = destService.getDestinationsForAdmin(avioId);
 		return new ResponseEntity<List<Destination>>(dests, HttpStatus.OK);
 	}
 	
@@ -163,6 +163,14 @@ public class AvioAdminController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<AvioStatisticsDTO>(stats, HttpStatus.OK);
+	}
+	@PostMapping("/getGrossForInterval/{avioId}")
+	public ResponseEntity<?> getGrossForInterval(@PathVariable("avioId") Long avioId, @RequestBody GrossIntervalDTO grossObj) throws ParseException{
+		int grossResult = statsService.getGrossForInterval(avioId, grossObj);
+		if(grossResult == 1) return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
+		if(grossResult == 2) return new ResponseEntity<>(new CustomErrorType("No income for given period."), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Integer>(grossResult, HttpStatus.OK);
+		
 	}
 	
 }

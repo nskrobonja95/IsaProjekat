@@ -17,12 +17,6 @@ public @Data class FlightReservationDTO {
 	
 	private List<SeatDTO> seats;
 	
-	public FlightReservationDTO transformFromModel(FlightReservation fr) {
-		FlightReservationDTO retVal = new FlightReservationDTO();
-//		retVal.setFlightClass(fr.getFlightClass().name());
-		retVal.setLastname(fr.getLastname());
-		retVal.setName(fr.getName());
-		return retVal;
-	}
+	private Boolean baggageChecked;
 	
 }

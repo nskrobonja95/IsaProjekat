@@ -2,6 +2,7 @@ package edu.ftn.isa.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -58,6 +59,18 @@ public class DestinationService {
 	}
 	
 	@Transactional
+	public List<Destination> getDestinationsForAdmin(Long avioId) {
+		Optional<AvioCompany> temp = avioRepo.findById(avioId);
+		if(!temp.isPresent()) {
+			return null;
+		}
+		AvioCompany avio = temp.get();
+		List<AvioCompany> avios = new ArrayList<AvioCompany>();
+		avios.add(avio);
+		List<Destination> dests = destRepo.findByAvioCompanies(avios);
+		return dests;
+	}
+	@Transactional
 	public List<Destination> getRestOfDestinationsForAdmin(User admin) {
 		AvioCompany avio = avioRepo.findByAdmin(admin);
 		List<AvioCompany> avios = new ArrayList<AvioCompany>();
@@ -71,6 +84,7 @@ public class DestinationService {
 		List<Destination> dests = destRepo.findRestOfDestinations(id);
 		return dests;
 	}
+
 
 	public boolean deleteDest(Long id) {
 		Destination d = destRepo.findById(id).get();
@@ -89,4 +103,5 @@ public class DestinationService {
 		destRepo.save(dest);
 		return dest;
 	}
+
 }

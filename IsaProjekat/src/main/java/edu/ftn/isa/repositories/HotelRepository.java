@@ -8,8 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Hotel;
+import edu.ftn.isa.model.Room;
 import edu.ftn.isa.model.User;
 
 public interface HotelRepository extends JpaRepository<Hotel, Long>{
@@ -42,7 +44,25 @@ public interface HotelRepository extends JpaRepository<Hotel, Long>{
 	@Query("SELECT h from Hotel h where h.admin = :user")
 	List<Hotel> findHotelsByAdmin(@Param("user") User user);
 
+
 	List<Hotel> findByDestination(Destination d);
+
+	
+	
+	@Query("SELECT avg(hr.rating) FROM HotelReservation hr where hr.room.hotel = :hotel and hr.rating!=0")
+	float getAverageRateForHotel(@Param("hotel") Hotel hotel);
+
+	@Query("SELECT COUNT(*) FROM HotelReservation hr where hr.room.hotel = :hotel "
+			+ "and hr.arrivalDate<= :todayDate and hr.departingDate >= :todayDate")
+	Long getNumOfDailyVisitors(@Param("todayDate") Date todayDate,@Param("hotel") Hotel hotel);
+	
+	@Query("SELECT COUNT(*) FROM HotelReservation hr "
+			+ "WHERE ((hr.arrivalDate BETWEEN :weekEarlierDate and :todayDate) or "
+			+ " (hr.departingDate BETWEEN :weekEarlierDate and :todayDate) or"
+			+ " (hr.arrivalDate < :weekEarlierDate and hr.departingDate > :todayDate)) "
+			+ "and hr.canceled = false and hr.room.hotel = :hotel")
+	Long getNumOfVisitorsInInterval(@Param("weekEarlierDate") Date weekEarlierDate,@Param("todayDate") Date todayDate, @Param("hotel") Hotel hotel);
+	
 	
 	
 }
