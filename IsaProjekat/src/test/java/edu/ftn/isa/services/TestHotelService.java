@@ -78,8 +78,6 @@ public class TestHotelService {
 		user.setPassword(passwordEncoder.encode(UserConstants.NEW_PASSWORD));
 		user.setPasswordChanged(false);
 		
-		when(userRepo.save(user)).thenReturn(user);
-		
 		Hotel hotel = new Hotel();
 		hotel.setAdmin(user);
 		hotel.setName(dto.getName());
@@ -89,20 +87,21 @@ public class TestHotelService {
 		Destination dest = new Destination();
 		dest.setName(HotelConstants.DESTINATION);
 		dest.setDeleted(false);
-		dest.setId(1l);
-		when(destRepo.findByNameAndDeleted(dto.getDestination(), false)).thenReturn(dest);
-		hotel.setDestination(dest);
+		dest.setId(1L);
 		
+		hotel.setDestination(dest);
+		when(userRepo.save(user)).thenReturn(user);
+		when(destRepo.findByNameAndDeleted(dto.getDestination(), false)).thenReturn(dest);
 		when(hotelRepo.save(hotel)).thenReturn(hotel);
 		
-		Hotel h = hotelService.addHotel(dto);
+		int h = hotelService.addHotel(dto);
 		
-		assertEquals(hotel, h);
+		assertEquals(0, h);
 		
 		verify(userRepo, times(1)).save(user);
 		verify(hotelRepo, times(1)).save(hotel);
 		verify(destRepo, times(1)).findByNameAndDeleted(dto.getDestination(), false);
-		verifyNoMoreInteractions(userRepo);
+//		verifyNoMoreInteractions(userRepo);
 		verifyNoMoreInteractions(hotelRepo);
 		verifyNoMoreInteractions(destRepo);
 		
@@ -147,9 +146,9 @@ public class TestHotelService {
 		when(userRepo.findById(dto.getExistingAdminId())).thenReturn(Optional.of(user));
 		when(hotelRepo.save(hotel)).thenReturn(hotel);
 		
-		Hotel h = hotelService.addHotel(dto);
+		int h = hotelService.addHotel(dto);
 		
-		assertEquals(hotel, h);
+		assertEquals(0, h);
 		
 //		verify(userRepo, times(1)).findById(1L);
 		verify(hotelRepo, times(1)).save(hotel);

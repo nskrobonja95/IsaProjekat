@@ -49,8 +49,4 @@ public @Data class FlightSeat {
 	@ManyToMany(mappedBy = "flightReservationSeats")
 	private List<FlightReservation> reservations;
 	
-	@Version
-	@Column(name = "VERSION")
-	private Integer version;
-	
 }

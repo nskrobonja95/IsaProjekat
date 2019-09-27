@@ -53,8 +53,4 @@ public @Data class Room {
 	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
 	private List<PriceOfRoom> prices;
 	
-	@Version
-	@Column(name = "VERSION")
-	private Integer version;
-	
 }

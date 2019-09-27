@@ -268,27 +268,14 @@ public class UserController {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		
-//		Room room = roomRepo.findById(reservationDto.getRoomId()).get();
-//		
-//		HotelReservation reservation = new HotelReservation();
-//		reservation.setCanceled(false);
-//		reservation.setUser(userDetails.getUser());
-//		reservation.setRoom(room);
-//		reservation.setArrivalDate(reservationDto.getArrivalDate());
-//		reservation.setDepartingDate(reservationDto.getDepartingDate());
-//		List<HotelService> services = new ArrayList<HotelService>();
-//		for(HotelService service : room.getHotelServices()) {
-//			if(reservationDto.getHotelServices().contains(service.getName()))
-//				services.add(service);
-//		}
-//		reservation.setServices(services);
-//		
-//		hotelResRepo.save(reservation);
-		if(!resService.reserveRoom(reservationDto, userDetails.getUser())) {
+		int res = resService.reserveRoom(reservationDto, userDetails.getUser());
+		if(res == 0) {
 			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
+		} else if(res == 1) {
+			return new ResponseEntity<Long>(HttpStatus.CONFLICT);
 		}
 		return new ResponseEntity<Long>(HttpStatus.OK);
+		
 	}
 	
 	@PostMapping("/reserve")
@@ -482,8 +469,13 @@ public class UserController {
 	public ResponseEntity<?> fastHotelReserve(@PathVariable("resId") Long id) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		List<UserHotelReservationDTO> ret;
 		User user = userDetails.getUser();
-		List<UserHotelReservationDTO> ret = resService.fastHotelReserve(id, user);
+		try {
+			ret = resService.fastHotelReserve(id, user);
+		} catch(StaleObjectStateException exp) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 		if(ret == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<List<UserHotelReservationDTO>>(ret, HttpStatus.OK);
 	}

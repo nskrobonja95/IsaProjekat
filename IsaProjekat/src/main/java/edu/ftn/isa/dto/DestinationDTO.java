@@ -14,4 +14,6 @@ public @Data class DestinationDTO {
 
 	private String name;
 	
+	private Long id;
+	
 }

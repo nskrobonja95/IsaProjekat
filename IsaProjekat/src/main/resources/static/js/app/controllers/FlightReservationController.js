@@ -185,8 +185,8 @@ angular.module('flightApp').controller('FlightReservationController', [
                 .then(
                     function (response) {
                     	if(response.response.status == 500 || response.response.status == 400) {
-                            if(response.response.data.isSuccesfullyReserved){
-                                alert("Seat" + response.response.data + "has been taken! Please select other!");
+                            if(response.response.data.ids.length == 1){
+                                alert("Seat " + response.response.data.ids[0] + " has been taken! Please select other!");
                             } else {
                                 alert("Reservation process not succesful.");
                             }

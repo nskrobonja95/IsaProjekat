@@ -50,8 +50,9 @@
 						<div class="card-body" align="left">
 						<div ng-repeat="dest in sysAdminAirlinesCtrl.destinationList">
 							<span><i class="fas fa-city" style="color:#3485ef"></i> {{dest.name}} </span>
+							<button ng-click="sysAdminAirlinesCtrl.editDest(dest)">Edit</button>
+							<button ng-click="sysAdminAirlinesCtrl.deleteDest(dest)">Delete</button>
 						</div>
-
 						</div>
 					</div>
 					</div>
