@@ -3,6 +3,7 @@ package edu.ftn.isa.services;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -88,11 +89,13 @@ public class ReservationService {
 		}
 		flightResRepo.save(res);
 		HotelReservation hr = res.getHotelReservation();
-		List<FlightReservation> reservations = flightResRepo.findByHotelReservationAndStatus(res.getHotelReservation(), ReservationStatus.APPROVED);
-		if(reservations == null || reservations.isEmpty()) {
-			hr.setCanceled(true);
-			hr.setStatus(ReservationStatus.CANCELED);
-			hotelResRepo.save(hr);
+		if(hr != null) {
+			List<FlightReservation> reservations = flightResRepo.findByHotelReservationAndStatus(res.getHotelReservation(), ReservationStatus.APPROVED);
+			if(reservations == null || reservations.isEmpty()) {
+				hr.setCanceled(true);
+				hr.setStatus(ReservationStatus.CANCELED);
+				hotelResRepo.save(hr);
+			}
 		}
 		return true;
 	}
@@ -155,12 +158,15 @@ public class ReservationService {
 	}
 	
 	@Transactional
-	public boolean reserveRoom(HotelReservationDTO reservationDto, User user) {
+	public int reserveRoom(HotelReservationDTO reservationDto, User user) {
 		
 		Room room = em.find(Room.class, reservationDto.getRoomId(), LockModeType.PESSIMISTIC_WRITE);
 		if(room == null) {
-			return false;
+			return 0;
 		}
+		List<HotelReservation> reservations = hotelResRepo.checkIfHotelRoomReserved(room);
+		if(!reservations.isEmpty())
+			return 1;
 		HotelReservation reservation = new HotelReservation();
 		reservation.setCanceled(false);
 		reservation.setUser(user);
@@ -181,14 +187,14 @@ public class ReservationService {
 			for(int i=0; i<reservationDto.getFlightReservationIds().size(); ++i) {
 				Optional<FlightReservation> optFlightRes = flightResRepo.findById(reservationDto.getFlightReservationIds().get(i).longValue());
 				if(!optFlightRes.isPresent()) {
-					return false;
+					return 0;
 				}
 				FlightReservation flightRes = optFlightRes.get();
 				flightRes.setHotelReservation(reservation);
 				flightResRepo.save(flightRes);
 			}
 		}
-		return true;
+		return 2;
 	}
 	
 	@Transactional(readOnly=false, propagation = Propagation.REQUIRES_NEW)
@@ -233,6 +239,7 @@ public class ReservationService {
 		//Flight flight = em.find(Flight.class, flightDto.getSeats().get(0).getFlight().getId(), LockModeType.PESSIMISTIC_FORCE_INCREMENT );
 		List<Integer> succussfulRetVal = new ArrayList<Integer>();
 		FlightReservationResponseDTO dto = new FlightReservationResponseDTO();
+		List<FlightReservation> reservationsToSave = new ArrayList<FlightReservation>();
 		for(int j=0; j<flightDto.size(); ++j) {
 			FlightReservation reservation = new FlightReservation();
 			reservation.setUser(user);
@@ -251,7 +258,7 @@ public class ReservationService {
 			for(int i=0; i<flightDto.get(j).getSeats().size(); ++i) {
 	//			Optional<FlightSeat> optionalSeat = flightSeatRepo.findById(flightDto.getSeats().get(i).getId());
 	//			FlightSeat seat = optionalSeat.get();
-				FlightSeat seat = em.find(FlightSeat.class, flightDto.get(j).getSeats().get(i).getId(), LockModeType.OPTIMISTIC);
+				FlightSeat seat = em.find(FlightSeat.class, flightDto.get(j).getSeats().get(i).getId(), LockModeType.PESSIMISTIC_WRITE);
 				if(!seat.isAvailable()) {
 					List<Integer> temp = new ArrayList<Integer>();
 					temp.add(seat.getSeatNumber());
@@ -283,10 +290,17 @@ public class ReservationService {
 				seats.add(seat);
 			}
 			reservation.setFlightReservationSeats(seats);
-			reservation.setPrice(price);
-			FlightReservation res = flightResRepo.save(reservation);
-			dto.getIds().add(res.getId().intValue());
+//<<<<<<< HEAD
+			reservationsToSave.add(reservation);
+//=======
+//			reservation.setPrice(price);
+//			FlightReservation res = flightResRepo.save(reservation);
+//			dto.getIds().add(res.getId().intValue());
+//>>>>>>> e48bfdad929e63e4ee1f3a8de00f29891978b2c4
 		}
+		List<FlightReservation> res = flightResRepo.saveAll(reservationsToSave);
+		for(int i=0; i<res.size(); ++i)	
+			dto.getIds().add(res.get(i).getId().intValue());
 		dto.setSuccesfullyReserved(true);
 		return dto;
 	}
@@ -346,10 +360,10 @@ public class ReservationService {
 	}
 
 	public List<UserHotelReservationDTO> fastHotelReserve(Long id, User user) {
-		Optional<HotelReservation> optRes = hotelResRepo.findById(id);
-		if(!optRes.isPresent())
+		HotelReservation res = em.find(HotelReservation.class, id, LockModeType.OPTIMISTIC);
+		if(res.getStatus() != ReservationStatus.PENDING) {
 			return null;
-		HotelReservation res = optRes.get();
+		}
 		res.setUser(user);
 		res.setStatus(ReservationStatus.APPROVED);
 		hotelResRepo.save(res);

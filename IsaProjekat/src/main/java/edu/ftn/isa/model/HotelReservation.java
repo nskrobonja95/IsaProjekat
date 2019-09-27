@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.data.annotation.Version;
 import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -78,5 +79,9 @@ public @Data class HotelReservation {
 	
 	@Column(name="discount")
 	private Double discount;
+	
+	@javax.persistence.Version
+	@Column(name="version")
+	private int version;
 
 }

@@ -88,26 +88,35 @@ angular.module('flightApp').controller('HotelProfileController',
                 obj.arrivalDate = SearchService.formatDateString(self.checkInDate);
                 obj.departingDate = SearchService.formatDateString(self.checkOutDate);
                 console.log(obj);
-                if(self.flightReservations != null)
+                if(self.flightReservations != null){
                     obj.flightReservationIds = self.flightReservations.ids;
-                else
-                obj.flightReservationIds = null;
+                }
+                else{
+                    obj.flightReservationIds = null;
+                }
                 HotelService.bookRoom(obj)
                     .then(
                         function (response) {
-                            if(self.flightReservations == null) {
-                                var btn = document.getElementById(room.id);
-                                btn.disabled = true;
-                                btn.style.backgroundColor="green";
-                                btn.innerHTML = 'RESERVED';
-                                // btn.style.visibility = 'hidden';
-                                // var lbl = btn.nextElementSibling;
-                                // lbl.style.visibility = 'visible';
-                                // lbl.textContent = 'BOOKED';
-                                room.dataLoading = false;
+                            debugger;
+                            if(response.bookingRoomResponse.status == 200){
+                                if(self.flightReservations == null) {
+                                    var btn = document.getElementById(room.id);
+                                    btn.disabled = true;
+                                    btn.style.backgroundColor="green";
+                                    btn.innerHTML = 'RESERVED';
+                                    // btn.style.visibility = 'hidden';
+                                    // var lbl = btn.nextElementSibling;
+                                    // lbl.style.visibility = 'visible';
+                                    // lbl.textContent = 'BOOKED';
+                                    room.dataLoading = false;
+                                } else {
+                                    room.dataLoading = false;
+                                    $state.go("home-abstract.succesful-reservation");
+                                }
+                            } else if(response.bookingRoomResponse.status == 409) {
+                                alert("Room taken");
                             } else {
-                                room.dataLoading = false;
-                                $state.go("home-abstract.succesful-reservation");
+                                alert("Something went wrong with reservation process");
                             }
                         },
                         function (errResponse) {

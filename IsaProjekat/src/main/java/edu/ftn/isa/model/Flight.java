@@ -72,4 +72,6 @@ public @Data class Flight {
 	@Column(name = "VERSION")
 	private Integer version;
 	
+	
+	
 }

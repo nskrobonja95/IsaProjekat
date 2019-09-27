@@ -144,7 +144,9 @@ public class UnregisteredUsersController {
 		List<Destination> allDests = destRepo.findByDeleted(false);
 		List<DestinationDTO> retVal = new ArrayList<DestinationDTO>();
 		for(Destination d : allDests) {
-			retVal.add(new DestinationDTO(d.getName()));
+			DestinationDTO dto = new DestinationDTO(d.getName());
+			dto.setId(d.getId());
+			retVal.add(dto);
 			
 		}
 		

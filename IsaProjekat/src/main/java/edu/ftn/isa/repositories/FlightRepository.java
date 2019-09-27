@@ -31,5 +31,8 @@ public interface FlightRepository extends JpaRepository<Flight, Long>{
 	@Query("SELECT avg(fr.rate) FROM FlightRate fr where fr.flight = :flight "
 			+ "and fr.rate != 0")
 	Float getAverageRatingForFlight(@Param("flight") Flight flight);
+
+	@Query("select f from Flight f where f.from = :d or f.toDest = :d")
+	List<Flight> findByDestination(@Param("d")Destination d);
 	
 }

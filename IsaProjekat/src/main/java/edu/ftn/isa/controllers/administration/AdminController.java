@@ -9,6 +9,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +28,7 @@ import edu.ftn.isa.dto.AddHotelDTO;
 import edu.ftn.isa.dto.AdminDTO;
 import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.model.AvioCompany;
+import edu.ftn.isa.model.Destination;
 import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.Role;
 import edu.ftn.isa.model.User;
@@ -73,6 +75,13 @@ public class AdminController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		user.setRole(role);
 		userRepo.save(user);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/deleteDestination/{id}")
+	public ResponseEntity<?> deleteDestination(@PathVariable("id") Long id) {
+		boolean res = destService.deleteDest(id);
+		if(!res) return new ResponseEntity<>(HttpStatus.CONFLICT);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
@@ -223,8 +232,16 @@ public class AdminController {
 	
 	@PostMapping("/saveDestination")
 	public ResponseEntity<?> saveDestination(@RequestBody DestinationDTO destDto) {
-		destService.addDestination(destDto);
-		return new ResponseEntity<>(HttpStatus.OK);
+		Destination d = destService.addDestination(destDto);
+		destDto.setId(d.getId());
+		return new ResponseEntity<DestinationDTO>(destDto, HttpStatus.OK);
+	}
+	
+	@PutMapping("/editDestination")
+	public ResponseEntity<?> editDestination(@RequestBody DestinationDTO destDto) {
+		Destination d = destService.editDestination(destDto);
+		destDto.setId(d.getId());
+		return new ResponseEntity<DestinationDTO>(destDto, HttpStatus.OK);
 	}
 	
 }

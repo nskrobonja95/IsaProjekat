@@ -44,6 +44,9 @@ public interface HotelRepository extends JpaRepository<Hotel, Long>{
 	@Query("SELECT h from Hotel h where h.admin = :user")
 	List<Hotel> findHotelsByAdmin(@Param("user") User user);
 
+
+	List<Hotel> findByDestination(Destination d);
+
 	
 	
 	@Query("SELECT avg(hr.rating) FROM HotelReservation hr where hr.room.hotel = :hotel and hr.rating!=0")
@@ -59,8 +62,6 @@ public interface HotelRepository extends JpaRepository<Hotel, Long>{
 			+ " (hr.arrivalDate < :weekEarlierDate and hr.departingDate > :todayDate)) "
 			+ "and hr.canceled = false and hr.room.hotel = :hotel")
 	Long getNumOfVisitorsInInterval(@Param("weekEarlierDate") Date weekEarlierDate,@Param("todayDate") Date todayDate, @Param("hotel") Hotel hotel);
-	
-	
 	
 	
 	

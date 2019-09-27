@@ -16,6 +16,9 @@ angular.module('flightApp').controller('HotelFastReservationsController',
                             if(response.response.status == 400) {
                                 alert("Well, this is embarrasing. This function wont work now. Try again later");
                                 state.reload();
+                            } else if(response.response.status == 409) {
+                                alert("Reservation taken.");
+                                state.reload();
                             } else {
                                 alert("Succesfully reserved");
                                 self.fastReservations = response.response.data;

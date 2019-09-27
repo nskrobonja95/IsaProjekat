@@ -1,3 +1,4 @@
+
 package edu.ftn.isa.services;
 
 import java.text.ParseException;
@@ -45,42 +46,7 @@ public class StatsService {
 	
 	@Autowired
 	private RoomRepository roomRepo;
-	@Transactional
-	public AvioStatisticsDTO getAvioStats(User admin) throws ParseException {
-		AvioCompany avio = avioRepo.findByAdmin(admin);
-		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		Date todayDate = new Date();
-		todayDate = formatter.parse(formatter.format(todayDate));
-		Calendar c = Calendar.getInstance();
-		c.setTime(todayDate);
-		c.add(Calendar.DATE, -7);
-		Date weekEarlierDate = c.getTime();
-		weekEarlierDate = formatter.parse(formatter.format(weekEarlierDate));
-		c.add(Calendar.DATE, -23);
-		Date monthEarlierDate = c.getTime();
-		monthEarlierDate = formatter.parse(formatter.format(monthEarlierDate));
-		
-		AvioStatisticsDTO retVal = new AvioStatisticsDTO();
-		retVal.setAvgAvioRate(avio.getAverageRate());
-		retVal.setDailySoldTickets(avioRepo.getNumOfDailySoldTickets(todayDate, avio));
-		retVal.setWeeklySoldTickets(avioRepo.getNumOfSoldTicketsInInterval(weekEarlierDate, todayDate, avio));
-		retVal.setMonthlySoldTickets(avioRepo.getNumOfSoldTicketsInInterval(monthEarlierDate, todayDate, avio));
-		List<FlightForStatsDTO> flights = new ArrayList<FlightForStatsDTO>();
-		List<Flight> flightList = flightRepo.findByAvioCompany(avio);
-		for(int i=0; i<flightList.size(); ++i) {
-			FlightForStatsDTO flight = new FlightForStatsDTO();
-			flight.setAvgRate(flightRepo.getAverageRatingForFlight(flightList.get(i)));
-			flight.setFrom(flightList.get(i).getFrom().getName());
-			flight.setTo(flightList.get(i).getToDest().getName());
-			flight.setDepart(formatter.format((flightList.get(i).getTakeoff())));
-			flight.setLand((formatter.format((flightList.get(i).getLanding()))));
-			flights.add(flight);
-		}
-		retVal.setFlights(flights);
-		return retVal;
-	}
-
-	public AvioStatisticsDTO getAvioStats(Long avioId) throws ParseException {
+		public AvioStatisticsDTO getAvioStats(Long avioId) throws ParseException {
 		Optional<AvioCompany> temp = avioRepo.findById(avioId);
 		if(!temp.isPresent()) {
 			return null;
@@ -179,5 +145,4 @@ public class StatsService {
 		retVal.setRooms(rooms);
 		return retVal;
 	} 
-	
 }

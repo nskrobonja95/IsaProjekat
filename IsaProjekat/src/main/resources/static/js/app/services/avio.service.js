@@ -35,6 +35,7 @@
         service.rateReservation = rateReservation;
         service.loadAvioStatistics = loadAvioStatistics;
         service.loadAvioListForAdmin = loadAvioListForAdmin;
+        service.deleteDestination = deleteDestination;
         service.getGrosForInterval = getGrosForInterval;
         return service;
         
@@ -337,6 +338,25 @@
                     return response.data;
                 }, function (error) {
                     console.log("Error occured while updating avio!", error);
+                    return error;
+                });
+    
+                return $q.all([avio])
+                    .then(function (results) {
+                        return {
+                            avio: results[0]
+                        };
+                    });
+            }
+
+            function saveDestination(obj) {
+                var avio = $http.put(urls.SYS_ADMIN_API+'editDestination/', obj)
+                .then(function (response) {
+                    console.log("Updated avio:", response);
+                    return response.data;
+                }, function (error) {
+                    console.log("Error occured while updating avio!", error);
+                    return error;
                 });
     
                 return $q.all([avio])
@@ -464,6 +484,25 @@
                     .then(function (results) {
                         return {
                             seats: results[0]
+                        };
+                    });
+            }
+
+            function deleteDestination(id) {
+                debugger;
+                var response = $http.delete(urls.SYS_ADMIN_API+'deleteDestination/'+id)
+                .then(function (response) {
+                    console.log("Avio service response(get seats):", response.data);
+                    return response;
+                }, function (error) {
+                    console.log("Error occured while initializing  avio company destinations!", error);
+                    return error;
+                });
+
+                return $q.all([response])
+                    .then(function (results) {
+                        return {
+                            response: results[0]
                         };
                     });
             }

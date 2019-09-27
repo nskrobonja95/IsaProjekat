@@ -280,9 +280,10 @@
             var bookingRoomResponse = $http.post(urls.USERS_SERVICE_API+'reserveRoom', obj)
             .then(function (response) {
                 console.log("Book room response:", response.data);
-                return response.data;
+                return response;
             }, function (error) {
                 console.log("Error occured while bookung room!", error);
+                return error;
             });
 
             return $q.all([bookingRoomResponse])

@@ -20,7 +20,7 @@ app.constant('urls', {
     HOTEL_ADMIN_API: 'http://localhost:8080/hoteladmin/',
     ENTITY_ADMIN_API: 'http://localhost:8080/entityadmin/',
     SYS_ADMIN_API: 'http://localhost:8080/admin/',
-    RESERVATION_SERVICE_API: 'localhost://localhost:8080/reserve/',
+    RESERVATION_SERVICE_API: 'http://localhost:8080/reserve/',
     AVIO_SERVICE_API: 'http://localhost:8080/avio/',
     REGISTER_SERVICE_API : 'http://localhost:8080/auth/register',
     LOGIN_SERVICE_API : 'http://localhost:8080/auth/login',

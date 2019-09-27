@@ -69,11 +69,11 @@ public class AvioService {
 	
 	@Transactional
 	public AvioCompany updateAvio(BasicAvioInfoDTO avioDto, User admin) {
-		AvioCompany avioToModify = avioRepo.findByAdmin(admin);
-		avioToModify.setName(avioDto.getName());
-		avioToModify.setAddress(avioDto.getAddress());
-		avioToModify.setPromo(avioDto.getPromo());
-		avioRepo.save(avioToModify);
+		AvioCompany avio = avioRepo.findByAdmin(admin);
+		avio.setName(avioDto.getName());
+		avio.setAddress(avioDto.getAddress());
+		avio.setPromo(avioDto.getPromo());
+		AvioCompany avioToModify = avioRepo.save(avio);
 		return avioToModify;
 	}
 	@Transactional
@@ -94,7 +94,7 @@ public class AvioService {
 		AvioCompany avio = avioRepo.findByAdmin(admin);
 		Destination dest = destRepo.findByNameAndDeleted(name, false);
 		avio.getDestinations().add(dest);
-		avioRepo.save(avio);
+		avio = avioRepo.save(avio);
 		return avio;
 	}
 	@Transactional

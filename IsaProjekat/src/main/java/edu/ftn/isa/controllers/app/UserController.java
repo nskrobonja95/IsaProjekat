@@ -262,11 +262,16 @@ public class UserController {
 		
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-	
-		if(!resService.reserveRoom(reservationDto, userDetails.getUser())) {
+
+		int res = resService.reserveRoom(reservationDto, userDetails.getUser());
+		if(res == 0) {
+
 			return new ResponseEntity<Long>(HttpStatus.BAD_REQUEST);
+		} else if(res == 1) {
+			return new ResponseEntity<Long>(HttpStatus.CONFLICT);
 		}
 		return new ResponseEntity<Long>(HttpStatus.OK);
+		
 	}
 	
 	@PostMapping("/reserve")
@@ -481,8 +486,13 @@ public class UserController {
 	public ResponseEntity<?> fastHotelReserve(@PathVariable("resId") Long id) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		List<UserHotelReservationDTO> ret;
 		User user = userDetails.getUser();
-		List<UserHotelReservationDTO> ret = resService.fastHotelReserve(id, user);
+		try {
+			ret = resService.fastHotelReserve(id, user);
+		} catch(StaleObjectStateException exp) {
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 		if(ret == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<List<UserHotelReservationDTO>>(ret, HttpStatus.OK);
 	}

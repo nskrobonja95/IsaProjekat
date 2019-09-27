@@ -12,9 +12,13 @@ import org.springframework.stereotype.Service;
 import edu.ftn.isa.dto.DestinationDTO;
 import edu.ftn.isa.model.AvioCompany;
 import edu.ftn.isa.model.Destination;
+import edu.ftn.isa.model.Flight;
+import edu.ftn.isa.model.Hotel;
 import edu.ftn.isa.model.User;
 import edu.ftn.isa.repositories.AvioRepository;
 import edu.ftn.isa.repositories.DestinationRepository;
+import edu.ftn.isa.repositories.FlightRepository;
+import edu.ftn.isa.repositories.HotelRepository;
 
 @Service
 public class DestinationService {
@@ -24,6 +28,12 @@ public class DestinationService {
 	
 	@Autowired
 	private AvioRepository avioRepo;
+	
+	@Autowired
+	private FlightRepository flightRepo;
+	
+	@Autowired
+	private HotelRepository hotelRepo;
 	
 	@Transactional
 	public void saveDestination(Destination dest) {
@@ -75,5 +85,36 @@ public class DestinationService {
 		return dests;
 	}
 
-	
+
+	public boolean deleteDest(Long id) {
+		Destination d = destRepo.findById(id).get();
+		List<Flight> flights = flightRepo.findByDestination(d);
+		List<Hotel> hotels = hotelRepo.findByDestination(d);
+		if(!flights.isEmpty() || !hotels.isEmpty())
+			return false;
+		destRepo.deleteById(id);
+		return true;
+	}
+
+	public Destination editDestination(DestinationDTO destDto) {
+		if(destDto.getId() == null) {
+			Destination dest = new Destination();
+			dest.setName(destDto.getName());
+			dest.setDeleted(false);
+			destRepo.save(dest);
+			return dest;
+		}else {
+			Optional<Destination> temp = destRepo.findById(destDto.getId());
+			if(!temp.isPresent()) {
+				return null;
+			}
+			Destination dest = temp.get();
+			dest.setName(destDto.getName());
+			dest.setDeleted(false);
+			destRepo.save(dest);
+			return dest;
+		}
+		
+	}
+
 }
